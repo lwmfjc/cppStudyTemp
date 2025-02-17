@@ -1,0 +1,114 @@
+#include <iostream>
+// #include <iomanip>
+// tools
+/* const int Pen{10};
+const int Marker{20};
+const int Eraser{30}; */
+
+int main()
+{
+
+  // https://en.cppreference.com/w/cpp/io/manip
+  //  std::cout << "This is a nice message..." << std::endl <<std::flush;
+  //  std::cout << std::left;
+  //  std::cout << std::setfill('-');
+  //  std::cout << std::setw(10) << "hello1" <<std::setw(10) << "ly2" << std::endl;
+  //  std::cout << std::setw(10) << "hello2" <<std::setw(10) << "ly2" << std::endl;
+
+  // std::cout << std::right;
+  // std::cout << std::setw(10) << -123.45 << std::endl;
+  // std::cout << std::internal;
+  // std::cout << std::setw(10) << -123.45 << std::endl;
+
+  // std::cout << std::showpos;
+  // std::cout << 123 << std::endl;
+  // std::cout << -89 << std::endl;
+  // std::cout << std::noshowpos;
+  // //16进制
+  // std::cout << std::hex << 16 << std::endl;
+  // //小数点补0
+  // std::cout << std::fixed;
+  // std::cout << 1.9 << std::endl;
+  //---错误,没有效果---
+  // std::cout << std::setw(10);
+  // std::cout << "hello";
+  // std::cout << "ly";
+  //---错误,没有效果---
+
+  // https://en.cppreference.com/w/cpp/types/numeric_limits
+  // https://en.cppreference.com/w/cpp/header/cmath
+
+  // short int var1{10};
+  // short int var2{20};
+
+  // char var3{40};
+  // char var4{50};
+
+  // auto result1{var1+var2};
+  // //暗中转为int后相加,所以result2也是int
+  // auto result2{var3+var4};
+
+  // std::cout << sizeof(result2) << std::endl;
+
+  // int tool{Eraser};
+  // if( tool == Pen){
+  //   std::cout << "Active tool is pen" << std::endl;
+  // }else if (tool == Eraser)
+  // {
+  //   std::cout << "Active tool is eraser" << std::endl;
+  // }
+  // switch (tool)
+  // {
+  // case Pen:
+  // {
+  //   std::cout << "Active tool is pen" << std::endl;
+  // }
+  // break;
+  // case Eraser:
+  // {
+  //   std::cout << "Active tool is eraser" << std::endl;
+  // }
+  // break;
+  // default:
+  // {
+  //   std::cout << "Active tool is 'I dont know'" << std::endl;
+  // }
+  // break;
+  // }
+
+  /*  int a = 30;
+   int b = 20;
+   int max=(a>b)?a:b;
+   //double
+   auto max1 = (a > b) ? a : 22.5;
+   std::cout << max1 << std::endl;
+   std::cout << sizeof(max1) << std::endl;
+   std::cout << sizeof(max); */
+
+  /* const size_t COUNT{10};
+  // for(unsigned int i{}; i< 10; ++i){
+  for (size_t i{}; i < COUNT; ++i)
+  {
+    std::cout << "I love C++ [" << i << "]" << std::endl;
+  }
+  std::cout << sizeof(size_t) << std::endl; */
+  /* int scores[10]{}; // 全部初始化为默认值
+  std::cout << scores[0] << std::endl;
+
+  const int birds[]{10, 12, 14};
+  std::cout << sizeof(birds) << std::endl;
+  std::cout << sizeof(birds[0])  << std::endl;
+  std::cout << std::size(birds) << std::endl;
+  // birds[0] = 9;
+  for(auto i : birds){
+    std::cout << i << std::endl;
+  } */
+
+  char message1[]{'h','i'};//不是c-string
+  char message2[3]{'h','i'};//默认添加了'\0'，是c-string
+  char message3[]{"hi"};//默认添加了'\0'，是c-string
+  std::cout << message1 << std::endl; //乱码
+  std::cout << message2 << std::endl; //正常
+  std::cout << sizeof(message3) << std::endl; //3,因为1个字符1字节
+  return 0;
+}
