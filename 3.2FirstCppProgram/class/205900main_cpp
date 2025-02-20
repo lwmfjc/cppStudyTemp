@@ -1,0 +1,46 @@
+#include <iostream>
+const double PI{3.1415926535897932384626433832795};
+class Cylinder
+{
+public:
+  // 如果没有任何构造函数，则
+  // 编译器会帮你自动生成一个无参无语句的构造函数
+  /* Cylinder()
+  {
+    base_radius = 2.0;
+    height = 2.0;
+  } */
+  Cylinder() = default;
+  Cylinder(double radius_param, double height_param)
+  {
+    base_radius = radius_param;
+    height = height_param;
+  }
+  double volume()
+  {
+    return PI * base_radius * base_radius * height;
+  }
+
+public:
+  // private:
+  double base_radius{};
+  double height{};
+};
+
+int main()
+{
+  // 编译器会去找默认的无参构造函数
+  //   Cylinder cylinder1 = Cylinder();
+  Cylinder cylinder2;
+  std::cout << cylinder2.volume() << std::endl;
+
+  // Cylinder cylinder1 = Cylinder(10, 4);
+  Cylinder cylinder1(10, 4);
+  std::cout << cylinder1.volume() << std::endl;
+  // std::cout << cylinder1.base_radius << std::endl;
+  // std::cout << cylinder1.height << std::endl;
+  cylinder1.base_radius = 10;
+  cylinder1.height = 3;
+  std::cout << cylinder1.volume() << std::endl;
+  return 0;
+}

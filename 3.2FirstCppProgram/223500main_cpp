@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+
+class Dog
+{
+public:
+  Dog() = default;
+  Dog(std::string_view name_param, std::string_view breed_param, int age_param);
+  ~Dog();
+  void print_info()
+  {
+    std::cout << "Dog( name: " << name << " breed: " << breed << "age: " << *p_age << std::endl;
+  }
+  /* Dog *set_dog_name(std::string_view name)
+  {
+    this->name = name;
+    return this;
+  }
+  Dog *set_dog_breed(std::string_view breed)
+  {
+    // this->breed=breed;
+    // 或者
+    (*this).breed = breed;
+    return this;
+  }
+  Dog *set_dog_age(int age)
+  {
+    *(this->p_age) = age;
+    return this;
+  } */
+ Dog &set_dog_name(std::string_view name)
+  {
+    this->name = name;
+    return *this;
+  }
+  Dog &set_dog_breed(std::string_view breed)
+  {
+    // this->breed=breed;
+    // 或者
+    (*this).breed = breed;
+    return *this;
+  }
+  Dog &set_dog_age(int age)
+  {
+    *(this->p_age) = age;
+    return *this;
+  }
+
+private:
+  std::string name;
+  std::string breed;
+  int *p_age{nullptr};
+};
+Dog::Dog(std::string_view name_param, std::string_view breed_param, int age_param)
+{
+  name = name_param;
+  breed = breed_param;
+  p_age = new int;
+  *p_age = age_param;
+  std::cout << "Dog constructor called for " << name << "at:" << this << std::endl;
+}
+Dog::~Dog()
+{
+  delete p_age;
+  std::cout << "Dog destructor called for " << name << "at:" << this << std::endl;
+}
+
+// 由于外面的dog和这个dog_param的p_age指向的是同一份，所以
+// 函数退出时会导致p_age指向的那个空间被释放
+void some_func1(Dog dog_param)
+{
+  std::cout << std::endl;
+}
+void some_func2()
+{
+  std::cout << std::endl;
+  Dog *p_dog = new Dog("Fluffy_func2", "Shepherd_func2", 22);
+  // 如果不delete会导致内存泄露(导致函数退出后没法释放对象空间)
+  delete p_dog;
+}
+/* void some_func(){
+  Dog my_dog("Fluffly_func", "Shepherd_func", 2);
+} */
+
+int main()
+{
+  // std::cout << "----start---" << std::endl;
+  // // {
+  // //   Dog my_dog("Fluffly", "Shepherd", 2);
+  // // }
+  // Dog my_dog_func1("Fluffly_func", "Shepherd_func1", 2);
+  // some_func1(my_dog_func1);
+  // std::cout << "----end---" << std::endl;
+
+  // 之所以最后删除dog1，是因为dog1有可能被其他对象依赖
+  // 而最后创建的dog4不会
+  Dog dog1("Dogyy1", "shepherd", 2);
+  // (*(dog1.set_dog_name("dog1")->set_dog_breed("xxbreed")->set_dog_name("xname"))).set_dog_age(12)->print_info(); 
+  // Dog dog2("Dogyy2", "shepherd", 12);
+  // Dog dog3("Dogyy3", "shepherd", 20);
+  // Dog dog4("Dogyy4", "shepherd", 23);
+  
+  dog1.set_dog_name("dog1").set_dog_breed("xxbreed").set_dog_name("xname").set_dog_age(12).print_info(); 
+
+  return 0;
+}

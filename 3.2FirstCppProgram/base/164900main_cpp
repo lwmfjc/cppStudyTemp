@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+
+int max(int a, int b)
+{
+  return (a > b) ? a : b;
+}
+double max(double a,double b){
+  return (a>b)?a:b;
+}
+std::string_view max(std::string_view a,std::string_view b){
+  std::string_view result=(a>b)?a:b;
+  std::cout << &result << std::endl;
+  return result;
+}
+
+int main()
+{
+  std::string_view result=max("a","b");
+  std::cout << &result << std::endl;
+  return 0;
+}

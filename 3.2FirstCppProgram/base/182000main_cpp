@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+
+template <typename T>
+T maximum(T a, T b)
+{
+  return (a > b) ? a : b;
+}
+
+template < typename X, typename Y>
+int lytest(X a, Y b)
+{
+  return 7;
+}
+
+int main()
+{
+  auto result_ly = lytest(2,3.0) ;
+  std::cout << result_ly << std::endl;
+  int x{5};
+  int y{7};
+  int* p_x{&x};
+  int* p_y{&y};
+  auto result_p=maximum(p_x,p_y);
+
+  int result = maximum(x, y);
+  std::cout << result << std::endl;
+  double x1{3.5};
+  double y1{7.5};
+  double result1 = maximum(x1, y1);
+  std::cout << result1 << std::endl;
+  std::string x2{"hi"};
+  std::string y2{"hello"};
+  std::string result2 = maximum(x2, y2);
+  std::cout << result2 << std::endl;
+
+  return 0;
+}

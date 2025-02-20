@@ -1,0 +1,62 @@
+#include <iostream>
+
+int main()
+{
+  // -> int (返回值)可以不要
+  /* auto func = [](int a, int b) -> int
+  {
+    return a > b ? a : b;
+  };
+  auto result = func(3, 6);
+  std::cout << result << std::endl;
+
+  // 没有(入参)参数的lambda函数
+  []() -> int
+  {
+    std::cout << "hello" << std::endl;
+    return 3;
+  }();
+  // 带参数的lambda函数
+  auto max=[](int a, int b)
+  {
+    return a > b ? a : b;
+  }(3, 5);
+  std::cout << max << std::endl; */
+
+  int c{42};
+  
+  auto func1=[](){
+    //这里c编译报错，'c' is not capturedgcc
+    // std::cout << "inner: " << c << std::endl;
+  };
+
+  //c一直都是42
+ /*  auto func=[c](){
+    std::cout << "inner: " << c << "address:" << &c << std::endl;
+  }; */
+   auto func=[=](){
+    std::cout << "inner: " << c << "address:" << &c << std::endl;
+  };
+  for(size_t i{};i<5;++i){
+    std::cout << "outer: " << c << "address:" << &c << std::endl;
+    func();
+    ++c;
+  }
+  std::cout << "==========" << std::endl;
+  int d{2};
+  std::cout << "outer: " << d << "address:" << &d << std::endl;
+  /* auto func2=[&d](){
+    std::cout << "inner: " << d << "address:" << &d << std::endl;
+  }; */
+  auto func2=[&](){
+    std::cout << "inner: " << d << "address:" << &d << std::endl;
+  };
+  for(size_t i{};i<5;++i){
+    std::cout << "outer: " << d << std::endl;
+    func2();
+    ++d;
+  }
+
+
+  return 0;
+}

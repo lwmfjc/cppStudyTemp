@@ -1,0 +1,28 @@
+//头文件只放了声明，没有定义
+#ifndef CYLINDER_H
+#define CYLINDER_H
+#include "constants.h"
+
+class Cylinder
+{
+public:
+  Cylinder() = default;
+  // 不允许多次定义构造函数
+  // Cylinder(double radius_param, double height_param)
+  //{
+
+  //};
+  Cylinder(double radius_param, double height_param);
+  double volume();
+
+  // getter and setter
+  double get_base_radius();
+  double get_height();
+  void set_base_radius(double radius_param);
+  void set_height(double height_param);
+
+private:
+  double base_radius{};
+  double height{};
+};
+#endif

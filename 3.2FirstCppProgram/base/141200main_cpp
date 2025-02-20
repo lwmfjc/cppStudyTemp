@@ -1,0 +1,224 @@
+#include <iostream>
+#include <cstring>
+// #include <cctype>
+
+int main()
+{
+
+  /* int *p_number{};
+  double *p_fractional_number{};
+  std::cout << sizeof(p_number) << std::endl;
+  std::cout << sizeof(p_fractional_number) << std::endl;
+
+  //p_number指针,my_num是int
+  int * p_number7{},my_num{}; */
+
+  /* int int_var{43};
+  int *p_int{&int_var};
+
+  std::cout << int_var << std::endl;
+  std::cout << p_int << std::endl;
+  std::cout << "size[" << sizeof(p_int) << "]" << std::endl;
+  std::cout << *p_int << std::endl; */
+
+  /* const char *p_message{"Hello World!"};
+  // *p_message='B';
+  std::cout << p_message << std::endl;
+  std::cout << *p_message << std::endl; */
+
+  /* int *p_number4{nullptr};
+  p_number4 = new int;
+  int *p_number5{new int{34}};
+
+  *p_number4 = 123;
+  std::cout << *p_number4 << std::endl;
+  std::cout << *p_number5 << std::endl;
+
+  delete p_number4;
+  // 表示释放原来p_number4指向的那块内存，
+  // 有可能会马上被别的程序拿去用
+  std::cout << *p_number4 << std::endl;
+  // 所以这里也要马上把指针赋值nullptr，免得
+  // 影响别的程序运行
+  p_number4 = nullptr;
+
+  delete p_number5;
+  p_number5 = nullptr;
+
+  // 再次使用
+  p_number5 = new int(222);
+  std::cout << *p_number5 << std::endl;
+
+  delete p_number5;
+  p_number5 = nullptr; */
+
+  // int* data=new int[100000000000];
+  /* for (size_t i{0}; i < 25; ++i)
+  {
+    try
+    {
+      int *data = new int[256*1024*1024];
+      std::cout << "分配[" << i << "成功" << std::endl;
+    }
+    catch ( std::exception &ex)
+    {
+      std::cout << " Something went wrong: " << ex.what() << std::endl;
+    }
+  } */
+
+  /* for (size_t i{0}; i < 25; ++i)
+  {
+    int *data = new (std::nothrow) int[256 * 1024 * 1024];
+    if (data != nullptr)
+    {
+      std::cout << "分配[" << i << "成功" << std::endl;
+    }
+    else
+    {
+      std::cout << "分配[" << i << "失败" << std::endl;
+    }
+  }
+
+  std::cout << "Program ending well" << std::endl; */
+
+  /* const size_t size{10};
+  double *p_salaries{new double[size]};
+  int *p_students{new (std::nothrow) int[size]{}};
+
+  double *p_scores{new (std::nothrow) double[size]{1, 2, 3, 4, 5}};
+  int scores[10] = {11, 22, 33, 44};
+  std::cout << "size: " << std::size(scores) << std::endl;
+  for (auto s : scores)
+  {
+    std::cout << s << std::endl;
+  }
+
+  if (p_scores)
+  {
+    for (size_t i{}; i < size; ++i)
+    {
+      std::cout << p_scores[i] << "===" << *(p_scores + i) << std::endl;
+    }
+  }
+
+  delete[] p_salaries;
+  p_salaries = nullptr;
+
+  delete[] p_students;
+  p_students = nullptr;
+
+  delete[] p_scores;
+  p_scores = nullptr;
+
+  int* pscores1=new int[10]{44,54,23,12}; */
+
+  /* int int_data{33};
+  double double_data{55};
+  // References
+  int &ref_int_data{int_data};
+  double &ref_double_data{double_data};
+
+  std::cout << &int_data << std::endl;
+  std::cout << &ref_int_data << std::endl;
+  std::cout << "=======" << std::endl;
+  std::cout << &double_data << std::endl;
+  std::cout << &ref_double_data << std::endl;
+
+  std::cout << int_data << std::endl;
+  std::cout << ref_int_data << std::endl;
+  int_data=987;
+  std::cout << "=======" << std::endl;
+  std::cout << int_data << std::endl;
+  std::cout << ref_int_data << std::endl; */
+
+  // 可以改值，不能改指向
+  /* int *const p_int{new int{123}};
+  *p_int =34;
+  // p_int=new int{345}; //Error
+  std::cout << *p_int << std::endl;
+
+  //可以改指向，不能改值
+  const int * p_int1{new int{123}};
+  p_int1 = new int{34};
+  // *p_int1=33;//Error
+  std::cout << *p_int1 << std::endl; */
+
+  /*  int int1{23};
+   int &r_int1{int1};
+   r_int1 = 211;
+
+   std::cout << "int1----" << &int1 << "------" << int1 << std::endl;
+   std::cout << "r_int1----" << &r_int1 << "------" << r_int1 << std::endl;
+
+   int int2=45;
+   r_int1=int2;
+   //地址没变，值变了
+   std::cout << "r_int1----" << &r_int1 << "------" << r_int1 << std::endl; */
+
+  /* int int1=90;
+  const int& r_int1{int1};
+  int1=89;
+  std::cout << r_int1 <<std::endl; */
+
+  /* std::cout << std::isalnum('A') << std::endl;//T
+  std::cout << std::isalnum('a') << std::endl;//T
+  std::cout << std::isalnum('2') << std::endl;//T
+  std::cout << std::isalnum('_') << std::endl;//False */
+
+  /* const char message1 [] {"hello"};
+  const char* message2{"Hi"};
+
+  //不包括'\0'的字符数
+  std::cout << std::strlen(message1) << std::endl;
+  //字符数组大小
+  std::cout << sizeof(message1) << std::endl;
+  std::cout << std::strlen(message2) << std::endl;
+  //指针大小，8字节
+  std::cout << sizeof(message2) << std::endl;  */
+
+  /* const char *str{"Try not. Do, or do not .There is no try."};
+  char target = 'T';
+  const char *result = str;
+  int iterations{};
+
+  while ((result = std::strchr(result, target)) != nullptr)
+  {
+    std::cout << "Found '" << target << "' starting at '" << result << "'\n";
+    ++result;
+  } */
+
+  /* char input[] = "/home/usr/hxxx.cpp";
+  char *output = std::strrchr(input, '/');
+  if (output)
+  {
+    std::cout << output + 1 << std::endl;
+  }
+
+  std::cout << std::strcmp("Cb","Ac") << std::endl; */
+
+  // https://en.cppreference.com/w/c/string/byte/strchr
+
+  /* char dest[50] = "H\0abcdefgh";
+  char src[50] = "W";
+  // src直接从dest的\0开始替换
+  std::strcat(dest, src);
+  // 结果是HW\0bcdefgh\0\0....
+  std::cout << dest << std::endl;
+  for (auto s : dest)
+  {
+    if (s == '\0')
+      std::cout << "=";
+    else
+      std::cout << s;
+  }
+  std::cout << std::endl;
+  // 复制
+  const char *source3 = "C++";
+  char *dest3 = new char[std::strlen(source3) + 1];
+  std::strcpy(dest3, source3);
+  std::cout << dest3 << std::endl; */
+
+  std::string weird_message(4,'e');
+  std::cout << weird_message << std::endl;
+  return 0;
+}

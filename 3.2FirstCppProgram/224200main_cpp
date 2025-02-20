@@ -1,0 +1,41 @@
+#include <iostream>
+
+class Dog
+{
+public:
+  std::string m_name;
+};
+
+struct Cat
+{
+private:
+  std::string m_name;
+
+public:
+  ~Cat()
+  {
+    std::cout << "destruct---" << std::endl;
+  }
+  void print_info()
+  {
+    std::cout << m_name << std::endl;
+  }
+  Cat &set_name(std::string_view name)
+  {
+    m_name = name;
+    return *this;
+  }
+};
+
+int main()
+{
+  Dog dog1;
+  Cat cat1;
+  dog1.m_name = "dog--1";
+  cat1.set_name("cat--1");
+  // std::cout << cat1.m_name << std::endl;
+  cat1.print_info();
+  std::cout << dog1.m_name << std::endl;
+
+  return 0;
+}

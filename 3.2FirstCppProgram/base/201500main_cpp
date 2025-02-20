@@ -1,0 +1,45 @@
+#include <iostream>
+template <typename T>
+concept TinyType = requires(T t) {
+  sizeof(T) <= 4;
+  requires sizeof(T) <= 4;
+};
+
+template <typename T>
+// requires std::integral<T> || std::floating_point<T>
+  requires std::integral<T> && TinyType<T>
+T add(T a, T b)
+{
+  return a + b;
+}
+
+template <typename T>
+T func(T t)
+  requires std::integral<T> &&
+           requires(T t) {
+             sizeof(T) <= 4;
+             requires sizeof(T) <= 4;
+           }
+{
+  std::cout << "value: " << t << std::endl;
+  return (2 * t);
+}
+
+// 另一个知识点
+std::integral auto add3(std::integral auto a, std::integral auto b)
+{
+  return a + b;
+};
+
+int main()
+{
+  //   int x{2};
+  //   double y{3};
+  //   std::string z{"hello"};
+  //   add(x, x);
+  // func(y);
+  // std::integral auto result = add3(12, 3);
+  // std::floating_point auto result = add3(12, 3);
+
+  return 0;
+}

@@ -1,0 +1,6 @@
+//Declaration
+int max(int, int);
+//如果main中未使用函数，则可以不需要定义
+//如果使用了min，即链接器从main中查找发现
+//使用了min，就回去找min的定义
+int min(int, int);

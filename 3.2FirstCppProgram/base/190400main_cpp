@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstring>
+template <typename T1,typename T2,typename R1>
+R1 lytest(T1 a, T2 b)
+{
+  return a > b ? a : b;
+}
+
+template <typename T>
+T maximum(T a, T b)
+{
+  return a > b ? a : b;
+}
+
+template <typename T>
+const T &min(const T &a, T &b);
+
+// 具体化
+/* template <>
+const char *maximum<const char *>(const char *a, const char *b) */
+
+//<const char*>可以省略
+/* template <>
+const char *maximum(const char *a, const char *b) */
+template <>
+const char *maximum<const char *>(const char *a, const char *b)
+{
+  return (std::strcmp(a, b) > 0) ? a : b;
+};
+
+int main()
+{
+  // auto max = maximum<double>(3, 4);
+  // std::cout << max << std::endl;
+  /* int a{12};
+  int b{22};
+  auto minValue = min<int>(a, b);
+  std::cout << minValue << std::endl;
+  std::cout << b << std::endl; */
+  /* const char *g{"wild"};
+  const char *h{"animal"};
+  std::cout << maximum(g, h) << std::endl; */
+  auto lyresult=lytest< int,int,double>(3,5);
+  std::cout << lyresult <<std::endl;
+  return 0;
+}
+
+template <typename T>
+const T &min(const T &a, T &b)
+{
+  auto min = a > b ? b : a;
+  b = 190.0;
+  return a > b ? b : a;
+}

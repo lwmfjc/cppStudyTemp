@@ -1,22 +1,21 @@
 #include <iostream>
+#include "player.h"
 
+class B
+{
+private:
+  int age;
+};
+class A : public B
+{
+private:
+  int c;
+};
 int main()
 {
+  A a;
+  Player p1("Basketball");
+  std::cout << "player:" << p1 << std::endl;
 
-  /* int *p_number{};
-  double *p_fractional_number{};
-  std::cout << sizeof(p_number) << std::endl;
-  std::cout << sizeof(p_fractional_number) << std::endl;
-
-  //p_number指针,my_num是int
-  int * p_number7{},my_num{}; */
-
-  int int_var{43};
-  int *p_int{&int_var};
-
-  std::cout << int_var << std::endl;
-  std::cout << p_int << std::endl;
-  std::cout << "size[" << sizeof(p_int) << "]" << std::endl;
-  std::cout << *p_int << std::endl;
   return 0;
 }

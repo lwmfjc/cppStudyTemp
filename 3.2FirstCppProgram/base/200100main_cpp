@@ -1,0 +1,38 @@
+#include <iostream>
+#include <concepts>
+
+template <typename T>
+concept Addable = requires(T a, T b) {
+  //noexcept可以省略
+  // a+b 是可行的语法，而且a+b的结果可以被转为int
+  { a + b } noexcept -> std::convertible_to<int> ;
+};
+
+template <typename T>
+concept TinyType = requires(T t) {
+  // 先测试是否语法通过，不会校验是否小于4
+  sizeof(T) <= 4;
+  requires sizeof(T) <= 4;
+};
+
+TinyType auto add(TinyType auto a, TinyType auto b)
+{
+  // 如果a,b是char，相加后会变成int，不满足sizeof(int) < 4
+  return a + b;
+}
+
+Addable auto add1(Addable auto a, Addable auto b)
+{
+  // 如果a,b是char，相加后会变成int，不满足sizeof(int) < 4
+  return a + b;
+}
+
+int main()
+{
+  double x{56};
+  double y{22};
+  // std::string x{"hello"};
+  // std::string y{"world"};
+  std::cout << add1(x, y) << std::endl;
+  return 0;
+}

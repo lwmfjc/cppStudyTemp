@@ -1,0 +1,46 @@
+#include <iostream>
+const double PI{3.141592653589};
+class Cylinder
+{
+private:
+  double base_radius{1};
+  double height{1};
+
+public:
+  Cylinder() = default;
+  Cylinder(double rad_param, double heigh_param)
+  {
+    base_radius = rad_param;
+    height = heigh_param;
+  }
+  double volume()
+  {
+    return PI * base_radius * base_radius * height;
+  }
+  double get_base_radius()
+  {
+    return base_radius;
+  }
+  double get_height()
+  {
+    return height;
+  }
+  void set_base_radius(double radius_param)
+  {
+    base_radius = radius_param;
+  }
+  void set_height(double height_param)
+  {
+    height = height_param;
+  }
+};
+int main()
+{
+  Cylinder cylinder(5, 3);
+  std::cout << cylinder.volume() << std::endl;
+  cylinder.set_base_radius(2.0);
+  cylinder.set_height(3.0);
+  std::cout << cylinder.volume() << std::endl;
+
+  return 0;
+}

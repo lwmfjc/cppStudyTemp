@@ -1,0 +1,22 @@
+#include <iostream>
+#include "cylinder.h"
+
+int main()
+{
+  Cylinder c1(10, 2);
+  std::cout << c1.volume() << std::endl;
+  Cylinder *c2 = new Cylinder(11, 20);
+  std::cout << (*c2).volume() << std::endl;
+  std::cout << c2->volume() << std::endl;
+  delete c2;
+
+  
+  Cylinder *c3 = &c1;// new Cylinder(11, 20);
+  std::cout << (*c3).volume() << std::endl;
+  std::cout << c3->volume() << std::endl;
+  
+  //delete c3; //这句会导致下面不执行(程序异常提前退出)
+  std::cout << "===end===" << std::endl;
+
+  return 0;
+}

@@ -1,0 +1,47 @@
+#ifndef CYLINDER_H
+#define CYLINDER_H
+#include "constants.h"
+
+class Cylinder
+{
+public:
+  // 如果没有任何构造函数，则
+  // 编译器会帮你自动生成一个无参无语句的构造函数
+  /* Cylinder()
+  {
+    base_radius = 2.0;
+    height = 2.0;
+  } */
+  Cylinder() = default;
+  Cylinder(double radius_param, double height_param)
+  {
+    base_radius = radius_param;
+    height = height_param;
+  }
+  double volume()
+  {
+    return PI * base_radius * base_radius * height;
+  }
+  double get_base_radius()
+  {
+    return base_radius;
+  }
+  double get_height()
+  {
+    return height;
+  }
+  void set_base_radius(double radius_param)
+  {
+    base_radius = radius_param;
+  }
+  void set_height(double height_param)
+  {
+    height = height_param;
+  }
+
+//public:
+private:
+  double base_radius{};
+  double height{};
+};
+#endif

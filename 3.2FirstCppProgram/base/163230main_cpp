@@ -1,0 +1,17 @@
+#include <iostream> 
+#include <string>
+
+std::string add_strings(std::string str1, std::string str2)
+{
+  std::string result = str1 + str2;
+  std::cout << &result << std::endl;
+  return result;
+}
+int main()
+{
+  std::string str_result = add_strings(std::string("hello"),
+                                       std::string(" world!"));
+  std::cout << &str_result << std::endl;
+  std::cout << str_result << std::endl;
+  return 0;
+}

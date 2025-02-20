@@ -1,0 +1,26 @@
+#include <iostream>
+// void a();
+/* void enter_bar(unsigned int age)
+{
+  if (age > 10)
+  {
+    std::cout << age << "proceed." << std::endl;
+  }
+  else
+  {
+    std::cout << "No offense." << std::endl;
+  }
+  return;
+} */
+int main()
+{
+  // enter_bar(22);
+  // enter_bar(2);
+  // a();
+  return 0;
+}
+// 没有返回值时void是必须的
+/* void a()
+{
+  std::cout << "hello" << std::endl;
+} */
