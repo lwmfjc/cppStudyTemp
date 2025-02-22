@@ -1,0 +1,19 @@
+#include "nurse.h"
+
+#include <iostream>
+
+Nurse::Nurse()
+{
+}
+
+Nurse::~Nurse()
+{
+}
+
+std::ostream &operator<<(std::ostream &out, const Nurse &nurse)
+{
+
+  out << "Person [ Full name" << nurse.get_full_name() << " ,Age: " << nurse.get_age() << ",Address: "
+      << nurse.get_address() << "]";
+  return out;
+}

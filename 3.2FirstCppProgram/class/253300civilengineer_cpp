@@ -1,0 +1,42 @@
+#include "civilengineer.h"
+#include <iostream>
+
+// 如果没有指定调用别的构造函数，那么必定会继续调用基类的空参构造函数
+// 这种情况下调用基类空参构造函数且基类并没有空参构造函数,那么编译器
+// 会报错
+CivilEngineer::CivilEngineer(std::string_view fullname, int age,
+                             std::string_view address, int contract_count_param, std::string_view m_speciality_param) 
+    : Engineer(fullname, age, address, contract_count_param), m_speciality(m_speciality_param)
+// :m_full_name(fullname),
+// m_age(age),m_address(address),m_speciality(m_speciality_param)
+{
+  std::cout << "Custom constructor for CivilEngineer called ..." << std::endl;
+}
+CivilEngineer::CivilEngineer()
+{
+
+  std::cout << "Default constructor for CivilEngineer called ..." << std::endl;
+}
+
+CivilEngineer::~CivilEngineer()
+{
+}
+std::ostream &operator<<(std::ostream &out, const CivilEngineer &engineer)
+{
+  // engineer.m_full_name;
+  // engineer.m_speciality="hello"; //engineer是const，不允许修改内容
+  // out << engineer.hehe << std::endl;
+  // const对象不可以调用类中的非const成员函数(属性可以)
+  // out << engineer.get_contract_count() << std::endl;
+
+  // 基类的private都不能访问
+  out << "Person [ Full name" << engineer.get_full_name() << " ,Age: " << engineer.get_age() << ",address: "
+      // << ".m_address "<< engineer.m_address
+      << engineer.get_address()
+      << ",contract_count: "
+      << engineer.get_contract_count()
+      << ",m_speciality: "
+      << engineer.m_speciality
+      << "]";
+  return out;
+}

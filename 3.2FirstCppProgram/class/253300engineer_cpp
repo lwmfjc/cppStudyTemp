@@ -1,0 +1,30 @@
+#include "person.h"
+#include "engineer.h"
+#include <iostream>
+Engineer::Engineer(std::string_view fullname, int age,
+                   std::string_view address, int contract_count_param)
+    : Person(fullname, age, address), contract_count(contract_count_param)
+{
+  // this->m_address=address;//不可见
+  std::cout << "custom constructor for Engineer called ..." << std::endl;
+}
+Engineer::Engineer()
+{
+  std::cout << "Default constructor for Engineer called ..." << std::endl;
+}
+
+Engineer::~Engineer()
+{
+}
+std::ostream &operator<<(std::ostream &out, const Engineer &engineer)
+{
+
+  out << "Person [ Full name" << engineer.get_full_name() << " ,Age: " << engineer.get_age() << ",Address: "
+      //<< engineer.m_age //success 基类的protected能访问
+      // << engineer.m_address  //error 基类的private他是访问不了的
+      << engineer.get_address()
+      << ",contractcount: "
+      << engineer.contract_count
+      << "]";
+  return out;
+}

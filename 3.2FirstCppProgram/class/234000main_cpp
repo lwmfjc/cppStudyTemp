@@ -1,0 +1,16 @@
+#include <iostream>
+#include "player.h"
+class XX : public Player{
+  void a(){
+    // all_name="a";
+  }
+};
+int main()
+{
+  Player p1("Basketball","Jon","Snow");
+  // p1.set_first_name("Jon-main");
+  // p1.set_last_name("ha-main");
+  std::cout << "player:" << p1 << std::endl;
+
+  return 0;
+}

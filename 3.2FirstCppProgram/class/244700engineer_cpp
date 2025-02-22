@@ -1,0 +1,20 @@
+#include "person.h"
+#include "engineer.h"
+#include <iostream>
+
+Engineer::Engineer()
+{
+}
+
+Engineer::~Engineer()
+{
+}
+std::ostream &operator<<(std::ostream &out, const Engineer &engineer)
+{
+
+  out << "Person [ Full name" << engineer.get_full_name() << " ,Age: " << engineer.get_age() << ",Address: "
+      //<< engineer.m_age //success 基类的protected能访问
+      // << engineer.m_address  //error 基类的private他是访问不了的
+      << engineer.get_address() << "]";
+  return out;
+}

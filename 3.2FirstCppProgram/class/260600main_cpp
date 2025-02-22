@@ -1,0 +1,20 @@
+#include <iostream> 
+#include "engineer.h" 
+
+int main()
+{ 
+  {
+    
+    std::cout << "=========1" << std::endl;
+    Engineer e1("xx-fullname-e1", 12, "xx-address-e1");
+    std::cout << "e1:  [" << &e1 << "] " << e1 << std::endl;
+    std::cout << "=========2" << std::endl;
+    Engineer e2(e1);
+    std::cout << "e2: [" << &e2 << "] " << e2 << std::endl;
+    std::cout << "=========3" << std::endl;
+    Engineer e3;
+    std::cout << "=========4" << std::endl;
+  } 
+  std::cout << "========== end main ============";
+  return 0;
+}

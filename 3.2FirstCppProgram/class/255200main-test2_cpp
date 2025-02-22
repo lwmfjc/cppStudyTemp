@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+class LyTest
+{
+public:
+  LyTest()
+  {
+    std::cout << "Default constructor called! (lyTest)--" << this << std::endl;
+  }
+};
+
+class Parent
+{
+protected:
+  LyTest lyTest;
+  int money{};
+
+public:
+  Parent()
+  {
+    std::cout << "Default constructor called  (Parent)--" << this << std::endl;
+  }
+  Parent(int x) : money(x)
+  {
+    std::cout << "Value constructor called  (Parent)-- with " << x << "!"  << this << std::endl;
+  }
+  Parent(const Parent &e)
+  {
+    std::cout << "Copy fuc (Parent) Called!  (Parent)--"  << this << std::endl;
+  }
+};
+class Entity : public Parent
+{
+private:
+  int age{};
+
+public:
+  // 跟copy没关系，它是通过Parent(int)构造函数来创建对象的
+  Entity()
+  {
+    std::cout << "Default constructor called  (Entity)--"  << this << std::endl;
+  }
+  Entity(int age_param) : Parent(12), age(age_param)
+  {
+    std::cout << "Value constructor called  (Entity)--"  << this << std::endl;
+  }
+  // Entity(const Entity & source) : Parent(source.money), age(source.age)
+  Entity(const Entity & source) : Parent(source), age(source.age)//,a(source.age)
+  {
+    std::cout << "Value constructor called  (Entity)--[source]"  << &source << std::endl;
+    std::cout << "Value constructor called  (Entity)--"  << this << std::endl;
+  }
+  void a(int a){}
+  void print_info()
+  {
+    std::cout
+        << " age: " << this->age
+        << " money: " << this->money
+        << std::endl;
+  }
+};
+
+int main()
+{
+  std::cout << "===========0" << std::endl;
+  Entity e1(23);
+  std::cout << "===========1" << std::endl;
+  e1.print_info();
+  std::cout << "===========2" << std::endl;
+  Entity e2(e1);
+  std::cout << "===========3" << std::endl;
+  return 0;
+}

@@ -1,0 +1,33 @@
+#include "person.h"
+
+Person::Person()
+{
+  std::cout << "Default constructor for Person called ..." << this << std::endl;
+}
+// 使用构造器中的first_name_param来初始化成员变量first_name
+Person::Person(std::string_view fullname, int age,
+               std::string_view address) : m_full_name(fullname), m_age(age), m_address{address}
+{
+  std::cout << "Custom constructor for Person called ..." << this << std::endl;
+}
+std::ostream &operator<<(std::ostream &out, const Person &person)
+{
+  out << "Person [ Full name: " << person.get_full_name() << " ,Age: " << person.get_age() << ",Address: "
+      << person.get_address() << "]";
+  return out;
+}
+
+Person::Person(const Person &source)
+    : m_full_name(source.m_full_name), m_age(source.m_age),
+      m_address(source.m_address)
+{
+  std::cout << "Custom copy constructor for Person called ..." << this << std::endl;
+}
+Person::~Person()
+{
+  std::cout << "Deconstructor for Person called ..." << this << std::endl;
+}
+void Person::do_something() const
+{
+  std::cout << "hello" << std::endl;
+}

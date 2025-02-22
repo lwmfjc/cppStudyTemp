@@ -1,0 +1,25 @@
+#include "civilengineer.h"
+#include <iostream>
+
+CivilEngineer::CivilEngineer()
+{
+}
+
+CivilEngineer::~CivilEngineer()
+{
+}
+std::ostream &operator<<(std::ostream &out, const CivilEngineer &engineer)
+{
+  // engineer.m_full_name;
+    // engineer.m_speciality="hello"; //engineer是const，不允许修改内容 
+   out << engineer.hehe << std::endl;
+   //const对象不可以调用类中的非const成员函数(属性可以)
+  out << engineer.get_contract_count() << std::endl;
+
+  // 基类的private都不能访问
+  out << "Person [ Full name" << engineer.get_full_name() << " ,Age: " << engineer.get_age() << ",Address: "
+        << engineer.get_contract_count()
+        // << ".m_address "<< engineer.m_address
+      << engineer.get_address() << "]";
+  return out;
+}

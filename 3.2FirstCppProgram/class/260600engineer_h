@@ -1,0 +1,47 @@
+#ifndef ENGINEER_H
+#define ENGINEER_H
+#include "person.h"
+
+class Engineer : public Person
+{
+
+public:
+  /* 
+  //如果该构造函数与下面的using Person::Person;一起使用，则会以这个为主
+  Engineer(std::string_view fullname, int age,
+           std::string_view address )
+      : Person(fullname, age, address) 
+  {
+    // this->m_address=address;//不可见
+    std::cout << "custom constructor for Engineer called ..." << this << std::endl;
+  } */
+  // 虽然继承了，但是大括号{}里面的所有语句并不会一起继承
+  // 我觉得是编译器生成了带初始化列表的空语句实现的构造函数
+  using Person::Person;
+  friend std::ostream &operator<<(std::ostream &out, const Engineer &engineer);
+
+public:
+  /*   Engineer();
+    Engineer(std::string_view fullname, int age,
+             std::string_view address, int contract_count); */
+  Engineer(const Engineer &source);
+  ~Engineer();
+
+  void build_something()
+  {
+    m_full_name = "jso Sno";
+    m_age = 134;
+    // m_address = "ssNo..";
+  }
+
+  // const对象不可以调用类中的非const成员函数
+  int get_contract_count() const
+  {
+    return contract_count;
+  }
+
+private:
+  int contract_count{0};
+};
+
+#endif

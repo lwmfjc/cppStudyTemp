@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+class Example
+{
+public:
+  Example()
+  {
+    std::cout << "Created Example!" << std::endl;
+  }
+  Example(const Example &e)
+  {
+    std::cout << "Copy fuc Called!" << std::endl;
+  }
+  Example(int x)
+  {
+    std::cout << "Created Example with " << x << "!" << std::endl;
+  }
+};
+class Entity
+{
+private:
+  std::string m_Name;
+  Example m_Example;
+
+public:
+  //跟copy没关系，它是通过Example(int)构造函数来创建对象的
+  Entity() : m_Example(Example(8))
+  {
+    m_Name = std::string("Unkown");
+    // m_Example = Example(8);
+  }
+  Entity(const std::string &name)
+      : m_Name(name)
+  {
+  }
+  const std::string &GetName() const
+  {
+    return m_Name;
+  }
+};
+
+int main()
+{
+  Entity e;
+  std::cout << e.GetName() << std::endl;
+  // Entity e1("haha");
+  // std::cout << e1.GetName() << std::endl;
+  return 0;
+}

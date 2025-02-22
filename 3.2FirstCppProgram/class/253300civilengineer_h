@@ -1,0 +1,33 @@
+#ifndef CIVIL_ENGINEER_H
+#define CIVIL_ENGINEER_H
+#include "engineer.h"
+
+class CivilEngineer : public Engineer
+{
+  friend std::ostream &operator<<(std::ostream &out, const CivilEngineer &civilEngineer);
+
+public:
+  CivilEngineer(std::string_view fullname, int age,
+                std::string_view address, int contract_count_param, std::string_view m_speciality_param);
+  CivilEngineer();
+  ~CivilEngineer();
+  void build_road()
+  {
+    std::cout << add(2, 3) << std::endl;
+    std::cout << add(2, 3, 4) << std::endl;
+    // m_full_name = "jso Sno";
+    // m_age = 134;
+    // m_address = "ssNo..";
+    // get_full_name();
+  }
+
+  // public:
+  //   // 不可行
+  //   using Person::do_something;
+
+private:
+  int hehe = 98;
+  std::string m_speciality{"None"};
+};
+
+#endif

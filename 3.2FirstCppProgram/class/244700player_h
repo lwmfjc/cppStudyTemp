@@ -1,0 +1,34 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+// #include <string>
+// #include <iostream>
+// #include <string_view>
+#include "person.h"
+
+// 派生类Player继承的所有属性和方法都变成private(
+// 但是Person的属性和方法权限不变,即原来是protected的属性方法，
+//  Player照样能用)
+// class Player : private Person
+class Player : public Person
+{
+  friend std::ostream &operator<<(std::ostream &out, const Player &player);
+
+public:
+  Player();
+  ~Player();
+
+  // my test
+  void play()
+  {
+    m_full_name = "john snow";//ok private
+    m_age = 55;//protected
+    // m_address = "sss23 No..";//private
+  }
+
+private:
+  int m_career_start_year{0};
+  double m_salary{0.0};
+  int health_factor{0};
+};
+
+#endif

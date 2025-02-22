@@ -1,0 +1,55 @@
+#include "person.h"
+#include "engineer.h"
+#include <iostream>
+Engineer::Engineer(std::string_view fullname, int age,
+                   std::string_view address, int contract_count_param)
+    : Person(fullname, age, address), contract_count(contract_count_param)
+{
+  // this->m_address=address;//不可见
+  std::cout << "custom constructor for Engineer called ..." << this << std::endl;
+}
+Engineer::Engineer()
+{
+  std::cout << "Default constructor for Engineer called ..." << this << std::endl;
+}
+
+// Person默认的无参构造函数会被调用(没有设置属性值)
+/* Engineer::Engineer(const Engineer &source)
+    : contract_count(source.contract_count)
+{
+  std::cout << "custom copy constructor for Engineer called ..." << std::endl;
+} */
+
+// 视频里说初始化列表中调用这个Person(string,int,int)产生了拷贝，
+// 我觉得理解成产生了string,m_age的拷贝更好，而不是一个Person对象拷贝
+// 而下面的复制构造函数由于参数是引用，所以不会产生拷贝
+Engineer::Engineer(const Engineer &source)
+    : Person() , contract_count(source.contract_count)
+{
+  std::cout << "custom copy constructor for Engineer called ...[source][" << &source << "]" << std::endl;
+  std::cout << "custom copy constructor for Engineer called ..." << this << std::endl;
+}
+
+/* Engineer::Engineer(const Engineer &source)
+    : Person(source),contract_count(source.contract_count)
+{
+  std::cout << "custom copy constructor for Engineer called ...[source][" << &source << "]" << std::endl;
+  std::cout << "custom copy constructor for Engineer called ..." << this << std::endl;
+} */
+
+Engineer::~Engineer()
+{
+  std::cout << "Deconstructor for Engineer called ..." << this << std::endl;
+}
+std::ostream &operator<<(std::ostream &out, const Engineer &engineer)
+{
+
+  out << "Person [ Full name" << engineer.get_full_name() << " ,Age: " << engineer.get_age() << ",Address: "
+      //<< engineer.m_age //success 基类的protected能访问
+      // << engineer.m_address  //error 基类的private他是访问不了的
+      << engineer.get_address()
+      << ",contractcount: "
+      << engineer.contract_count
+      << "]";
+  return out;
+}
