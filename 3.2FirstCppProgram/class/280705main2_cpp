@@ -1,0 +1,85 @@
+#include <iostream>
+#include <memory>
+#include "circle.h"
+
+int main()
+{
+  // 40  56  56,如果只有shape的方法带了virtual也是这个大小
+  /* std::cout << sizeof(Shape) << std::endl;
+  std::cout << sizeof(Oval) << std::endl;
+  std::cout << sizeof(Circle) << std::endl; */
+
+  // 32 48 48 //三个都去掉virtual
+  //  std::cout << sizeof(Shape) << std::endl;
+  //  std::cout << sizeof(Oval) << std::endl;
+  //  std::cout << sizeof(Circle) << std::endl;
+
+  /* Circle circle1(3.3, "Circel1");
+  Shape shape = circle1; // 会切掉(slice)派生类的信息(永久丢失)，之后给shape
+  shape.draw();          // Shape::draw() called. Drawing Circel1
+  Shape *shape2 = &shape;
+  shape2->draw(); // Shape::draw() called. Drawing Circel1
+  std::cout << sizeof(Shape) << "--" << sizeof(Circle) << std::endl;//40 56
+  std::cout << sizeof(shape) << "--" << sizeof(*shape2) << std::endl;//40 40 */
+
+  /* int a = 56;
+  int &b = a;
+  std::cout << &a << "----" << a << std::endl;
+  std::cout << &b << "----" << b << std::endl;
+  b = 34; //b还是指向a的地址，更改的是a地址里的值
+  std::cout << &a << "----" << a << std::endl;
+  std::cout << &b << "----" << b << std::endl;  */
+
+  /*  Oval oval1(21.3, 3.2, "oval1");
+   Circle circle1(2.3, "circal1");
+   Oval oval2(4.3, 5.2, "oval2");
+   Circle circle2(12.3, "circal2");
+   Oval oval3(21.23, 3.32, "oval3");
+   Circle circle3(8.3, "circal3"); */
+
+  // all be sliced
+  /* Shape shapes1[]{circle1, oval1, circle2, oval2, circle3, oval3};
+  std::cout << sizeof(circle1) << std::endl;
+  for (Shape s : shapes1)
+  {
+    s.draw();
+    std::cout << sizeof(s) << std::endl;
+  } */
+
+  // 禁止使用引用数组
+  //  const Shape& shapes2[]{circle1};
+
+  /* std::cout << "====start====" << std::endl;
+  std::cout << sizeof(Shape) << std::endl; //40
+  std::cout << sizeof(Circle) << std::endl; //56
+  std::cout << sizeof(circle1) << std::endl; //56
+  std::cout << "========" << std::endl;
+  Shape *s1 = &circle1;
+
+  std::cout << sizeof(*s1) << std::endl; //40???没懂
+  std::cout << "========" << std::endl;
+  Shape &s2 = circle1;
+  std::cout << sizeof(s2) << std::endl; //40???没懂
+  std::cout << "====end====" << std::endl;
+
+  Shape *shapes3[]{&circle1, &oval1, &circle2, &oval2, &circle3, &oval3};
+  for (Shape *s : shapes3)
+  {
+    s->draw();
+    std::cout << "~~~~~~~start~~~~~~" << std::endl;
+    std::cout << sizeof(*s); //40???没懂
+    (*s).draw();
+    std::cout << "~~~~~~~end~~~~~~" << std::endl;
+  } */
+
+  std::shared_ptr<Shape> shapes4[]{
+      std::make_shared<Circle>(12.2, "Circle4"),
+      std::make_shared<Oval>(34.2, 3.4, "Oval4")};
+  // for(auto s:shapes4){
+  for (auto &s : shapes4)
+  {
+    s->draw();
+  }
+
+  return 0;
+}

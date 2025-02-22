@@ -1,0 +1,18 @@
+#include <iostream>
+#include "circle.h"
+
+int main()
+{
+  /* Oval oval1(21.3, 3.2, "oval1");
+  Circle circle1(2.3, "circal1");
+/*   Oval oval2(4.3, 5.2, "oval2");
+  Circle circle2(12.3, "circal2");
+  Oval oval3(21.23, 3.32, "oval3");
+  Circle circle3(8.3, "circal3");
+  circle1.draw();
+  circle1.draw(2); */
+  Shape *shape_ptr = new Circle(10, "Circle1");
+  shape_ptr->draw(3,"s");
+
+  return 0;
+}

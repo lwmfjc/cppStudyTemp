@@ -15,7 +15,14 @@ public:
          std::string_view description);
   ~Circle();
 
-  void draw() const
+  virtual void draw(int color_depth) const
+  {
+    std::cout << "Circle::Drawing with color depth" << color_depth << m_description
+              << std::endl;
+  }
+  // 子类可以不写virtual关键字
+  /* virtual  void draw() const*/
+  virtual void draw() const override
   {
     std::cout << "Circle::draw() called. Drawing " << m_description
               << " with radius: " << get_x_rad()

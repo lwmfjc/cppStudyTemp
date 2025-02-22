@@ -1,71 +1,15 @@
 #include <iostream>
-#include "shape.h"
-#include "oval.h"
-#include "circle.h"
+#include "animal.h"
+#include "feline.h"
+#include "dog.h"
+#include "cat.h"
+#include "bird.h"
+#include "pigeon.h"
+#include "crow.h"
 
-int main()
-{
-  /*   Shape shape1("Shape1");
-    shape1.draw();
 
-    Oval oval1(2.0, 3.5, "Oval1");
-    oval1.draw();
-
-    Circle circle1(3.3, "Circle1");
-    circle1.draw(); */
-
-  Shape shape1("Shape1");
-  Oval oval1(2.0, 3.5, "Oval1");
-  Circle circle1(3.3, "Circle1");
-
-  Shape *shape_ptr = &shape1;
-  shape_ptr->draw();
-
-  shape_ptr = &oval1;
-  shape_ptr->draw();
-
-  shape_ptr = &circle1;
-  shape_ptr->draw();
-
-  std::cout << "==========" << std::endl;
-
-  Shape &shape_ref11 = shape1;
-  shape_ref11.draw();
-  Shape &shape_ref12 = oval1;
-  shape_ref12.draw();
-  Shape &shape_ref13 = circle1;
-  shape_ref13.draw();
-  int a{3};
-  int &a_f{a};
-  int *a_p{&a};
-
-  // a value of type "int *" cannot be used to initialize an entity of type "Shape *"
-  //  Shape *shape_ptrs[]{&shape1, &oval1, &circle1, &a};
-  Shape *shape_ptrs[]{&shape1, &oval1, &circle1};
-  // Shape & shape_refs[]{shape_ref11};//Error,array of reference is not allowedC/C++(251)
-
-  std::cout << "==========" << std::endl;
+/* int main(){
   
-  //只会调用基类指针的那个方法
-  
-  std::cout << "=====无参=====" << std::endl;
-  Shape shape2;
-  Oval oval2;
-  Circle circle2;
-  Shape *shape_ptr21 = &shape2;
-  shape_ptr21->draw();//Shape::draw() called. Drawing
-  Shape *shape_ptr22 = &oval2;
-  shape_ptr22->draw();//Shape::draw() called. Drawing
-  std::cout << "=====有参=====" << std::endl;
-  Shape shape3("shape3");
-  Oval oval3(3.2,1.2,"oval3");
-  Circle circle3(33.5,"circle3");
-  Shape *shape_ptr31 = &shape3;
-  shape_ptr31->draw();//Shape::draw() called. Drawing shape3
-  Shape *shape_ptr32 = &oval3;
-  shape_ptr32->draw();//Shape::draw() called. Drawing oval3
-  Oval *shape_ptr33 = &oval3;
-  shape_ptr33->draw();//Oval::draw() called. Drawing oval3 with m_x_radius: 3.2 and m_y_radius: 1.2
-
-  return 0;
-}
+   
+    return 0;
+} */
