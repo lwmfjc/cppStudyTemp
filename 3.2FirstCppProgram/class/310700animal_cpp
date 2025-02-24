@@ -1,0 +1,13 @@
+#include "animal.h"
+
+Animal::Animal(const std::string& description)
+    : m_description(description)
+{
+    std::cout << "Animal::Animal() invoked!" << std::endl;
+}
+
+Animal::~Animal()
+{
+    std::cout << "Animal::~Animal() invoked!" << std::endl;
+}
+

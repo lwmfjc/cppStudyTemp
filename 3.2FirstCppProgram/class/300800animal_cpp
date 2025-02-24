@@ -1,0 +1,18 @@
+#include "animal.h"
+
+Animal::Animal( ) 
+{
+    std::cout << "Constructor be called!(Animal)" << std::endl;
+}
+Animal::Animal(std::string_view description)
+    : m_description(description)
+{
+    std::cout << "Constructor be called!(Animal)" << std::endl;
+}
+
+//virtual只能放声明中，不能放定义中
+Animal::~Animal()
+{
+    std::cout << "Destructor be called!(Animal)" << std::endl;
+}
+

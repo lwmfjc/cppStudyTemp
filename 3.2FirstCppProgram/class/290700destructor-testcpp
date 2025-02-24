@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+class Father
+{
+public:
+  Father() { cout << "contructor Father!" << endl; };
+  ~Father() { cout << "destructor Father!" << endl; };
+};
+
+class Son : public Father
+{
+public:
+  Son() { cout << "contructor Son!" << endl; };
+  ~Son() { cout << "destructor Son!" << endl; };
+};
+
+class Father1
+{
+public:
+  Father1() { cout << "contructor Father1!" << endl; };
+  virtual ~Father1() { cout << "destructor Father1!" << endl; };
+};
+
+class Son1 : public Father1
+{
+public:
+  Son1() { cout << "contructor Son1!" << endl; };
+  virtual ~Son1() { cout << "destructor Son1!" << endl; };
+};
+
+int main()
+{
+  {
+    Son son;
+    /* contructor Father!
+    contructor Son!
+    destructor Son!
+    destructor Father! */
+  }
+  std::cout << "-----end-----" << std::endl;
+
+  Father *pfather = new Son;
+  delete pfather;
+  pfather = NULL;
+  /*  contructor Father!
+   contructor Son!
+   destructor Father! */
+  std::cout << "-----end-----" << std::endl;
+  Son *pson = new Son;
+  delete pson;
+  pson = NULL;
+  /* contructor Father!
+  contructor Son!
+  destructor Son!
+  destructor Father! */
+  std::cout << "-----end-----" << std::endl;
+  Son1 *pson1 = new Son1;
+  delete pson1;
+  pson1 = NULL;
+  /*  contructor Father1!
+   contructor Son1!
+   destructor Son1!
+   destructor Father1! */
+  std::cout << "-----end-----" << std::endl;
+
+  return 0;
+}
+/*输出结果为：
+    contructor Father!
+    contructor Son!
+    destructor Father!
+
+————————————————
+
+                            版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。
+
+原文链接：https://blog.csdn.net/qq_28584889/article/details/88749862*/

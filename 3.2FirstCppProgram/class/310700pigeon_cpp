@@ -1,0 +1,13 @@
+#include "pigeon.h"
+
+Pigeon::Pigeon(const std::string& wing_color, const std::string& description)
+    : Bird(wing_color,description)
+{
+    std::cout << "Pigeon::Pigeon() invoked!" << std::endl;
+}
+
+Pigeon::~Pigeon()
+{
+    std::cout << "Pigeon::~Pigeon() invoked!" << std::endl;
+}
+

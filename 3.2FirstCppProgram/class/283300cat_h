@@ -12,7 +12,7 @@ public:
         std::cout << "Cat::miaw() called for cat " << m_description << std::endl;
     }
 
-    virtual void breathe()const{
+    virtual void breathe()const override{
         std::cout << "Cat::breathe called for : " << m_description << std::endl;
     }
 

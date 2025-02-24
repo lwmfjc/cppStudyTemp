@@ -1,0 +1,37 @@
+#include <iostream>
+
+class Base
+{
+public:
+  //永远不要在构造函数或者析构函数调用虚函数,
+  //这将是静态绑定而不是动态绑定
+  Base()
+  {
+    std::cout << "Base constructor called" << std::endl;
+    //创建了一个Derived对象，本来是希望他能根据多态性调用(Derived)子类setup()，但其实并不会，因为需要先构建Base对象之后再构建Derived对象
+    //静态绑定，并不会调用子类setup
+    // this->setup();
+  }
+  virtual ~Base() {
+    //静态绑定，并不会调用子类clean_up
+    // this->clean_up();
+    std::cout << "Base Destructor called" << std::endl;
+  }
+  virtual void setup()
+  {
+    std::cout << "Base::setup() called" << std::endl;
+    m_value = 10;
+  }
+  virtual void clean_up()
+  {
+    std::cout << "Base::cleanup() called" << std::endl;
+
+  }
+  int get_value()
+  {
+    return m_value;
+  }
+
+protected:
+  int m_value;
+};

@@ -1,0 +1,23 @@
+#include "ellipse.h"
+
+int main()
+{
+  Shape shape1("shape1");
+  std::cout << "shape count: " << Shape::m_count << std::endl;
+  Shape shape2("shape2");
+  std::cout << "shape count: " << Shape::m_count << std::endl;
+  Shape shape3("shape3");
+  std::cout << "shape count: " << Shape::m_count << std::endl;
+  std::cout << "======================== " << std::endl;
+  Ellipse ellipse1(10, 12, "ellipse1");
+  std::cout << "shape count: " << Shape::m_count << std::endl;
+  std::cout << "ellipse count: " << Ellipse::m_count << std::endl;
+  std::cout << "======================== " << std::endl;
+
+  //4 1 ，层次中最具体的那个
+  Shape *shapes[]{&shape1, &ellipse1};
+  for (auto &s : shapes)
+  {
+    std::cout << "count: " << s->get_count() << std::endl;
+  }
+}

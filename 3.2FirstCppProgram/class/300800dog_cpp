@@ -1,0 +1,17 @@
+#include "dog.h"
+
+Dog::Dog() 
+{
+    std::cout << "Constructor be called!(Dog)" << std::endl;
+}
+Dog::Dog(std::string_view fur_style, std::string_view description)
+    : Feline(fur_style,description)
+{
+    std::cout << "Constructor be called!(Dog)" << std::endl;
+}
+
+Dog::~Dog()
+{
+    std::cout << "Destructor be called!(Dog)" << std::endl;
+}
+

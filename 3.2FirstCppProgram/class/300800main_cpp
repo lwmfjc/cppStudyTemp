@@ -1,0 +1,99 @@
+#include <iostream>
+#include "dog.h"
+
+void do_something_with_animal_ptr(Animal* animal){
+  std::cout << "In function taking base pointer..." << std::endl;
+  Feline* f_ptr=dynamic_cast<Feline*>(animal);
+
+  if(f_ptr){
+    f_ptr->do_some_feline_thingy();
+  }else{
+    std::cout << "Couldn't cast to Feline pointer,sorry." << std::endl;
+  }
+}
+void do_something_with_animal_ref(Animal& animal){
+  std::cout << "In function taking base pointer..." << std::endl;
+  Feline* f_ptr=dynamic_cast<Feline*>(&animal);
+
+  if(f_ptr){
+    f_ptr->do_some_feline_thingy();
+  }else{
+    std::cout << "Couldn't cast to Feline pointer,sorry." << std::endl;
+  }
+}
+
+int main()
+{
+  /*   {
+      Dog dog;
+    }
+    std::cout << "====" << std::endl;
+    Animal *p_animal = new Dog;
+    delete p_animal; */
+
+  Animal *animal1 = new Feline("stripes", "feline1");
+  // animal1.do_some_feline_thingy(); //Error
+
+  std::cout << "----" << std::endl;
+  Feline *feline_ptr = dynamic_cast<Feline *>(animal1);
+  if (feline_ptr)
+    feline_ptr->do_some_feline_thingy();
+  else
+    std::cout << "cast failed!" << std::endl;
+
+  Dog *feline_ptr1 = dynamic_cast<Dog *>(animal1);
+  // 因为这个animal1并没有dog的信息，如果do_some_dog_thingy()函数
+  // 涉及到dog相关信息则函数会崩溃退出，否则会正常执行
+  // 不要直接调用，要用下面的判断是否为空检测
+  //  feline_ptr1->do_some_dog_thingy();
+  if (feline_ptr1)
+    feline_ptr1->do_some_feline_thingy();
+  else
+    std::cout << "cast failed!" << std::endl;
+  std::cout << "====" << std::endl;
+
+  Feline feline2("stripes", "feline2");
+  Animal &animal_ref = feline2;
+  // animal_ref.do_some_feline_thingy();
+
+  // 也行
+  // Feline & feline_ref {dynamic_cast<Feline&>(feline2)};
+  // 动态转换成派生的引用
+  Feline &feline_ref{dynamic_cast<Feline &>(animal_ref)};
+  // Error,会报错，只能是指针或者引用
+  // Feline & feline_ref {dynamic_cast<Feline>(feline2)};
+  feline_ref.do_some_feline_thingy();
+
+  //引用转换
+  //terminate called after throwing an instance of 'std::bad_cast'
+  //what():  std::bad_cast
+  // Dog &feline_ref1{dynamic_cast<Dog &>(animal_ref)}; //Error,提前Error，而不是到调用方法时,抛出错误且程序提前停止运行
+  // feline_ref1.do_some_dog_thingy();
+
+  //把refrence转化为指针
+  //指针转换
+  Dog* feline_p2{dynamic_cast<Dog*>(&animal_ref)};
+  if(feline_p2){
+    feline_p2->do_some_dog_thingy();
+  }else{
+    std::cout << "Cast to pointer Error!" << std::endl;
+  }
+
+  std::cout << "==functionTest==" << std::endl;
+  do_something_with_animal_ptr(animal1);
+  do_something_with_animal_ref(animal_ref);
+  std::cout << "==OtherTest==" << std::endl;
+  int data{34};
+  int * data_p{&data};
+  //出错，只能是继承层次结构下的引用或者指针
+  // std::string data_str=dynamic_cast<std::string>(data);
+  // std::string data_str=dynamic_cast<std::string>(data_p);
+
+
+  std::cout << "end successfull" << std::endl;
+
+  delete animal1;
+
+  
+  return 0;
+}

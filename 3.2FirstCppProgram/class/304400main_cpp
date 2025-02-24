@@ -1,0 +1,13 @@
+#include "shape.h"
+#include "rectangle.h"
+ 
+
+int main()
+{
+  Shape *r = new Rectangle; 
+  std::cout << typeid(*r).name() << std::endl;//9Rectangle
+  r->perimeter();
+  r->surface();
+  // Shape Shape;
+  return 0;
+}

@@ -1,0 +1,57 @@
+#include <iostream>
+#include "derived.h"
+class Parent
+{
+public:
+  virtual void test(int a , int b=9)
+  {
+    std::cout << "(Parent)" << a + b + 5 << std::endl;
+  }
+};
+class Child : public Parent
+{
+
+  virtual void test(int a = 20, int b = 20) override
+  {
+    std::cout << "(Child)" << a + b + 3 << std::endl;
+  }
+};
+int main()
+{
+  Parent *p = new Child;
+  //不论Parent::test 几个参数有默认值，都是静态绑定。
+  //如果这里b没有默认值，连编译都过不去
+  p->test(5); //(Child)17 ,5+9+3
+  Parent p2=*p;
+  p2.test(5);//Parent)19 5+5+9
+
+  Derived d;
+  Base &base{d};
+
+  // 14 = 3+10+1
+  std::cout << d.add(3) << std::endl;
+
+  // 引用都是走Derived::add()
+  // Derived::add() called
+  //  9 = 3+5+1
+  // 默认参数是通过静态绑定来决定的
+  std::cout << base.add(3) << std::endl;
+  // Derived::add() called  10 =3+6+1
+  std::cout << base.add(3, 6) << std::endl;
+  // Derived::add() called  11=5+5+1
+  std::cout << base.add() << std::endl;
+
+  Base *basep{&d};
+  std::cout << "======" << std::endl;
+  // 9 = 3+5+1
+  std::cout << basep->add(3) << std::endl;
+  // Derived::add() called  10 =3+6+1
+  std::cout << basep->add(3, 6) << std::endl;
+  // Derived::add() called  11=5+5+1
+  std::cout << basep->add() << std::endl;
+  Base *base_ptr1 = new Derived;
+  // 9 = 3+5+1
+  std::cout << base_ptr1->add(3) << std::endl;
+
+  return 0;
+}

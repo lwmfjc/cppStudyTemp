@@ -1,0 +1,32 @@
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+#include "shape.h"
+class Rectangle : public Shape
+{
+public:
+  Rectangle() = default;
+  Rectangle(double width, double height, std::string_view description);
+  virtual ~Rectangle() = default;
+
+public:
+  // 父类是抽象类的情况下，如果该子类没有重写(override)父类
+  // 的所有抽象方法，那么该子类也会变成抽象类
+  //允许重写父类的所有方法(抽象+非抽象)
+  virtual double perimeter() const override
+  {
+    std::cout << "call in Rectangle::perimeter()";
+    return (2 * m_width + 2 * m_height);
+  }
+
+  virtual double surface() const override
+  {
+    std::cout << "call in Rectangle::surface()";
+    return (m_width * m_height);
+  }
+
+private:
+  double m_width{0.0};
+  double m_height{0.0};
+};
+
+#endif

@@ -1,0 +1,18 @@
+#include "derived.h"
+
+int main()
+{
+  {
+    Base *p_base = new Derived;
+    p_base->setup();
+
+    auto value = p_base->get_value();
+    // 期望100，但是得到10
+    std::cout << "value: " << value << std::endl;
+
+    p_base->clean_up();
+    delete p_base;
+    // 期望
+  }
+  return 0;
+}

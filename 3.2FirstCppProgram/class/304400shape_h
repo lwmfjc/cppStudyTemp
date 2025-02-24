@@ -1,0 +1,26 @@
+#ifndef SHAPE_H
+#define SHAPE_H
+#include <iostream>
+#include <string>
+
+// 只要有一个纯虚函数，他就是抽象类
+class Shape
+{
+protected:
+  Shape() = default;
+  Shape(std::string_view description);
+
+public:
+  virtual ~Shape() = default;
+  virtual double perimeter() const  
+  {
+    std::cout << "call in Shape::perimeter()";
+    return 0.0;
+  };
+  // virtual double perimeter() const = 0;
+  virtual double surface() const = 0;
+
+private:
+  std::string m_description;
+};
+#endif
