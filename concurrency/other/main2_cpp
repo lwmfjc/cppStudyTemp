@@ -1,0 +1,28 @@
+#include <iostream>
+#include <thread>
+ 
+void myfunc(){};
+void myfunc1(){};
+
+int main()
+{
+  auto lamda = [](int x) -> void
+  {
+    std::cout << "hello from thread! " << std::endl;
+    std::cout << "Argument passed in: " << x << std::endl;
+  };
+
+  std::cout << "========" << std::endl;
+  std::cout << myfunc << std::endl;
+  std::cout << &myfunc << std::endl;
+  std::cout << myfunc1 << std::endl;
+  std::cout << &myfunc1 << std::endl;
+  std::cout << "========" << std::endl;
+
+  std::thread myThread(lamda, 100);
+  // Blocks the current thread until the thread identified by *this finishes its execution.
+  // 阻止当前线程直到 *通过*识别的线程完成执行。
+  myThread.join();
+  std::cout << "hello from my main thread" << std::endl;
+  return 0;
+}

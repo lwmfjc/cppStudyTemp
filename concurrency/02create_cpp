@@ -1,0 +1,54 @@
+#include <iostream>
+#include <thread>
+using namespace std;
+
+class Base
+{
+public:
+  void run(int x)
+  {
+    while (x-- > 0)
+    {
+      cout << std::this_thread::get_id() << "--" << x << endl;
+    }
+  }
+  
+  static void runs(int x)
+  {
+    while (x-- > 0)
+    {
+      cout << std::this_thread::get_id() << "-s-" << x << endl;
+    }
+  }
+};
+
+void fun1(int x)
+{
+  while (x-- > 0)
+  {
+    cout << std::this_thread::get_id() << "--" << x << endl;
+  }
+}
+
+int main()
+{
+  //  std::thread t1(fun1,11);
+  // std::thread t2(fun1, 10);
+  // t1.join();
+  // t2.join();
+  auto fun = [](int x) -> void
+  {
+    while (x-- > 0)
+    {
+      cout << std::this_thread::get_id() << "--" << x << endl;
+    }
+  };
+  // std::thread t1(fun,11);
+  Base b;
+  // std::thread t1(&Base::run, &b, 10);
+  std::thread t1(&Base::runs, 10);
+
+  t1.join();
+
+  return 0;
+}

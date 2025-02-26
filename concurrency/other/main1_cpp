@@ -1,0 +1,20 @@
+#include <iostream>
+#include <thread>
+
+void test(int x)
+{
+  std::cout << "hello from thread! " << std::endl;
+  std::cout << "Argument passed in: " << x << std::endl;
+}
+
+ 
+int main()
+{
+  std::thread myThread(&test,100);
+
+  //Blocks the current thread until the thread identified by *this finishes its execution.
+  //阻止当前线程直到 *通过*识别的线程完成执行。
+  myThread.join();
+  std::cout << "hello from my main thread" << std::endl;
+  return 0;
+}
