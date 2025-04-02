@@ -1,7 +1,6 @@
 // @before-stub-for-debug-begin
 #include <vector>
-#include <string>
-#include "commoncppproblem6.h"
+#include <string> 
 
 using namespace std;
 // @before-stub-for-debug-end
@@ -21,3 +20,6 @@ public:
 };
 // @lc code=end
 
+int main(){
+    return 0;
+}
