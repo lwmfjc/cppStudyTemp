@@ -7,6 +7,6 @@
 
 
 //定义，定义这个函数到底是什么
-void Logr(const char* message) {
+void Log(const char* message) {
 	std::cout << message << std::endl;
 }
