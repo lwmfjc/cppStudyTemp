@@ -1,10 +1,16 @@
- 
+#include <iostream>
+void Log(const char* message);
+void Log(const char* message) {
+	std::cout << message << std::endl;
+}
 
-#pragma comment(linker, "/ENTRY:haha") 
+static int Multiply(int a, int b) {
+	Log("Multiply");
+	return a * b;
 
-// 这个main函数会被自动调用
-int haha()
-{
-     
-    return 0;
+}
+
+int main() {
+	std::cout << Multiply(5, 8) << std::endl;
+	std::cin.get();
 }
