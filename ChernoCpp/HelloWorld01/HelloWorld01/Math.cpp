@@ -1,8 +1,5 @@
 #include <iostream>
-void Log(const char* message);
-void Log(const char* message) {
-	std::cout << message << std::endl;
-}
+#include "Log.h"
 
 static int Multiply(int a, int b) {
 	Log("Multiply");
