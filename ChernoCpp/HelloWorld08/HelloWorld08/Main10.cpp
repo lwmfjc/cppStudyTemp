@@ -44,19 +44,28 @@ int main()
 	{
 
 	} while (condition);*/
-	for (int i = 0; i < 2; i++)
+	/*for (int i = 0; i < 2; i++)
 	{
 
-		std::cout << "i" << i << "-start" << std::endl; 
+		std::cout << "i" << i << "-start" << std::endl;
 		for (int j = 0; j < 2; j++) {
-			 
+
 			std::cout << "j" << j << "-start" << std::endl;
-			break; 
+			break;
 
 			std::cout << "j" << j << "-end" << std::endl;
 		}
 
-		std::cout << "i" << i << "-end" << std::endl; 
+		std::cout << "i" << i << "-end" << std::endl;
+	}*/
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (i > 5)
+			return 0;
+		std::cout << i;
+		Log("Hello world!");
 	}
+
 	std::cin.get();
 }
