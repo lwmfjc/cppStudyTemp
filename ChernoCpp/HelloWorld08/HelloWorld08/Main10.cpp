@@ -59,13 +59,13 @@ int main()
 		std::cout << "i" << i << "-end" << std::endl;
 	}*/
 
-	for (int i = 0; i < 5; i++)
-	{
-		if (i > 5)
-			return 0;
-		std::cout << i;
-		Log("Hello world!");
-	}
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	if (i > 5)
+	//		return 0;
+	//	std::cout << i;
+	//	Log("Hello world!");
+	//}
 
 	std::cin.get();
 }
