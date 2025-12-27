@@ -67,5 +67,8 @@ int main()
 	//	Log("Hello world!");
 	//}
 
+	int var = 8;
+	void* ptr = &var;
+
 	std::cin.get();
 }
