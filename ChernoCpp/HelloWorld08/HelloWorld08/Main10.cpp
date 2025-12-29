@@ -1,9 +1,29 @@
 #include "iostream"
 #include "Log.h" 
+#define LOG(x) std::cout << x << std::endl;
 
+
+void Increment(int& value) { 
+	value++;
+}
 
 int main()
 {
+
+	int a = 5;
+	int b = 8;
+
+	int* ref = &a;
+	*ref = 2;
+	ref = &b;
+	*ref = 1;
+
+	LOG(a);
+	LOG(b);
+
+	std::cin.get();
+
+
 	//int x = 6;
 
 	//比较这里比较int的4字节的
@@ -67,8 +87,37 @@ int main()
 	//	Log("Hello world!");
 	//}
 
-	int var = 8;
-	void* ptr = &var;
+	//int var = 8;
 
-	std::cin.get();
+	//没有指定指针类型，编译器
+	//不知道怎么存数据，*ptr=10会报错
+	//void* ptr =  & var;
+	//*ptr = 10;
+
+	/*int* ptr = &var;
+	*ptr = 10;
+	LOG(var);*/
+
+	/*char* buffer = new char[8];
+	memset(buffer, 0, 8);
+	
+	char** ptr = &buffer;*/
+
+	//int a = 5;
+	//Increment(a);
+	//std::cin.get();
+
+
+
+	//int* b = &a;
+
+	////&符号是类型的一部分
+	////使用ref就跟使用a的别名一样
+	//int& ref = a;
+	////这里编译器编译后会直接设置a，而
+	////不会再创建一个变量
+	//ref = 2;
+
+	//LOG(a);
+	//std::cin.get();
 }
