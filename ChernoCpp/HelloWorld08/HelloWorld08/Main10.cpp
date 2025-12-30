@@ -3,14 +3,42 @@
 #define LOG(x) std::cout << x << std::endl;
 
 
-void Increment(int& value) { 
-	value++;
-}
+//void Increment(int& value) { 
+//	value++;
+//}
+
+//类定义
+class Player
+{
+	//默认是私有的
+	//int x, y;
+//这里的public包括了speed这个成员
+public:
+	int x, y;
+	int speed;
+	//方法
+	void Move( int xa, int ya)
+	{
+		x += xa * speed;
+		y += ya * speed;
+	}
+};
+
+
 
 int main()
 {
+	//player:对象
+	//创建(实例化)一个对象
+	Player player;
+	player.x = 1;
+	player.y = 2;
+	player.speed = 2;
+	player.Move( 1, -1);
+	LOG(player.x);//3
+	LOG(player.y);//0
 
-	int a = 5;
+	/*int a = 5;
 	int b = 8;
 
 	int* ref = &a;
@@ -21,7 +49,7 @@ int main()
 	LOG(a);
 	LOG(b);
 
-	std::cin.get();
+	std::cin.get();*/
 
 
 	//int x = 6;
@@ -119,5 +147,5 @@ int main()
 	//ref = 2;
 
 	//LOG(a);
-	//std::cin.get();
+	std::cin.get();
 }
