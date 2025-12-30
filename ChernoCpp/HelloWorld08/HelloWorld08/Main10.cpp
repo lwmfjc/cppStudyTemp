@@ -8,12 +8,12 @@
 //}
 
 //类定义
-class Player
+struct Player
 {
 	//默认是私有的
 	//int x, y;
 //这里的public包括了speed这个成员
-public:
+
 	int x, y;
 	int speed;
 	//方法
