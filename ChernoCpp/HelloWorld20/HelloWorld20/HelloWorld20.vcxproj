@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Main23.cpp" />
+    <ClCompile Include="Main24.cpp" />
     <ClCompile Include="Static.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
