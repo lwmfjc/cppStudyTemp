@@ -19,10 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="Main23.cpp" />
-    <ClCompile Include="Main24.cpp" />
-    <ClCompile Include="Static.cpp" />
+    <ClCompile Include="Main27.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
