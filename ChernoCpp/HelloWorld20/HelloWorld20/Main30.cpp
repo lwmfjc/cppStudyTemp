@@ -1,7 +1,7 @@
 #include <iostream> 
 class Entity
 { 
-	constexpr int size = 5;
+	const static int size = 5;
 	int arr[size];
 };
 int main()
