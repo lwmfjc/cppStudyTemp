@@ -22,7 +22,7 @@ int main()
 	std::cout << b.x << std::endl;//5
 
 	Vector2* aP = new Vector2();
-	//复制了指针，没有复制实际数据
+	//复制了指针，没有复制实际数据，复制的是地址
 	Vector2* bP = aP;
 	bP->x = 2;
 	std::cout << aP->x << std::endl;//2

@@ -18,8 +18,5 @@
     <ClCompile Include="Main44_1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rename_dir.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
