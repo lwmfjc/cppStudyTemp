@@ -17,6 +17,13 @@ public:
 		// 但计数结果不计入这个\0
 		m_Size = strlen(string);
 
+		/*for (int i = 0; i < m_Size; i++)
+			m_Buffer[i] = string[i];*/
+
+		//不使用上面的，而是使用简短的函数拷贝
+		//工作方式：它从 src 指向的地址开始，连续复制 count 个字节到 dest 指向的地址。
+		memcpy(m_Buffer, string, m_Size);
+
 	}
 };
 
