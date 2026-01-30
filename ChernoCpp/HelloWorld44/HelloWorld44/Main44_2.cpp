@@ -16,6 +16,8 @@ public:
 		// 地址开始扫描，直到遇到第一个空字符（终止符）\0 为止，
 		// 但计数结果不计入这个\0
 		m_Size = strlen(string);
+		//向堆申请m_Size字节的空间
+		m_Buffer = new char[m_Size];
 
 		/*for (int i = 0; i < m_Size; i++)
 			m_Buffer[i] = string[i];*/
