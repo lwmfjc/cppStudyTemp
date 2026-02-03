@@ -133,6 +133,9 @@
   <ItemGroup>
     <ClCompile Include="Main44_1.cpp" />
     <ClCompile Include="Main44_2.cpp" />
+    <ClCompile Include="Main44_3.cpp" />
+    <ClCompile Include="Main44_4_memory.cpp" />
+    <ClCompile Include="Main44_4_virtual.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

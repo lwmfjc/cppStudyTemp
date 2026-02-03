@@ -22,14 +22,15 @@ public:
 		/*for (int i = 0; i < m_Size; i++)
 			m_Buffer[i] = string[i];*/
 
-			//不使用上面的，而是使用简短的函数拷贝
-			//工作方式：它从 src 指向的地址开始，连续复制 count 个字节到 dest 指向的地址。
+		//不使用上面的，而是使用简短的函数拷贝
+		//工作方式：它从 src 指向的地址开始，连续复
+		// 制 count 个字节到 dest 指向的地址。
 		memcpy(m_Buffer, string, m_Size);
 		m_Buffer[m_Size] = '\0';
 
 	}
 
-	
+
 	////如果没有给出复制构造函数，编译器会默认给出这样一个构造函数
 	//String(const String& other) 
 	//{
@@ -37,6 +38,36 @@ public:
 	////编译器认为：既然你已经身处 String 类的内部代码中，你就是“自己人”。作为一个 String 类，你理所当然知道如何处理另一个 String 类的内部数据。
 	//	//std::cout << other.m_Size;
 	//}
+
+	//String(const String& other)
+	//{
+	//	/*
+	//	memcpy(this, &other, sizeof(String)) 会把 other 对象内存里的所有内容（包括它的 vptr）原封不动地覆盖到 this 对象的内存上。
+	//	*/
+	//	memcpy(this, &other, sizeof(String));
+	//}
+
+	//不允许复制
+	//String(const String& other) = delete;
+
+	//深度复制
+	String(const String& other)
+		:m_Size(other.m_Size)
+	{
+		std::cout << "Copied String!" << std::endl;
+		m_Buffer = new char[m_Size + 1];
+		//把那个空字符也copy过来
+		memcpy(m_Buffer, other.m_Buffer, m_Size+1); 
+
+		/*
+深度复制的运行结果
+cherno
+cherno
+3
+cherno
+charno
+	*/
+	}
 
 	//让该函数在类外访问String私有成员
 	friend std::ostream& operator<<(std::ostream& stream, const String& string);
@@ -76,6 +107,11 @@ std::ostream& operator<<(std::ostream& stream, const String& string)
 	return stream;
 }
 
+void PrintString(String& string)
+{
+	std::cout << string << std::endl;
+}
+
 int main()
 {
 	String string = "cherno";
@@ -92,11 +128,25 @@ int main()
 	// second.m_Size = 3;
 	second.mytest() = 3;
 	std::cout << second.mytest() << std::endl;//3
+	second.mytest() = 6;
 
-
-	std::cout << string << std::endl;//charno
-	std::cout << second << std::endl;//charno
+	std::cout << second << std::endl;
+	PrintString(string);//cherno
+	PrintString(second);//charno 
 
 
 	std::cin.get();
 }
+
+/*
+cherno
+Copied String!
+cherno
+3
+charno
+Copied String!
+cherno
+Copied String!
+charno
+
+*/
