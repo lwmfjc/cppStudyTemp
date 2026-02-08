@@ -1,0 +1,2 @@
+﻿Main50_1.obj : error LNK2019: unresolved external symbol __imp__glfwInit referenced in function _main
+E:\cppStudyTemp\ChernoCpp\HelloWorld50\Debug\HelloWorld50.exe : fatal error LNK1120: 1 unresolved externals
