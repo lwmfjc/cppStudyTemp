@@ -1,0 +1,5 @@
+﻿cl : command line  warning D9025: overriding '/sdl' with '/GS-'
+  Main54_1.cpp
+  Main54_Source.cpp
+  Generating Code...
+  HelloWorld52.vcxproj -> E:\cppStudyTemp\ChernoCpp\HelloWorld52\Debug\HelloWorld52.exe
