@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main56_1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main56_2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main56_3.cpp">
+    <ClCompile Include="Main57_1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
