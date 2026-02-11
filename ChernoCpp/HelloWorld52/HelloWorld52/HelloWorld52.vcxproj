@@ -19,9 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main58_1.cpp" />
-    <ClCompile Include="Main58_2.cpp" />
-    <ClCompile Include="Main58_3.cpp" />
+    <ClCompile Include="Main59_1.cpp" />
+    <ClCompile Include="Main59_2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
