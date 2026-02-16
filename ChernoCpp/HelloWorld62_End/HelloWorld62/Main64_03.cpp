@@ -1,4 +1,4 @@
-#ifdef LY_EP64
+#ifdef LY_EP64_
 #include <iostream>
 
 int main()
@@ -11,6 +11,15 @@ int main()
 		//每个元素都包含五个数组
 		a2d[i] = new int[5];
 	} 
+
+	//设置元素的值
+	for (int y = 0; y < 5; y++)
+	{
+		for (int x = 0; x < 5; x++)
+		{
+			a2d[y][x] = 2;
+		}
+	}
 
 	//这25个元素并不是一个连续的能
 	//容纳25个整数的缓冲区,而是5个独立
