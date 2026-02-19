@@ -11,6 +11,10 @@ int main()
 	double  value = *(double*)&a;
 	std::cout << a << std::endl;
 	std::cout << value << std::endl;
+
+	//不想创建全新变量，只是想把这个整数当成双精度数来访问，
+	//那么可以在这个双精度数后面加&，这样就能引用他
+	double&  value1 = *(double*)&a;
 	std::cin.get();
 }
 #endif
