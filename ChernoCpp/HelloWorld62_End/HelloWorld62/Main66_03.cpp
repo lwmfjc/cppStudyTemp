@@ -1,5 +1,10 @@
-#ifdef LY_EP66_
+#ifdef LY_EP66
 #include <iostream>
+
+struct Entity
+{
+	int x, y;
+};
 
 int main()
 {
@@ -16,7 +21,7 @@ int main()
 	//那么可以在这个双精度数后面加&，这样就能引用他
 	//强行让 value1 成为 &a 处那块 8 字节内存的别名。通过
 	// value1 修改数据会直接破坏 a 及其相邻内存。
-	double&  value1 = *(double*)&a;
+	double& value1 = *(double*)&a;
 	//这里会把8个字节(a和a后面的4个字节)都写入0
 	value1 = 0;
 	std::cin.get();
