@@ -1,4 +1,4 @@
-#ifdef LY_EP69
+#ifdef LY_EP69_
 #include <iostream>
 
 void IncreaseValue(const int* val_ptr) {
