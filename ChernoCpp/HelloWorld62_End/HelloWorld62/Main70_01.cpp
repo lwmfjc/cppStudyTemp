@@ -3,10 +3,13 @@
 
 int main()
 { 
-
+	int a = 2, b = 3;
+	for (int i = 0; i < 5; i++) {
+		std::cout << "i:" << i << std::endl;
+	}
+	std::cout << a << std::endl;
+	std::cout << b << std::endl;
 	std::cin.get();
-	//成功的情况只有一种（0），而失败的原因
-	//可以有成千上万种（1, 2, 3...）。
 	return 0;
 }
 #endif

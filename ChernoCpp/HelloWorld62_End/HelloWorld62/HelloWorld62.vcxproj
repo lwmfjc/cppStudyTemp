@@ -19,9 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main69_01.cpp" />
-    <ClCompile Include="Main69_02.cpp" />
-    <ClCompile Include="Main69_03.cpp" />
     <ClCompile Include="Main70_01.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
