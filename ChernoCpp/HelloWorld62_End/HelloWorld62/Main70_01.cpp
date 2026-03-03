@@ -1,4 +1,4 @@
-#ifdef LY_EP70
+#ifdef LY_EP70_
 #include <iostream>
 
 int main()
