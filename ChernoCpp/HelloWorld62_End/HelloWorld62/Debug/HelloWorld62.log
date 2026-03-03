@@ -1,2 +1,6 @@
-﻿  Main73_01.cpp
-  HelloWorld62.vcxproj -> E:\cppStudyTemp\ChernoCpp\HelloWorld62_End\Debug\HelloWorld62.exe
+﻿  Main74_01.cpp
+  Main74_02.cpp
+  Generating Code...
+E:\cppStudyTemp\ChernoCpp\HelloWorld62_End\HelloWorld62\Main74_02.cpp(12,39): warning C4834: discarding return value of function with [[nodiscard]] attribute
+E:\cppStudyTemp\ChernoCpp\HelloWorld62_End\HelloWorld62\Main74_02.cpp(40,45): error C2079: 'sharedPtrs' uses undefined class 'std::array<std::shared_ptr<main::Vector2>,1000>'
+E:\cppStudyTemp\ChernoCpp\HelloWorld62_End\HelloWorld62\Main74_02.cpp(43,15): error C2109: subscript requires array or pointer type
