@@ -1,8 +1,7 @@
-﻿  Main73_01.cpp
-  Main74_01.cpp
-E:\cppStudyTemp\ChernoCpp\HelloWorld62_End\HelloWorld62\Main74_01.cpp(11,39): warning C4834: discarding return value of function with [[nodiscard]] attribute
+﻿  Main75_01.cpp
+  Main75_02.cpp
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 28 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Compiler switch has changed, fall back to full compilation.
+  All 92 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   HelloWorld62.vcxproj -> E:\cppStudyTemp\ChernoCpp\HelloWorld62_End\Release\HelloWorld62.exe
