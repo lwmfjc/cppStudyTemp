@@ -64,4 +64,9 @@ int main()
 	std::cin.get();
 
 } 
+/*
+File content: Data!Hello!
+File content: Data!Hello!
+Failed to read file(data1.txt).
+*/
 #endif
