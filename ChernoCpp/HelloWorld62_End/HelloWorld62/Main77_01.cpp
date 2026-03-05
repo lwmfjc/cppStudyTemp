@@ -1,11 +1,11 @@
-#ifdef LY_EP77
+#ifdef LY_EP77_
 
 #include <iostream>
 #include <variant>
 
 int main()
 {
-	std::variant<std::string, int> data;
+	std::variant<std::string, int,float> data;
 	data = "Cherno";
 	std::cout << std::get<std::string>(data) << std::endl;
 	data = 2;
@@ -45,16 +45,31 @@ int main()
 		int age;//4字节
 	};
 	std::cout << "union======size===" << std::endl;
-	std::cout << sizeof(std::string) << std::endl;//28字节
-	std::cout << sizeof(int) << std::endl;//4字节
-	std::cout << sizeof(TestS) << std::endl;//28字节
+	std::cout << "stringSize:" << sizeof(std::string) << std::endl;//28字节
+	std::cout << "intSize:" << sizeof(int) << std::endl;//4字节
+	std::cout << "floatSize:" << sizeof(float) << std::endl;//4字节
+	std::cout << "TestSSize:" << sizeof(TestS) << std::endl;//28字节
 	std::cout << "variant======size===" << std::endl;
 
-	//32=28+4，所以基本上创建了struct，或者说用于存储两种数据类型的空间；所以union更高效，而variant安全性更高
+	//28 4 4里面取最大是28，然后1字节存储索引,28+1=29,然后由于字节对齐需要变为32；所以union更高效，而variant安全性更高
 	std::cout << sizeof(data) << std::endl;//32
 
 
 	std::cin.get();
 	return 0;
 }
+/*
+Cherno
+2
+1
+1
+it's an int:1
+union======size===
+stringSize:28
+intSize:4
+floatSize:4
+TestSSize:28
+variant======size===
+3
+*/
 #endif
