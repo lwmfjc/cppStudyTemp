@@ -15,16 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main78_01.cpp">
+    <ClCompile Include="Main84_01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main77_01.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main78_02.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main78_03.cpp">
+    <ClCompile Include="Main84_02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
