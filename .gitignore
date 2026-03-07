@@ -1,6 +1,7 @@
 *.exe
 .vscode
 **/.vs/**
+**/x86/**
 **/x64/**
 **/Debug/**
 **/Release/**
