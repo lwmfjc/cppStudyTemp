@@ -1,4 +1,4 @@
-#ifdef LY_EP85
+#ifdef LY_EP85_
 
 #include <iostream>   
 
@@ -60,6 +60,9 @@ GetRefValue():12
 
 	SetValueConst(10);//从右值创建一个const左值引用 
 	//int& a1 = 10;//非const的引用，必须通过左值来初始化
+
+	//编译器可能创建了一个带实际存储的临时变量(比如temp=10)，然后
+	//const int& b1=temp;
 	const int& b1 = 11;//const的引用，还可以通过右值来初始化
 
 	std::cin.get();
