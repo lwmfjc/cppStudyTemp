@@ -1,8 +1,7 @@
-#ifdef LY_EP89
+#ifdef LY_EP89_
 
 //c++11才引入了右值引用
 #include <iostream>   
-#include <utility> // std::move 在这个头文件里
 
 class String
 {
@@ -19,7 +18,7 @@ public:
 		memcpy(m_Data, string, m_Size);
 		std::cout << "String(const char* string)" << std::endl;
 	}
-
+	
 	//复制构造函数
 	String(const String& other)
 	{
@@ -34,25 +33,7 @@ public:
 
 		std::cout << "String(const String& other)" << std::endl;
 	}
-
-
-	//移动构造函数
-	//接收一个右值引用参数，表示可以从一个将要被销毁的临时对象中“窃取”资源，而不是复制资源。
-	String(String&& other) noexcept
-	{
-		printf("Moved!\n");
-		//不包括\0
-		m_Size = other.m_Size;
-		m_Data = other.m_Data;
-
-		other.m_Size = 0;//将原对象的大小置为0，表示它不再拥有资源
-
-		//把被接管控制权的资源指针置空，防止原对象的析构函数删除已经被移动的资源
-		other.m_Data = nullptr;
-
-
-		std::cout << "String(String&& other)" << std::endl;
-	}
+	 
 
 	~String()
 	{
@@ -79,34 +60,11 @@ private:
 class Entity
 {
 public:
-
-
-	Entity(const String& name) 
+	Entity(const String& name)
 		:m_Name(name)
 	{
 		std::cout << "Entity(const String& name)" << std::endl;
-	}
-
-
-
-	//Entity(String&& name)
-	//	//一旦右值引用有了名字，它在后续表达式中就变成了左值。
-	//	//编译器会想：“这个 name 虽然是引用进来的，但它现在是有名有姓的变量，为了安全起见，我必须调用 复制构造函数 来保护它。
-	//	:m_Name(name)
-	//{
-	//	std::cout << "Entity( String&& name)" << std::endl;
-	//}
-	
-
-
-	//接收一个临时对象作为参数，使用移动语义来构造 Entity 对象，避免不必要的复制，提高性能。
-	Entity(String&& name)
-		//强转为右值引用，告诉编译器：我知道 name 是一个左值，但我想把它当作一个将要被销毁的临时对象来处理，所以请调用 移动构造函数 来构造 m_Name。
-		//:m_Name((String&&)name) //这种写法也行
-		:m_Name(std::move(name))  // 将左值 name 强行转回右值
-	{
-		std::cout << "Entity( String&& name)" << std::endl;
-	}
+	}  
 
 	void PrintName()
 	{
@@ -134,9 +92,9 @@ int main()
 /*
 Created!
 String(const char* string)
-Moved!
-String(String&& other)
-Entity( String&& name)
+Copied!
+String(const String& other)
+Entity(const String& name)
 Destroyed!
 ~String()
 Cherno

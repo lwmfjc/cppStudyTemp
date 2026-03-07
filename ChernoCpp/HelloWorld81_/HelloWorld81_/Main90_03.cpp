@@ -1,4 +1,4 @@
-#ifdef LY_EP89
+#ifdef LY_EP90_
 
 //c++11才引入了右值引用
 #include <iostream>   
@@ -7,6 +7,7 @@
 class String
 {
 public:
+
 	String() = default;
 
 	//构造函数
@@ -38,6 +39,7 @@ public:
 
 	//移动构造函数
 	//接收一个右值引用参数，表示可以从一个将要被销毁的临时对象中“窃取”资源，而不是复制资源。
+	//如果手动定义了“移动构造函数”，编译器就不再为你自动生成“默认赋值运算符”了。
 	String(String&& other) noexcept
 	{
 		printf("Moved!\n");
@@ -61,6 +63,47 @@ public:
 		std::cout << "~String()" << std::endl;
 	}
 
+	// 移动赋值运算符：将另一个对象，移入当前这个对象自身
+	//语义契约（Semantic Contract）。	C++ 的设计哲学是：让自定义类型的行为表现得像内置类型（如 int）一样。标准做法始终是返回非 const 的 *this 引用
+	String& operator=(String&& other) noexcept
+	{
+		printf("Move Assigned!\n");
+
+		// 1. 自赋值检查 (防止自己移动给自己，如 a = std::move(a)，
+		// 因为如下是会释放旧资源的，所以移动给自己就什么都没有了)
+		if (this != &other)
+		{
+			// 2. 释放旧资源 (dest[当前对象] 已经有内存了，必须先删掉，否则内存泄漏)
+			delete[] m_Data;
+
+			// 3. 窃取资源
+			m_Size = other.m_Size;
+			m_Data = other.m_Data;
+
+			// 4. 将原对象置空 (让它变成空壳)
+			other.m_Data = nullptr;
+			other.m_Size = 0;
+		}
+
+		//找到 this 指向的对象，返回它的引用（别名），
+		// 而不是创建一个新的副本
+		return *this;
+	}
+
+	//拷贝赋值运算符
+	String& operator=(const String& other)
+	{
+		printf("Copy Assigned!\n");
+		if (this != &other)
+		{
+			delete[] m_Data;
+			m_Size = other.m_Size;
+			m_Data = new char[m_Size]; // 必须申请新内存
+			memcpy(m_Data, other.m_Data, m_Size);
+		}
+		return *this;
+	}
+
 	void Print()
 	{
 		for (uint32_t i = 0; i < m_Size; i++)
@@ -81,7 +124,7 @@ class Entity
 public:
 
 
-	Entity(const String& name) 
+	Entity(const String& name)
 		:m_Name(name)
 	{
 		std::cout << "Entity(const String& name)" << std::endl;
@@ -96,7 +139,7 @@ public:
 	//{
 	//	std::cout << "Entity( String&& name)" << std::endl;
 	//}
-	
+
 
 
 	//接收一个临时对象作为参数，使用移动语义来构造 Entity 对象，避免不必要的复制，提高性能。
@@ -118,27 +161,58 @@ private:
 };
 
 int main()
-{
-	//隐式构造函数构造String对象，调用String(const char* string)构造函数
-	//Entity entity("Cherno");
+{ 
+	{
+		std::cout << "=====0=====" << std::endl;
 
-	//临时对象String("Cherno")的生命周期直到支持它的那个“完整表达式”计算完成为止，即该行代码分号结束时
-	//!!现在main函数创建这个(临时)对象后，传(复制)给Entity构造函数的当参数使用，又马上销毁了这个临时对象(只留下复制的)
-	Entity entity(String("Cherno"));
 
-	entity.PrintName();
+		//使用String(const char* string)构造String对象，Created!
+		String apple = "Apple";
+		//使用默认构造函数构造String对象
+		String dest;
+
+		std::cout << "=====1=====" << std::endl;
+		std::cout << "Apple: ";
+		apple.Print();
+		std::cout << "Dest: ";
+		dest.Print();
+		std::cout << "=====1=====" << std::endl;
+
+		//使用移动赋值运算符将apple的资源移入dest，Move Assigned!
+		//相当于dest.operator=(std::move(apple));
+		dest = std::move(apple);
+
+		std::cout << "=====2=====" << std::endl;
+		std::cout << "Apple: ";
+		apple.Print();
+		std::cout << "Dest: ";
+		dest.Print();
+		std::cout << "=====2=====" << std::endl;
+
+		//综上，没有任何复制就移动了整个字符数组的所有权，交换了两个
+		//变量
+	}
+	
 
 	std::cin.get();
 	return 0;
 }
-/*
+/* 
+=====0=====
 Created!
 String(const char* string)
-Moved!
-String(String&& other)
-Entity( String&& name)
+=====1=====
+Apple: Apple
+Dest:
+=====1=====
+Move Assigned!
+=====2=====
+Apple:
+Dest: Apple
+=====2=====
 Destroyed!
 ~String()
-Cherno
+Destroyed!
+~String()
 */
 #endif

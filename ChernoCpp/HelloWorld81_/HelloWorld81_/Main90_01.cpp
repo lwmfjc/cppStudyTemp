@@ -1,4 +1,4 @@
-#ifdef LY_EP89
+#ifdef LY_EP90_
 
 //c++11才引入了右值引用
 #include <iostream>   
@@ -7,6 +7,7 @@
 class String
 {
 public:
+
 	String() = default;
 
 	//构造函数
@@ -38,6 +39,7 @@ public:
 
 	//移动构造函数
 	//接收一个右值引用参数，表示可以从一个将要被销毁的临时对象中“窃取”资源，而不是复制资源。
+	//如果手动定义了“移动构造函数”，编译器就不再为你自动生成“默认赋值运算符”了。
 	String(String&& other) noexcept
 	{
 		printf("Moved!\n");
@@ -61,6 +63,43 @@ public:
 		std::cout << "~String()" << std::endl;
 	}
 
+	// 移动赋值运算符
+	String& operator=(String&& other) noexcept
+	{
+		printf("Move Assigned!\n");
+
+		// 1. 自赋值检查 (防止自己移动给自己，如 a = std::move(a))
+		if (this != &other)
+		{
+			// 2. 释放旧资源 (dest 已经有内存了，必须先删掉，否则内存泄漏)
+			delete[] m_Data;
+
+			// 3. 窃取资源
+			m_Size = other.m_Size;
+			m_Data = other.m_Data;
+
+			// 4. 将原对象置空 (让它变成空壳)
+			other.m_Data = nullptr;
+			other.m_Size = 0;
+		}
+
+		return *this;
+	}
+
+	//拷贝赋值运算符
+	String& operator=(const String& other)
+	{
+		printf("Copy Assigned!\n");
+		if (this != &other)
+		{
+			delete[] m_Data;
+			m_Size = other.m_Size;
+			m_Data = new char[m_Size]; // 必须申请新内存
+			memcpy(m_Data, other.m_Data, m_Size);
+		}
+		return *this;
+	}
+
 	void Print()
 	{
 		for (uint32_t i = 0; i < m_Size; i++)
@@ -81,7 +120,7 @@ class Entity
 public:
 
 
-	Entity(const String& name) 
+	Entity(const String& name)
 		:m_Name(name)
 	{
 		std::cout << "Entity(const String& name)" << std::endl;
@@ -96,7 +135,7 @@ public:
 	//{
 	//	std::cout << "Entity( String&& name)" << std::endl;
 	//}
-	
+
 
 
 	//接收一个临时对象作为参数，使用移动语义来构造 Entity 对象，避免不必要的复制，提高性能。
@@ -119,14 +158,24 @@ private:
 
 int main()
 {
-	//隐式构造函数构造String对象，调用String(const char* string)构造函数
-	//Entity entity("Cherno");
-
-	//临时对象String("Cherno")的生命周期直到支持它的那个“完整表达式”计算完成为止，即该行代码分号结束时
-	//!!现在main函数创建这个(临时)对象后，传(复制)给Entity构造函数的当参数使用，又马上销毁了这个临时对象(只留下复制的)
-	Entity entity(String("Cherno"));
-
+	//这里将"Cherno"隐式调用构造函数构造了一个String
+	//之后move给了Entity（Entity内部的m_Name接管了这个临时String指针指向的堆内存）
+	Entity entity("Cherno");
 	entity.PrintName();
+	std::cout << "===0==" << std::endl;
+	String string = "Hello";
+	std::cout << "===1==" << std::endl;
+	String dest = string;//这是复制
+	std::cout << "===2==" << std::endl;
+	String dest1 = std::move(string);//调用移动构造函数
+	dest1.Print();
+	std::cout << "===3==" << std::endl;
+	//如果没写移动赋值,编译器会“退而求其次”，去调用拷贝赋值运算符 operator=(const String & other)
+	dest = "abc";
+	std::cout << "===4==" << std::endl;
+	 
+	dest = std::move(string);
+	dest.Print();//string已经被移动了，变成了空壳，所以dest打印出来是空的
 
 	std::cin.get();
 	return 0;
@@ -140,5 +189,24 @@ Entity( String&& name)
 Destroyed!
 ~String()
 Cherno
+===0==
+Created!
+String(const char* string)
+===1==
+Copied!
+String(const String& other)
+===2==
+Moved!
+String(String&& other)
+Hello
+===3==
+Created!
+String(const char* string)
+Move Assigned!
+Destroyed!
+~String()
+===4==
+Move Assigned!
+
 */
 #endif

@@ -1,4 +1,4 @@
-#ifdef LY_EP89
+#ifdef LY_EP90_
 
 //c++11才引入了右值引用
 #include <iostream>   
@@ -7,6 +7,7 @@
 class String
 {
 public:
+
 	String() = default;
 
 	//构造函数
@@ -38,6 +39,7 @@ public:
 
 	//移动构造函数
 	//接收一个右值引用参数，表示可以从一个将要被销毁的临时对象中“窃取”资源，而不是复制资源。
+	//如果手动定义了“移动构造函数”，编译器就不再为你自动生成“默认赋值运算符”了。
 	String(String&& other) noexcept
 	{
 		printf("Moved!\n");
@@ -61,6 +63,47 @@ public:
 		std::cout << "~String()" << std::endl;
 	}
 
+	// 移动赋值运算符：将另一个对象，移入当前这个对象自身
+	//语义契约（Semantic Contract）。	C++ 的设计哲学是：让自定义类型的行为表现得像内置类型（如 int）一样。标准做法始终是返回非 const 的 *this 引用
+	String& operator=(String&& other) noexcept
+	{
+		printf("Move Assigned!\n");
+
+		// 1. 自赋值检查 (防止自己移动给自己，如 a = std::move(a)，
+		// 因为如下是会释放旧资源的，所以移动给自己就什么都没有了)
+		if (this != &other)
+		{
+			// 2. 释放旧资源 (dest[当前对象] 已经有内存了，必须先删掉，否则内存泄漏)
+			delete[] m_Data;
+
+			// 3. 窃取资源
+			m_Size = other.m_Size;
+			m_Data = other.m_Data;
+
+			// 4. 将原对象置空 (让它变成空壳)
+			other.m_Data = nullptr;
+			other.m_Size = 0;
+		}
+
+		//找到 this 指向的对象，返回它的引用（别名），
+		// 而不是创建一个新的副本
+		return *this;
+	}
+
+	//拷贝赋值运算符
+	String& operator=(const String& other)
+	{
+		printf("Copy Assigned!\n");
+		if (this != &other)
+		{
+			delete[] m_Data;
+			m_Size = other.m_Size;
+			m_Data = new char[m_Size]; // 必须申请新内存
+			memcpy(m_Data, other.m_Data, m_Size);
+		}
+		return *this;
+	}
+
 	void Print()
 	{
 		for (uint32_t i = 0; i < m_Size; i++)
@@ -81,7 +124,7 @@ class Entity
 public:
 
 
-	Entity(const String& name) 
+	Entity(const String& name)
 		:m_Name(name)
 	{
 		std::cout << "Entity(const String& name)" << std::endl;
@@ -96,7 +139,7 @@ public:
 	//{
 	//	std::cout << "Entity( String&& name)" << std::endl;
 	//}
-	
+
 
 
 	//接收一个临时对象作为参数，使用移动语义来构造 Entity 对象，避免不必要的复制，提高性能。
@@ -119,14 +162,35 @@ private:
 
 int main()
 {
-	//隐式构造函数构造String对象，调用String(const char* string)构造函数
-	//Entity entity("Cherno");
-
-	//临时对象String("Cherno")的生命周期直到支持它的那个“完整表达式”计算完成为止，即该行代码分号结束时
-	//!!现在main函数创建这个(临时)对象后，传(复制)给Entity构造函数的当参数使用，又马上销毁了这个临时对象(只留下复制的)
-	Entity entity(String("Cherno"));
-
+	//临时对象经历了:Created! -> Moved! -> Destroyed!
+	Entity entity("Cherno");
+	//打印字符串
 	entity.PrintName();
+	std::cout << "=====0=====" << std::endl;
+
+	//隐式调用构造函数String(const char* string)，Created! 
+	String string = "Hello";
+	std::cout << "=====1=====" << std::endl;
+
+	//隐式调用(复制)构造函数， 本质上就是“通过复制一个已有的对象来创建一个新对象”，这就是所谓的“复制构造”。
+	String dest = string;
+	std::cout << "=====2.1=====" << std::endl;
+	//使用接受字符串右值引用的构造函数，来构造一个String
+	String dest1 = (String&&)string;
+	std::cout << "=====2.2=====" << std::endl;
+	String dest2((String&&)string);//这个string内部的指针已经被dest1接管了，所以dest2构造的时候，string已经是空壳了，所以dest2也是空的
+	std::cout << "=====2.3=====" << std::endl;
+
+	//这样写无需知道string是什么类型的
+	//remove_reference_t<_Ty>&& move(_Ty&& _Arg)  ，查看源码可知返回的是右值引用
+	//这里是移动构造，而非移动赋值，因为dest3是第一次定义并使用
+	String dest3 = std::move(string);
+	std::cout << "=====3=====" << std::endl;
+
+	//当将一个变量(数值、表达式)赋给一个已有变量时，使用的是赋值
+	//就像这里是移动赋值
+	dest = std::move(string);
+
 
 	std::cin.get();
 	return 0;
@@ -140,5 +204,22 @@ Entity( String&& name)
 Destroyed!
 ~String()
 Cherno
+=====0=====
+Created!
+String(const char* string)
+=====1=====
+Copied!
+String(const String& other)
+=====2.1=====
+Moved!
+String(String&& other)
+=====2.2=====
+Moved!
+String(String&& other)
+=====2.3=====
+Moved!
+String(String&& other)
+=====3=====
+Move Assigned!
 */
 #endif
