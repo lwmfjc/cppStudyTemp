@@ -1,8 +1,8 @@
-#ifdef LY_EP92 
+#ifdef LY_EP92_
 
 #include <iostream>   
 #include <string>
-#include "92_vector.h"
+#include "92_02_vector.h"
 
 
 struct Vector3
@@ -58,6 +58,7 @@ struct Vector3
 	}
 };
 
+//全局重载函数，C++ 规定：对于二元运算符（有两个操作数的运算符），如果写成全局函数，第一个参数对应运算符左边的对象，第二个参数对应右边的对象
 std::ostream& operator<<(std::ostream& stream, const Vector3& v)
 {
 	stream << v.x << ", " << v.y << ", " << v.z;
@@ -77,8 +78,11 @@ void PrintVector(const Vector<Vector3>& vector)
 int main()
 {
 	Vector<Vector3> vector;
+
 	//Vector3(1.0f)->创建一个匿名临时对象
+	//临时对象会在包含它的那个“完整表达式（Full-expression）”结束时被销毁。即这行代码结束后该临时对象被析构
 	vector.PushBack(Vector3(1.0f));
+
 	vector.PushBack(Vector3{ 2,3,4 });
 	vector.PushBack(Vector3{});
 
@@ -88,5 +92,29 @@ int main()
 	std::cin.get();
 	return 0;
 }
-
+/*
+增大容量--0->2
+====构造器中初始化容量2======
+move=
+添加元素:1, 1, 1
+==================
+Destroy
+move=
+添加元素:2, 3, 4
+==================
+Destroy
+增大容量--2->3
+move=
+move=
+Destroy
+Destroy
+move=
+添加元素:0, 0, 0
+==================
+Destroy
+1, 1, 1
+2, 3, 4
+0, 0, 0
+==================
+*/
 #endif

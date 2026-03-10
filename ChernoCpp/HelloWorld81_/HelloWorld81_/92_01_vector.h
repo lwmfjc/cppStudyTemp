@@ -1,4 +1,5 @@
 #pragma once
+#ifdef LY_EP92_
 #include <memory>
 
 template<typename T>
@@ -21,6 +22,8 @@ public:
 			ReAlloc(m_Capacity + m_Capacity / 2);
 		}
 
+		//m_Data[m_Size] 是一个已经存在的对象，所以
+		//这里调用的是拷贝赋值函数
 		m_Data[m_Size] = value;
 		m_Size++;
 		std::cout << "添加元素:" << value << std::endl;
@@ -33,7 +36,7 @@ public:
 		{
 			//assert
 		}
-		m_Data[index];
+		return m_Data[index];
 	}
 
 	const T& operator[](size_t index) const
@@ -48,14 +51,21 @@ public:
 
 	size_t Size() const { return m_Size; }
 
+	~Vector()
+	{
+		delete[] m_Data;  
+	}
 private:
 	void ReAlloc(size_t newCapacity) {
 		// 1. allocate a new block of memory
 		// 2. copy/move old elements into new block
 		// 3. delete
 
-		//尽可能低层次的访问内存，而不是智能指针
-		//在堆上申请了一块连续(物理连续)的内存空间
+		//1. 尽可能低层次的访问内存，而不是智能指针
+		//2. 在堆上申请了一块连续(物理连续)的内存空间
+		//3. 在堆上创建了 newCapacity 个对象，并调用了它们
+		//的默认构造函数。也就是说，此时内存里已经存在了一
+		//堆“空”的 Vector3 对象
 		T* newBlock = new T[newCapacity];
 
 		//如果新容量小于当前大小，即缩小容量
@@ -80,7 +90,12 @@ private:
 			newBlock[i] = m_Data[i];
 		}
 
+		//1. 逐一析构：编译器会根据该内存块记录的大小信息（通常存储在数组头部的隐藏偏移量中），从后往前（或从前往后，取决于实现）调用每一个 Vector3 对象的析构函数。
+		//2. 释放内存：在所有对象的析构函数执行完毕后，才会一次性将整块堆内存归还给操作系统。
 		delete[] m_Data;//释放原来指向的内存块
+
+		//delete m_Data;只会触发第一个元素的析构函数
+
 		m_Data = newBlock;//指向新的那个内存块
 		m_Capacity = newCapacity;
 
@@ -94,3 +109,4 @@ private:
 	//可分配存储的元素个数
 	size_t m_Capacity = 0;
 };
+#endif

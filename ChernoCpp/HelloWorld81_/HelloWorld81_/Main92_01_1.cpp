@@ -7,7 +7,7 @@
 
 #include <iostream>   
 #include <string>
-#include "92_vector.h"
+#include "92_01_vector.h"
 
 template<typename T>
 void PrintVector(const Vector<T>& vector)
@@ -37,5 +37,42 @@ int main()
 	std::cin.get();
 	return 0;
 }
+/*
+增大容量--0->2
+====构造器中初始化容量2======
+添加元素:Cherno
+==================
+添加元素:C++
+==================
+增大容量--2->3
+添加元素:Vector01
+==================
+增大容量--3->4
+添加元素:Vector02
+==================
+增大容量--4->6
+添加元素:Vector03
+==================
+添加元素:Vector04
+==================
+增大容量--6->9
+添加元素:Vector05
+==================
+添加元素:Vector06
+==================
+添加元素:Vector07
+==================
+Cherno
+C++
+Vector01
+Vector02
+Vector03
+Vector04
+Vector05
+Vector06
+Vector07
+==================
+
+*/
 
 #endif

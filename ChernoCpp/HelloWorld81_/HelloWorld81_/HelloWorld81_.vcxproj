@@ -19,13 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main91_01.cpp" />
-    <ClCompile Include="Main91_02.cpp" />
-    <ClCompile Include="Main92_01.cpp" />
-    <ClCompile Include="Main92_02.cpp" />
+    <ClCompile Include="Main92_01_1.cpp" />
+    <ClCompile Include="Main92_01_2.cpp" />
+    <ClCompile Include="Main92_02_1.cpp" />
+    <ClCompile Include="Main92_03.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="92_vector.h" />
+    <ClInclude Include="92_02_vector.h" />
+    <ClInclude Include="92_01_vector.h" />
+    <ClInclude Include="92_03_vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
