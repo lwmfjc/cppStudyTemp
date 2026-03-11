@@ -40,6 +40,20 @@ int main()
 		std::cout << values[i] << std::endl;
 	}
 
+	std::cout << "Range-based for loop" << std::endl;
+	for (int value : values)
+	{
+		std::cout << value << std::endl;
+
+	}
+
+	std::cout << "Iterator:\n";
+	for (Vector<int>::Iterator it = values.begin();
+		it != values.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+
 	std::cin.get();
 	return 0;
 }

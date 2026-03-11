@@ -1,5 +1,5 @@
 #pragma once
-#ifdef LY_EP94
+#ifdef LY_EP94_
 #include <memory>
 #include <iostream>
 
@@ -20,6 +20,69 @@ public:
 
 	}
 
+	//前缀运算符
+	VectorIterator& operator++()
+	{
+		m_Ptr++;
+		return *this;
+	}
+
+	//前缀运算符
+	VectorIterator& operator--()
+	{
+		m_Ptr--;
+		return *this;
+	}
+
+	//后缀运算符
+	//编译器用来区分前缀和后缀的唯一手段，int
+	//是语法占位符
+	VectorIterator& operator++(int)
+	{
+		//这里是复制，由于成员只有一个指针，代价可以接受
+		VectorIterator iterator = *this;
+		//前缀运算符
+		++(*this);
+		return iterator;
+	}
+
+	//后缀运算符
+	VectorIterator& operator--(int)
+	{
+		//这里是复制，由于成员只有一个指针，代价可以接受
+		VectorIterator iterator = *this;
+		//前缀运算符
+		--(*this);
+		return iterator;
+	}
+
+	ReferenceType operator[](int index)
+	{
+		return *(m_Ptr + index);
+	}
+
+	//C++ 对 -> 有特殊处理。当你使用 it->Method() 时，它会调用 it.operator->() 得到 m_Ptr，然后再次对结果应用 ->。所以最终执行的是 m_Ptr->Method()。
+	//所以这里需要返回一个指针
+	PointerType operator->()
+	{
+		return m_Ptr;
+	}
+
+
+	ReferenceType operator*()
+	{
+		return *m_Ptr;
+	}
+
+	bool operator==(const VectorIterator& other) const
+	{
+		return m_Ptr == other.m_Ptr;
+	}
+	bool operator!=(const VectorIterator& other) const
+	{
+		return !(*this == other);
+	}
+
 private:
 	PointerType m_Ptr;
 };
@@ -34,15 +97,15 @@ public:
 	//public 类型别名 (using/typedef)：属于类（Class/Type）。它是一个“类型标签”，就像 Vector<int> 内部定义的一个子类型。
 	using Iterator = VectorIterator<Vector<T>>;
 
-	VectorIterator<ValueType> begin()
+	Iterator begin()
 	{
-		return VectorIterator(m_Data);
+		return Iterator(m_Data);
 	}
 
 
-	VectorIterator<ValueType>  begin()
+	Iterator  end()
 	{
-		return VectorIterator(m_Data + m_Size);
+		return Iterator(m_Data + m_Size);
 	}
 
 public:

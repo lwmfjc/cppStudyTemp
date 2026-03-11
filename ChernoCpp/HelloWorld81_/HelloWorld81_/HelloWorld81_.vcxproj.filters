@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="94_01_vector.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main94_01.cpp">
+    <ClCompile Include="Main100_01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
