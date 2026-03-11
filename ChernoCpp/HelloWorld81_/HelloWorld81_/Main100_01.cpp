@@ -1,4 +1,4 @@
-#ifdef LY_EP100
+#ifdef LY_EP100_
 
 #include <iostream>  
 #include <map>
