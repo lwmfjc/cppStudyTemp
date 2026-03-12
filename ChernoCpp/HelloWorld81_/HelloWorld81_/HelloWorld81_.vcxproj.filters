@@ -18,17 +18,5 @@
     <ClCompile Include="Main100_01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main105_01.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main105_02.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main105_03.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main105_04.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
