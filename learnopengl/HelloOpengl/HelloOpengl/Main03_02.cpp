@@ -1,3 +1,4 @@
+#ifdef LY_EP03_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -47,6 +48,7 @@ int main()
         return -1;
     }
 
+
     // 4. ‰÷»æ—≠ª∑
     while (!glfwWindowShouldClose(window))
     {
@@ -68,3 +70,5 @@ int main()
     glfwTerminate();
     return 0;
 }
+
+#endif
