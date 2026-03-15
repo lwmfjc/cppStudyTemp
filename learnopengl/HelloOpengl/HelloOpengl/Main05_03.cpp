@@ -7,26 +7,26 @@
 //GLSL风格代码
 const char* vertexShaderSource = R"(
 #version 330 core
-layout (location = 0) in vec3 aPos; // the position variable has attribute position 0
+layout (location = 0) in vec3 aPos;   // the position variable has attribute position 0
+layout (location = 1) in vec3 aColor; // the color variable has attribute position 1
   
-out vec4 vertexColor; // specify a color output to the fragment shader
+flat out vec3 ourColor; // output a color to the fragment shader
 
 void main()
 {
-    gl_Position = vec4(aPos, 1.0); // see how we directly give a vec3 to vec4's constructor
-    vertexColor = vec4(0.5, 0.0, 0.0, 1.0); // set the output variable to a dark-red color
+	gl_Position = vec4(aPos, 1.0);//这个是输出了位置，默认有的属性
+    ourColor = aColor; // set ourColor to the input color we got from the vertex data
 }
 )";
 
 const char* fragmentShaderSource = R"(
 #version 330 core
-out vec4 FragColor;
+out vec4 FragColor;  
+flat in vec3 ourColor;//用同名的ourColor接收顶点着色器给的变量
   
-in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)  
-
 void main()
 {
-    FragColor = vertexColor;
+    FragColor = vec4(ourColor, 1.0);
 }
 )";
 
@@ -163,9 +163,10 @@ int main()
 
 	//=========输入的顶点存储========
 	float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
+		// positions         // colors
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right 红
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left 绿
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 蓝
 	};
 	//②生成具有缓冲区ID的缓冲区
 	unsigned int VBO;
@@ -198,17 +199,23 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// 第三步：配置属性（VAO 记住了：VBO 里的数据应该这样读）
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//参数1：指定位置顶点属性的位置，顶点着色器中我们使用了 layout(lacation=0)
+	//参数2：指定顶点属性的大小 3
+	//参数3：指定数据类型为 GL\_FLOAT
+	//参数4：指定是否要对数据进行归一化
+	//参数5：步长，相邻顶点之间的间距
+	//参数6：数据(这里指位置)在缓冲区中的起始偏移量
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // 解绑 VBO 是安全的，VAO 已经记录了它 
 	// 当你写完这些，VAO 内部已经偷偷存好了 VBO 的 ID 和 Pointer 的规则。
 	glBindVertexArray(0); // 录制结束，把档案袋封好放回架子上。
-	 
-	int nrAttributes;
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-	//查询有几个可用的顶点属性
-	std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl; //我的电脑是32
+
+
 
 	// 注册 窗口大小改变的回调
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -238,11 +245,12 @@ int main()
 
 		//将新创建的程序对象作为参数来激活
 		glUseProgram(shaderProgram);
+		 
 
 		// 这一行告诉 OpenGL：“把刚才录制好的那个 VAO 档案袋拿出来，
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
 		glBindVertexArray(VAO);
-		//绘制对象
+		//绘制对象,0表示要绘制的顶点数组的起始索引，3表示我们要绘制的顶点数量
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		//swap the buffers

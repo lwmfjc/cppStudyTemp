@@ -5,28 +5,22 @@
 #include <iostream> 
 
 //GLSL风格代码
-const char* vertexShaderSource = R"(
-#version 330 core
-layout (location = 0) in vec3 aPos; // the position variable has attribute position 0
-  
-out vec4 vertexColor; // specify a color output to the fragment shader
-
-void main()
-{
-    gl_Position = vec4(aPos, 1.0); // see how we directly give a vec3 to vec4's constructor
-    vertexColor = vec4(0.5, 0.0, 0.0, 1.0); // set the output variable to a dark-red color
-}
-)";
+const char* vertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
 
 const char* fragmentShaderSource = R"(
 #version 330 core
 out vec4 FragColor;
   
-in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)  
+uniform vec4 ourColor; // we set this variable in the OpenGL code.
 
 void main()
 {
-    FragColor = vertexColor;
+    FragColor = ourColor;
 }
 )";
 
@@ -204,11 +198,8 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // 解绑 VBO 是安全的，VAO 已经记录了它 
 	// 当你写完这些，VAO 内部已经偷偷存好了 VBO 的 ID 和 Pointer 的规则。
 	glBindVertexArray(0); // 录制结束，把档案袋封好放回架子上。
-	 
-	int nrAttributes;
-	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-	//查询有几个可用的顶点属性
-	std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl; //我的电脑是32
+
+
 
 	// 注册 窗口大小改变的回调
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -238,6 +229,16 @@ int main()
 
 		//将新创建的程序对象作为参数来激活
 		glUseProgram(shaderProgram);
+
+
+		//每帧都更新这个 uniform 变量
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f; //(0+0.5) ~ (0.5+0.5)
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		//更新 uniform 变量需要先调用着色器程序（通过调用 glUseProgram），因为它会将 uniform 变量的值设置到当前活动的着色器程序上 
+		//glUniform4f这个函数名，表示 分别设置uniform变量的4个浮点数
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
 
 		// 这一行告诉 OpenGL：“把刚才录制好的那个 VAO 档案袋拿出来，
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
