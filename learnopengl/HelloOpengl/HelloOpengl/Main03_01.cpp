@@ -1,4 +1,4 @@
-#ifdef LY_EP03
+#ifdef LY_EP03_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 
