@@ -78,7 +78,7 @@ int main()
 	//绑定，让后续的纹理命令都配置的是当前绑定的纹理
 	//只需在调用 glDrawElements 之前绑定纹理，它就会自动将纹理分配给片段着色器的采样器
 	glBindTexture(GL_TEXTURE_2D, texture);
-	
+
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
@@ -89,9 +89,9 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
-	//加载图片
+	//加载图片， 把图片读进 CPU 内存
 	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
-	if(data)
+	if (data)
 	{
 		//使用前面加载的图片生成纹理
 		//参数1：此操作将在当前绑定的纹理对象上生成同一目标的纹理（因此绑定到目标 GL\_TEXTURE\_1D 或 GL\_TEXTURE\_3D 的任何纹理都不会受到影响）
@@ -101,6 +101,7 @@ int main()
 		//参数6：始终为零，历史遗留问题
 		//参数7、8：指定源图像的格式和数据类型（加载图像时使用了 `RGB` 值，并将其存储为 `char` （字节））
 		//参数9：实际的图像数据（对应了上面的，是个char字节类型）
+		//把图片从 CPU 内存 拷贝到 显存 里的纹理对象中，指的是texture对应的那块内存？
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		//以上只加载了纹理图像的基础层，如果要使用mipmap，就不断递加第二个参数，或者接下来调用生成纹理后调用glGenerateMipmap
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -109,8 +110,10 @@ int main()
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
-	//生成纹理及其对应的 mipmap 后，最好释放图像内存
+	//生成纹理及其对应的 mipmap 后，最好释放stbi_load加载的内存
 	stbi_image_free(data);
+	//解绑纹理，“防止误操作”导致的全局状态污染，
+	// GL_TEXTURE_2D 就像是一个全局唯一的插槽
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
@@ -130,20 +133,25 @@ int main()
 	};
 
 	//创建元素缓冲区对象
+	//存放绘制顺序的索引清单
 	unsigned int EBO;
+	//找目前没被占用的数字，并把它分配给 EBO
+	//存“东西”的
 	glGenBuffers(1, &EBO);
+
+	//创建顶点缓冲区对象，
+	//存放顶点属性（位置、颜色、纹理坐标）的大仓库
+	unsigned int VBO;
+	//找目前没被占用的数字，并把它分配给 VBO
+	glGenBuffers(1, &VBO);
 
 	//创建顶点数组对象
 	unsigned int VAO;
 	//早期设计逻辑中，它代表的是“一组指向顶点数据的状态集合”，
 	//管理着一堆顶点属性数组的配置,0号是位置数组的配置,1号是
 	//颜色数组的配置,2号是纹理坐标数组的配置。
+	//申请的是一个状态容器（就像在显存里买了一个文件夹/档案袋）
 	glGenVertexArrays(1, &VAO);
-
-	//创建顶点缓冲区对象
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-
 
 	//激活VAO
 	glBindVertexArray(VAO);
@@ -160,7 +168,8 @@ int main()
 
 	//配置位置属性
 	//顶点着色器程序编译后，会去0号通道找顶点位置数据画图，结果cpp代码这里没写或者写错了，他就找不到数据
-	//它会将当前属性（比如 0 号位置）与当前正绑定在 GL_ARRAY_BUFFER 上的那个 VBO 关联起来
+	//它会将当前属性（比如 0 号位置）与当前正绑定在 GL_ARRAY_BUFFER 上的那个 VBO 关联起来 
+	//配置的是“如何从当前绑定到 GL_ARRAY_BUFFER 的那个缓冲区（Buffer）读取数据”。
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -177,7 +186,7 @@ int main()
 	//关于这个 VBO 的配置已经彻底结束了
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // 解绑 VBO 是安全的，VAO 已经记录了它
 	glBindVertexArray(0);             // 封存 VAO
-	//封存VAO后解绑VBO
+	//封存VAO后解绑EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
@@ -224,6 +233,7 @@ int main()
 		//glDrawElements会去查找绑定的那个EBO
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+
 		//swap the buffers
 		/*
 	*单缓冲（坏处）：如果你直接在观众面前画，观众会看到你先
@@ -238,6 +248,14 @@ int main()
 		glfwSwapBuffers(window);
 
 	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//释放所有显存资源
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteTextures(1, &texture);
 
 	//渲染循环结束后，我们需要彻底清理 / 删除所有已分配的 GLFW 资源
 	glfwTerminate();
