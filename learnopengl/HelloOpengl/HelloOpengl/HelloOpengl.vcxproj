@@ -155,6 +155,7 @@
     <ClCompile Include="Main05_04_pakage_class.cpp" />
     <ClCompile Include="Main05_Prt.cpp" />
     <ClCompile Include="Main06_01.cpp" />
+    <ClCompile Include="Main06_Prt01.cpp" />
     <ClCompile Include="stb_image_06.cpp" />
     <ClCompile Include="Shader_05.cpp" />
   </ItemGroup>
@@ -168,8 +169,8 @@
     <None Include="shader\shader_05_Prt0102.vs" />
     <None Include="shader\shader_05_Prt03.fs" />
     <None Include="shader\shader_05_Prt03.vs" />
-    <None Include="shader_06.fs" />
-    <None Include="shader_06.vs" />
+    <None Include="shader\shader_06.fs" />
+    <None Include="shader\shader_06.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-#ifdef LY_EP06_
+#ifdef LY_EP06
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -83,8 +83,12 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);//超出的位置形成拉伸的边缘
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);//超出的位置形成拉伸的边缘
+	
 	//渲染过程中切换 mipmap 层级
 	//当纹理向下缩放是，选择GL_LINEAR_MIPMAP_LINEAR：在两个最接近的 mipmap 之间进行线性插值，并通过线性插值对插值级别进行采样
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -145,7 +149,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	 
+
 	//加载图片， 把图片读进 CPU 内存
 	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
@@ -160,7 +164,7 @@ int main()
 		//参数9：实际的图像数据（对应了上面的，是个char字节类型）
 		//把图片从 CPU 内存 拷贝到 显存 里的纹理对象中，指的是texture对应的那块内存？
 		//这里是RGBA，填错就不显示了
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
 		//以上只加载了纹理图像的基础层，如果要使用mipmap，就不断递加第二个参数，或者接下来调用生成纹理后调用glGenerateMipmap
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -180,10 +184,10 @@ int main()
 	//=========定点信息包括坐标、颜色、纹理坐标========
 	float vertices[] = {
 		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left 
 	};
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
@@ -282,9 +286,9 @@ int main()
 		ourShader.use();
 
 		//GPU会去读 GL_TEXTURE1 里的图
-		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);  
+		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
 		//GPU会去读 GL_TEXTURE2 里的图
-		ourShader.setInt("texture2", 2); 
+		ourShader.setInt("texture2", 2);
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);

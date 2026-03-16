@@ -84,10 +84,10 @@
     </None>
     <None Include="shader\shader_05_Prt03.vs" />
     <None Include="shader\shader_05_Prt03.fs" />
-    <None Include="shader_06.fs">
+    <None Include="shader\shader_06.fs">
       <Filter>Resource Files\shader</Filter>
     </None>
-    <None Include="shader_06.vs">
+    <None Include="shader\shader_06.vs">
       <Filter>Resource Files\shader</Filter>
     </None>
   </ItemGroup>
