@@ -13,15 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\shader">
+      <UniqueIdentifier>{f70546e6-5454-4a3b-8c5a-5fac34c3e778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\textures">
+      <UniqueIdentifier>{baf9b2e5-7843-48ed-b55a-df74da8812da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_01.cpp">
+    <ClCompile Include="Main04_01_triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_02.cpp">
+    <ClCompile Include="Main04_02_rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main04_Prt01.cpp">
@@ -33,14 +39,56 @@
     <ClCompile Include="Main04_Prt03.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_01.cpp">
+    <ClCompile Include="Main05_01_out.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_02.cpp">
+    <ClCompile Include="Main05_02_uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_03.cpp">
+    <ClCompile Include="Main05_03_flat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main05_04_pakage_class.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader_05.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main05_Prt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main06_01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image_06.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader_05.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\shader_05.fs">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="shader\shader_05.vs">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="shader\shader_05_Prt0102.vs">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="shader\shader_05_Prt03.vs" />
+    <None Include="shader\shader_05_Prt03.fs" />
+    <None Include="shader_06.fs">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="shader_06.vs">
+      <Filter>Resource Files\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
