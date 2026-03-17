@@ -302,7 +302,6 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 
-
 		//将新创建的程序对象作为参数来激活
 		ourShader.use();
 
