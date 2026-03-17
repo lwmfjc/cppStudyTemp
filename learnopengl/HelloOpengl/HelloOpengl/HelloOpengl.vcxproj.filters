@@ -72,6 +72,9 @@
     <ClCompile Include="Main06_Prt04.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main07_01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader_05.h">

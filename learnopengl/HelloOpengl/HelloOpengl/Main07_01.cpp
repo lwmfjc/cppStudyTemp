@@ -1,14 +1,9 @@
-#ifdef LY_EP06_
+#ifdef LY_EP07
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
-
-#include <thread>
-#include <chrono>
-
-float mixValue = 0.2f;
 
 void processInput(GLFWwindow* window)
 {
@@ -17,24 +12,6 @@ void processInput(GLFWwindow* window)
 	*/
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-	{
-
-		mixValue += 0.001f;
-		if (mixValue >= 1.0f)
-		{
-			mixValue = 1.0f;
-		}
-	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-	{
-		mixValue -= 0.001f;
-		if (mixValue <= 0.0f)
-		{
-			mixValue = 0.0f;
-		}
-	}
-
 }
 
 
@@ -90,7 +67,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_06_Prt04.vs", "shader/shader_06_Prt04.fs");
+	Shader ourShader("shader/shader_07.vs", "shader/shader_07.fs");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -168,7 +145,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	 
 	//加载图片， 把图片读进 CPU 内存
 	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
@@ -301,20 +278,13 @@ int main()
 		//立刻把 GL_COLOR_BUFFER_BIT（颜色缓冲区）里所有的像素，全部涂成我刚才在 glClearColor 里指定的颜色
 		glClear(GL_COLOR_BUFFER_BIT);
 
-
 		//将新创建的程序对象作为参数来激活
 		ourShader.use();
 
-		//这个setFloat要放在use()的后面，否则第一帧就不会
-		// 是setFloat的值，而是在第一帧use()之后，第二
-		// 帧在setFloat成功
-		ourShader.setFloat("mixValue", mixValue);
-
-
 		//GPU会去读 GL_TEXTURE1 里的图
-		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
+		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);  
 		//GPU会去读 GL_TEXTURE2 里的图
-		ourShader.setInt("texture2", 2);
+		ourShader.setInt("texture2", 2); 
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -341,7 +311,6 @@ int main()
 */
 // 4. 喊：画好了！把画完的后台画布翻到前台给用户看！
 		glfwSwapBuffers(window);
-		//std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	}
 	glBindVertexArray(0);
