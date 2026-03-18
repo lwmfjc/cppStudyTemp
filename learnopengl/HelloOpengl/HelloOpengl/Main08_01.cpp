@@ -1,4 +1,4 @@
-#ifdef LY_EP07_
+#ifdef LY_EP08
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -72,7 +72,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_07.vs", "shader/shader_07.fs");
+	Shader ourShader("shader/shader_08.vs", "shader/shader_08.fs");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -290,13 +290,13 @@ int main()
 	//将大拇指指向旋转轴的正方向（在你的代码里是 Z 轴正方向，即指向屏幕外、对着你的脸）。
 	//此时，你其余四个手指自然卷曲的方向，就是** 正角度（ + ） * *旋转的方向。
 	//原本在 (1, 0, 0) 的点会跑到 (0, 1, 0)。视线中就是逆时针移动了 90 度。	
-     //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
-	 
+	 //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
+
 	//所有方向上都缩放为0.5
 	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
 
-	
+
 
 	//以线框模式绘制三角形
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -347,34 +347,10 @@ int main()
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
 		glBindVertexArray(VAO);
 
-
-		glm::mat4 trans = glm::mat4(1.0f);
 		unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
 
-
-		//往右下角移动
-		//旋转角度（随时间）
-		//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		////平移：x平移0.5f，y平移-0.5f
-		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
-
-		//绘制对象,0表示要绘制的顶点数组的起始索引，6表示我们要绘制的顶点数量
-		//glDrawElements会去查找绑定的那个EBO
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-
-
-		//往左上角移动
-		trans = glm::mat4(1.0f);
-
-		//glfwGetTime()返回自 GLFW 初始化（调用 glfwInit()）以来所经过的秒数
-		//sin()输入值$(-\infty, +\infty)$，输出值始终在$[-1.0, 1.0]$之间
-		float timeAngle = sin(glfwGetTime()) * 0.5f + 0.5f; //（范围变成 $[0, 1]$）;
-		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(timeAngle, timeAngle, timeAngle));
+		glm::mat4 trans = glm::mat4(1.0f);
+		 
 
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

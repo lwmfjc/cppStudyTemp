@@ -90,7 +90,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP07;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP08;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -105,7 +105,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP07;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP08;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -118,7 +118,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP07;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP08;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -133,7 +133,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP07;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP08;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -144,6 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Main03_01.cpp" />
+    <ClCompile Include="Main03_02.cpp" />
     <ClCompile Include="Main04_01_triangle.cpp" />
     <ClCompile Include="Main04_02_rectangle.cpp" />
     <ClCompile Include="Main04_Prt01.cpp" />
@@ -159,10 +161,12 @@
     <ClCompile Include="Main06_Prt03.cpp" />
     <ClCompile Include="Main06_Prt04.cpp" />
     <ClCompile Include="Main07_01.cpp" />
+    <ClCompile Include="Main08_01.cpp" />
     <ClCompile Include="stb_image_06.cpp" />
     <ClCompile Include="Shader_05.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Main07_01.h" />
     <ClInclude Include="Shader_05.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
@@ -176,6 +180,10 @@
     <None Include="shader\shader_06.vs" />
     <None Include="shader\shader_06_Prt04.fs" />
     <None Include="shader\shader_06_Prt04.vs" />
+    <None Include="shader\shader_07.fs" />
+    <None Include="shader\shader_07.vs" />
+    <None Include="shader\shader_08.fs" />
+    <None Include="shader\shader_08.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
