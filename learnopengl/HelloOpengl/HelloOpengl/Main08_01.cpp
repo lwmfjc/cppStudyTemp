@@ -1,4 +1,4 @@
-#ifdef LY_EP08
+#ifdef LY_EP08_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -7,8 +7,7 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "Main07_01.h"
+#include "glm/gtc/type_ptr.hpp" 
 
 void processInput(GLFWwindow* window)
 {
@@ -255,32 +254,8 @@ int main()
 	//创建了一个初始坐标为 (1, 0, 0) 的点
 	//第四个分量 w = 1.0f 非常关键。在图形学中，如果 $w=1$，它代表一个位置（点）；如果 w=0，它代表一个方向（向量），因为w=0时他和平移矩阵相乘结果为本身，所以说他代表方向。
 	//只有 w=1 时，平移矩阵才会对它起作用
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	std::cout << vec.x << vec.y << vec.z << vec.w << std::endl;
-
-	// 1. 创建一个单位矩阵 (Identity Matrix)
-	// 它像数字 1 一样，是所有变换的起点。
-	// 主对角线全为 1.0，其余为 0。
-	glm::mat4 trans1 = glm::mat4(1.0f);
-
-	// 2. 缩放变换 (Scale)
-	// 传入第一个参数 trans 是为了在“单位矩阵”的基础上进行加工。
-	// scale 函数会根据 vec3(0.3f) 构造一个缩放矩阵 S：
-	// S 的主对角线前三个数是 0.3，第四个数（w）是 1.0。
-	// 计算过程：trans = trans * S;
-	//trans1 = glm::scale(trans, glm::vec3(0.3f));
-
-	// 3. 平移变换 (Translate)
-	// 此时第一个参数 trans1 已经包含了上面(注释掉了)的“缩放”信息。
-	// translate 函数会构造一个平移矩阵 T：
-	// T 的最右侧一列会填入 (1.0, 1.0, 0.0)，表示位移量。
-	// 计算过程：trans = trans * T; (现在 trans 同时拥有了缩放和平移)
-	trans1 = glm::translate(trans1, glm::vec3(1.0f, 1.0f, 0.0f));
-
-	vec = trans1 * vec;
-	std::cout << vec.x << vec.y << vec.z << vec.w << std::endl;
-
-	std::cout << "======旋转=======" << std::endl;
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f); 
+	 
 
 	//通过单参数构造函数，创建一个对角矩阵
 	//因为对角矩阵和任何矩阵S相乘，得到的还是S

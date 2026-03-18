@@ -162,11 +162,11 @@
     <ClCompile Include="Main06_Prt04.cpp" />
     <ClCompile Include="Main07_01.cpp" />
     <ClCompile Include="Main08_01.cpp" />
+    <ClCompile Include="Main08_official.cpp" />
     <ClCompile Include="stb_image_06.cpp" />
     <ClCompile Include="Shader_05.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Main07_01.h" />
     <ClInclude Include="Shader_05.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
@@ -184,6 +184,8 @@
     <None Include="shader\shader_07.vs" />
     <None Include="shader\shader_08.fs" />
     <None Include="shader\shader_08.vs" />
+    <None Include="shader\shader_08_official.fs" />
+    <None Include="shader\shader_08_official.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

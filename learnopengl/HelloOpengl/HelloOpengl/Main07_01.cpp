@@ -7,8 +7,7 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "Main07_01.h"
+#include "glm/gtc/type_ptr.hpp" 
 
 void processInput(GLFWwindow* window)
 {

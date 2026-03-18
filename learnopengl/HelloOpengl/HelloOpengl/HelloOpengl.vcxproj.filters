@@ -84,15 +84,15 @@
     <ClCompile Include="Main03_02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main08_official.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader_05.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Main07_01.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -120,5 +120,7 @@
     <None Include="shader\shader_07.fs" />
     <None Include="shader\shader_08.fs" />
     <None Include="shader\shader_08.vs" />
+    <None Include="shader\shader_08_official.vs" />
+    <None Include="shader\shader_08_official.fs" />
   </ItemGroup>
 </Project>
