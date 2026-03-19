@@ -1,4 +1,4 @@
-#ifdef LY_EP08_
+#ifdef LY_EP09
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -74,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_08.vs", "shader/shader_08.fs");
+	Shader ourShader("shader/shader_09.vs", "shader/shader_09.fs");
 
 	//=========Éú³ÉÎÆÀí==========
 	unsigned int texture1;

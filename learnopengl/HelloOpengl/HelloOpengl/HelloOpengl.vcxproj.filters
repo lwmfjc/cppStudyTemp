@@ -90,6 +90,15 @@
     <ClCompile Include="Main08_02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main08_Prt_0102.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main08_Prt_03.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main09_01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader_05.h">
@@ -125,5 +134,7 @@
     <None Include="shader\shader_08.vs" />
     <None Include="shader\shader_08_official.vs" />
     <None Include="shader\shader_08_official.fs" />
+    <None Include="shader\shader_09.vs" />
+    <None Include="shader\shader_09.fs" />
   </ItemGroup>
 </Project>
