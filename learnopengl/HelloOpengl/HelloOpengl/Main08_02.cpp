@@ -391,10 +391,15 @@ int main()
 			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 
 			model = glm::translate(model, cubePositions[i]);
+
+			if (i % 3 == 0) {
 			float angle = 2.0f * (i+1);
 			model = glm::rotate(model, (float)glfwGetTime()* angle, glm::vec3(1.0f, 0.3f, 0.5f));
+
+			}
 			ourShader.setMat4("model", model);
 
+			//试图空间，观察矩阵
 			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 			//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
