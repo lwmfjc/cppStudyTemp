@@ -9,12 +9,16 @@ out vec2 TexCoord;
 
 //用来进行类似矩阵变换的操作
 uniform mat4 transform;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
     //位置,默认的属性
     //gl_Position = vec4(aPos, 1.0f);
-    gl_Position=transform * vec4(aPos,1.0f);
+    //gl_Position=transform * vec4(aPos,1.0f);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     //颜色
     ourColor = aColor;
     //纹理

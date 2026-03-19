@@ -1,4 +1,4 @@
-#ifdef LY_EP08
+#ifdef LY_EP08_
 
 
 #include <iostream> 
@@ -177,7 +177,7 @@ int main()
 
         //观察矩阵
         //这行代码之后z=-100.5f
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, 50.5f));
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
         //近平面 (Near)：0.1，远平面 (Far)：100.0。只有在这个范围内的物体才准进入屏幕
         // 当z_view 超过 Far 时，计算出的 z_{clip} 会大于其自身的 w

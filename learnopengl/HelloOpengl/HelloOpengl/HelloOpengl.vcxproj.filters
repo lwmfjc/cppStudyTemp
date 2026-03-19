@@ -87,6 +87,9 @@
     <ClCompile Include="Main08_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main08_02.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader_05.h">
