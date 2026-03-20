@@ -14,6 +14,14 @@
 static int SCR_WIDTH = 800;
 static int SCR_HEIGHT = 600;
 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
 void processInput(GLFWwindow* window)
 {
 	/*
@@ -21,6 +29,34 @@ void processInput(GLFWwindow* window)
 	*/
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	const float cameraSpeed = 0.05f; // adjust accordingly
+	//按一次w就+0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
+	//也就是相机的位置朝负z轴前进
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		std::cout << "====w====" << std::endl;
+		cameraPos += cameraSpeed * cameraFront;
+	}
+	//按一次w就-0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
+	//也就是相机的位置朝正z轴前进
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		std::cout << "====s====" << std::endl;
+		cameraPos -= cameraSpeed * cameraFront;
+	}
+	//往左就是往负x轴移动
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		std::cout << "====a====" << std::endl;
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	//往右就是往正x轴移动
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		std::cout << "====d====" << std::endl;
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
 }
 
 
@@ -339,11 +375,7 @@ int main()
 	ourShader.setInt("texture2", 2);
 	glEnable(GL_DEPTH_TEST);
 
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-	//z轴
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	//y轴
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	 
 
 
 	//1. 问：该下班（关窗口）了吗？
@@ -375,6 +407,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -394,7 +430,11 @@ int main()
 		float camZ = cos(glfwGetTime()) * radius; //10->0 
 		camZ = 0.0f;
 		//相机的轨迹其实是在 $Z=3$ 这条直线上左右滑动。但在一个看向原点的相机眼里，当它滑到最右边（$X=10$）时，它必须向左后方“斜着”看
-		view = glm::lookAt(glm::vec3(camX, 0.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
+		//view = glm::lookAt(glm::vec3(camX, 0.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
+
+		//第一个参数(摄像头放哪里)：摄像头的位置
+		//第二个参数(盯着的位置)：摄像头的位置+ (z轴-1.0f)[摄像头前方1.0f的位置]
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
