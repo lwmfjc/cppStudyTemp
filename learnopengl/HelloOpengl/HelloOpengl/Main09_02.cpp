@@ -1,4 +1,4 @@
-#ifdef LY_EP09
+#ifdef LY_EP09_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -76,7 +76,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_08.vs", "shader/shader_08.fs");
+	Shader ourShader("shader/shader_09.vs", "shader/shader_09.fs");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -343,7 +343,7 @@ int main()
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
-
+		//std::this_thread::sleep_for(std::chrono::milliseconds(300));
 		//check and call events
 		//这个函数负责处理所有的互动
 		//它去操作系统那里询问：“刚才这 0.01 秒里，用户动鼠标了吗？按 ESC 键了吗；如果你之前注册过“按下 ESC 就关窗口”的函数，glfwPollEvents 发现你按了 ESC，就会立刻跳过去执行你的那个函数
@@ -383,7 +383,7 @@ int main()
 		//试图空间，观察矩阵
 		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		const float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius; //0->10
+		float camX = sin(glfwGetTime()) * radius; //0->10->0->-10->0
 		//camX = 0.0f;
 		float camZ = cos(glfwGetTime()) * radius; //10->0 
 		camZ = 0.0f;

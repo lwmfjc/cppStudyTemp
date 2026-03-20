@@ -17,7 +17,7 @@ void processInput(GLFWwindow* window)
 	/*
 	检查用户是否按下了 Esc 键（如果没有按下，glfwGetKey 返回 GLFW\_RELEASE ）。如果用户按下了 Esc 键，我们使用 glfwSetwindowShouldClose 将 GLFW 的 WindowShouldClose 属性设置为 `true` 来关闭 GLFW
 	*/
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_.KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 }
 
@@ -74,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_08.vs", "shader/shader_08.fs");
+	Shader ourShader("shader/shader_09.vs", "shader/shader_09.fs");
 
 	//=========生成纹理==========
 	unsigned int texture1;
