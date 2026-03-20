@@ -166,8 +166,9 @@
     <ClCompile Include="Main08_official.cpp" />
     <ClCompile Include="Main08_Prt_0102.cpp" />
     <ClCompile Include="Main08_Prt_03.cpp" />
-    <ClCompile Include="Main09_01.cpp" />
     <ClCompile Include="Main09_02.cpp" />
+    <ClCompile Include="Main09_base_test.cpp" />
+    <ClCompile Include="Main09_01.cpp" />
     <ClCompile Include="Main09_official.cpp" />
     <Text Include="shader\shader_09_official.vs">
       <FileType>Document</FileType>

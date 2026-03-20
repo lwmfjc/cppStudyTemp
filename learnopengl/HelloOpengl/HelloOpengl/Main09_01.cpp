@@ -325,6 +325,7 @@ int main()
 	ourShader.setInt("texture2", 2);
 	glEnable(GL_DEPTH_TEST);
 
+	bool hasLog = false;
 
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
@@ -370,13 +371,52 @@ int main()
 		//view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
 
 
-		view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
-
-		//试图空间，观察矩阵
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+		//view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
 
 
+
+		//===========视野空间处理=========
+		//视图空间空间，观察矩阵
+		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+
+		//normalize：归一化，让向量的长度变成1，但是方向不变。把它变成长度为 1 的单位向量后，它就能作为一个标准的轴（Axis）--z轴
+		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+
+		//上向量 
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+		//叉积，得到一个垂直于这两个向量的向量
+		//叉积（Cross Product）的方向遵循右手定则，伸出右手，平整手掌。四指指向第一个向量：也就是 up）。向第二个向量弯曲四指：也就是 cameraDirection。大拇指的指向：就是叉积的结果 cameraRight
+		glm::vec3 cameraRight = glm::normalize(
+			glm::cross(up, cameraDirection));
+
+		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+
+
+
+		if (!hasLog) {
+			std::cout << "Camera Position:  " << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << std::endl;
+			std::cout << "Camera Direction: " << cameraDirection.x << ", " << cameraDirection.y << ", " << cameraDirection.z << std::endl;
+			std::cout << "Camera Right:     " << cameraRight.x << ", " << cameraRight.y << ", " << cameraRight.z << std::endl;
+			std::cout << "Camera Up (Final):" << cameraUp.x << ", " << cameraUp.y << ", " << cameraUp.z << std::endl;
+			hasLog = true;
+
+		}
+
+		//glm::mat4 view;
+		/*view = glm::lookAt(glm::vec3(-0.5f, 0.3f, 3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));*/
+		view = glm::lookAt(glm::vec3(0.0f, 0.0f,  3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f));
+		/*view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));*/
+
+
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		ourShader.setMat4("view", view);
+		//===========视野空间处理=========
+
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
@@ -401,8 +441,8 @@ int main()
 
 		/*float angle = 2.0f * (i + 1);
 		//model = glm::rotate(model, (float)glfwGetTime() * angle, //glm::vec3(1.0f, 0.3f, 0.5f));*/
-		float angle = 20.0f;// *i;
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		float angle = 45.0f;// *i;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		ourShader.setMat4("model", model);
 

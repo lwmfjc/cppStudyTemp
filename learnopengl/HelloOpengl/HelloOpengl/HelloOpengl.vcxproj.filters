@@ -96,13 +96,16 @@
     <ClCompile Include="Main08_Prt_03.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_01.cpp">
+    <ClCompile Include="Main09_base_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main09_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main08_03.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main09_01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main09_02.cpp">

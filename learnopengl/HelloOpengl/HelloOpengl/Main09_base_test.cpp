@@ -1,4 +1,4 @@
-#ifdef LY_EP09
+#ifdef LY_EP09_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -239,18 +239,6 @@ int main()
 	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
-	glm::vec3 cubePositions[] = {
-	   glm::vec3(0.0f,  0.0f,  0.0f),
-	   glm::vec3(2.0f,  5.0f, -15.0f),
-	   glm::vec3(-1.5f, -2.2f, -2.5f),
-	   glm::vec3(-3.8f, -2.0f, -12.3f),
-	   glm::vec3(2.4f, -0.4f, -3.5f),
-	   glm::vec3(-1.7f,  3.0f, -7.5f),
-	   glm::vec3(1.3f, -2.0f, -2.5f),
-	   glm::vec3(1.5f,  2.0f, -2.5f),
-	   glm::vec3(1.5f,  0.2f, -1.5f),
-	   glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
 
 	//创建顶点缓冲区对象，
 	//存放顶点属性（位置、颜色、纹理坐标）的大仓库
@@ -378,48 +366,49 @@ int main()
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
+		//让相机先向上，再靠近(向前，即-z轴方向)
+		//view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
+
+
+		view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
+
 		//试图空间，观察矩阵
-		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		const float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius; //0->10
-		//camX = 0.0f;
-		float camZ = cos(glfwGetTime()) * radius; //10->0 
-		camZ = 0.0f;
-		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+
+
+		ourShader.setMat4("view", view);
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
 		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
 		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
+		//只看得到z值在-0.1f->-100.f之间的物体
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
-		for (unsigned int i = 0; i < 10; i++)
-		{
 
 
-			//对角线都是1.0
-			glm::mat4 model = glm::mat4(1.0f);
+		//对角线都是1.0
+		glm::mat4 model = glm::mat4(1.0f);
 
-			//如果是+45度，是上面的顶点朝着z轴正方形(转)
-			//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//如果是+45度，是上面的顶点朝着z轴正方形(转)
+		//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-			//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
-			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
+		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 
-			model = glm::translate(model, cubePositions[i]);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 
-			/*float angle = 2.0f * (i + 1);
-			model = glm::rotate(model, (float)glfwGetTime() * angle, glm::vec3(1.0f, 0.3f, 0.5f));*/
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		/*float angle = 2.0f * (i + 1);
+		//model = glm::rotate(model, (float)glfwGetTime() * angle, //glm::vec3(1.0f, 0.3f, 0.5f));*/
+		float angle = 20.0f;// *i;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
-			ourShader.setMat4("model", model);
+		ourShader.setMat4("model", model);
 
-			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 
 
