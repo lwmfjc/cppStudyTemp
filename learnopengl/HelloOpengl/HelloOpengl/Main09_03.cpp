@@ -30,7 +30,8 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	const float cameraSpeed = 0.05f; // adjust accordingly
+	/*const*/ float cameraSpeed = 0.05f; // adjust accordingly
+	cameraSpeed = 2.5f * deltaTime;
 	//按一次w就+0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
 	//也就是相机的位置朝负z轴前进
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
