@@ -1,4 +1,4 @@
-#ifdef LY_EP09_
+#ifdef LY_EP09
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -370,13 +370,20 @@ int main()
 		//view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
 
 
-		view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
+		//view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
+		
 
+
+		//===========视野空间处理=========
 		//试图空间，观察矩阵
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
 
 
+
+
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		ourShader.setMat4("view", view);
+		//===========视野空间处理=========
+
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);

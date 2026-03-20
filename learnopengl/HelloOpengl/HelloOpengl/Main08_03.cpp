@@ -1,4 +1,4 @@
-#ifdef LY_EP09_
+#ifdef LY_EP08
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -367,13 +367,11 @@ int main()
 		glm::mat4 projection = glm::mat4(1.0f);
 
 		//让相机先向上，再靠近(向前，即-z轴方向)
-		//view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
-
-
-		view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
-
+		view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
+		
 		//试图空间，观察矩阵
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		//view = glm::translate(view, glm::vec3(0.0f, -0.5f,10.0f)); 
 
 
 		ourShader.setMat4("view", view);
