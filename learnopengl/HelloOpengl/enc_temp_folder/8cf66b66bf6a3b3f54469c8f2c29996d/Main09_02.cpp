@@ -4,8 +4,6 @@
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
-#include <thread> // 必须包含此头文件
-#include <chrono> // 用于时间单位
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -387,7 +385,6 @@ int main()
 		//camX = 0.0f;
 		float camZ = cos(glfwGetTime()) * radius; //10->0 
 		camZ = 0.0f;
-		//相机的轨迹其实是在 $Z=3$ 这条直线上左右滑动。但在一个看向原点的相机眼里，当它滑到最右边（$X=10$）时，它必须向左后方“斜着”看
 		view = glm::lookAt(glm::vec3(camX, 0.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
