@@ -57,7 +57,7 @@
     <ClCompile Include="Main05_Prt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main06_01.cpp">
+    <ClCompile Include="Main06_01_textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stb_image_06.cpp">
@@ -72,10 +72,10 @@
     <ClCompile Include="Main06_Prt04.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main07_01.cpp">
+    <ClCompile Include="Main07_01_transformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_01.cpp">
+    <ClCompile Include="Main08_01_single.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main03_01.cpp">
@@ -87,7 +87,7 @@
     <ClCompile Include="Main08_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_02.cpp">
+    <ClCompile Include="Main08_02_ten_move.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main08_Prt_0102.cpp">
@@ -102,19 +102,22 @@
     <ClCompile Include="Main09_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_03.cpp">
+    <ClCompile Include="Main08_03_single.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_01.cpp">
+    <ClCompile Include="Main09_01_look_at.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_02.cpp">
+    <ClCompile Include="Main09_02_look_move_to_ten.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_03.cpp">
+    <ClCompile Include="Main09_03_look_around.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_04.cpp">
+    <ClCompile Include="Main09_04._mouse_input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main09_05_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera_09.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

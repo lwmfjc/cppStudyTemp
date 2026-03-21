@@ -1,4 +1,4 @@
-#ifdef LY_EP09
+#ifdef LY_EP09_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -69,7 +69,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
-static bool firstMouse;
+static bool firstMouse=true;
 static double lastX;
 static double lastY;
 static float yaw;
@@ -108,6 +108,17 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(direction);
+}
+
+static float fov= 45.0f;
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	fov -= (float)yoffset;
+	if (fov < 1.0f)
+		fov = 1.0f;
+	if (fov > 45.0f)
+		fov = 45.0f;
 }
 
 int main()
@@ -418,8 +429,12 @@ int main()
 	ourShader.setInt("texture2", 2);
 	glEnable(GL_DEPTH_TEST);
 
+	//设置输入模式-禁用光标
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//设置光标位置回调
 	glfwSetCursorPosCallback(window, mouse_callback);
+	//设置鼠标滚轴动作回调
+	glfwSetScrollCallback(window, scroll_callback);
 
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
@@ -484,7 +499,7 @@ int main()
 
 		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
 		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
 		for (unsigned int i = 0; i < 10; i++)
