@@ -55,7 +55,7 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader ourShader("shader/shader_09_official.vs", "shader/shader_09_official.fs");
+    Shader ourShader("shader/shader_09_official.vert", "shader/shader_09_official.frag");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------

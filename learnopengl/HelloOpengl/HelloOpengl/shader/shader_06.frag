@@ -1,6 +1,6 @@
 #version 330 core
 out vec4 FragColor;
-  
+
 in vec3 ourColor;
 //对应的纹理坐标
 in vec2 TexCoord;

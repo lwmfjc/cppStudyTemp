@@ -71,7 +71,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_07.vs", "shader/shader_07.fs");
+	Shader ourShader("shader/shader_07.vert", "shader/shader_07.frag");
 
 	//=========Éú³ÉÎÆÀí==========
 	unsigned int texture1;

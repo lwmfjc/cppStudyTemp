@@ -90,7 +90,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_06_Prt04.vs", "shader/shader_06_Prt04.fs");
+	Shader ourShader("shader/shader_06_Prt04.vert", "shader/shader_06_Prt04.frag");
 
 	//=========Éú³ÉÎÆÀí==========
 	unsigned int texture1;
