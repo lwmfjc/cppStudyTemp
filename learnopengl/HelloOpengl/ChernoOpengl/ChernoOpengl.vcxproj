@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a9d5c3ef-09ec-46fd-8137-6a0451542412}</ProjectGuid>
-    <RootNamespace>HelloOpengl</RootNamespace>
+    <ProjectGuid>{6096cf13-aad5-4c64-8118-5066e03a1e77}</ProjectGuid>
+    <RootNamespace>ChernoOpengl</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,32 +71,26 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\software\opengl\openglFiles\Includes;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>D:\software\opengl\openglFiles\Libs;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\software\opengl\openglFiles\Includes;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>D:\software\opengl\openglFiles\Libs;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\software\opengl\openglFiles\Includes;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>D:\software\opengl\openglFiles\Libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\software\opengl\openglFiles\Includes;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>D:\software\opengl\openglFiles\Libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP09;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP04;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\lib;$(SolutionDir)ChernoOpengl\Dependencies\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,26 +99,27 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP09;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP04;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\lib;$(SolutionDir)ChernoOpengl\Dependencies\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP09;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,96 +128,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP09;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="Main03_01.cpp" />
-    <ClCompile Include="Main03_02.cpp" />
-    <ClCompile Include="Main04_01_triangle.cpp" />
-    <ClCompile Include="Main04_02_rectangle.cpp" />
-    <ClCompile Include="Main04_Prt01.cpp" />
-    <ClCompile Include="Main04_Prt02.cpp" />
-    <ClCompile Include="Main04_Prt03.cpp" />
-    <ClCompile Include="Main05_01_out.cpp" />
-    <ClCompile Include="Main05_02_uniform.cpp" />
-    <ClCompile Include="Main05_03_flat.cpp" />
-    <ClCompile Include="Main05_04_pakage_class.cpp" />
-    <ClCompile Include="Main05_Prt.cpp" />
-    <ClCompile Include="Main06_01_textures.cpp" />
-    <ClCompile Include="Main06_Prt02.cpp" />
-    <ClCompile Include="Main06_Prt03.cpp" />
-    <ClCompile Include="Main06_Prt04.cpp" />
-    <ClCompile Include="Main07_01_transformations.cpp" />
-    <ClCompile Include="Main08_01_single.cpp" />
-    <ClCompile Include="Main08_02_ten_move.cpp" />
-    <ClCompile Include="Main08_official.cpp" />
-    <ClCompile Include="Main08_Prt_0102.cpp" />
-    <ClCompile Include="Main08_Prt_03.cpp" />
-    <ClCompile Include="Main09_02_look_move_to_ten.cpp" />
-    <ClCompile Include="Main09_03_look_around.cpp" />
-    <ClCompile Include="Main09_04._mouse_input.cpp" />
-    <ClCompile Include="Main09_05_class.cpp" />
-    <ClCompile Include="Main09_base_test.cpp" />
-    <ClCompile Include="Main09_01_look_at.cpp" />
-    <ClCompile Include="Main09_official.cpp" />
-    <Text Include="shader\shader_09_official.vs">
-      <FileType>Document</FileType>
-    </Text>
-    <ClCompile Include="Main08_03_single.cpp" />
-    <ClCompile Include="stb_image_06.cpp" />
-    <ClCompile Include="Shader_05.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera_09.h" />
-    <ClInclude Include="Shader_05.h" />
-    <ClInclude Include="stb_image.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shader\shader_05.frag" />
-    <None Include="shader\shader_05.fs" />
-    <None Include="shader\shader_05.vert" />
-    <None Include="shader\shader_05.vs" />
-    <None Include="shader\shader_05_Prt0102.vert" />
-    <None Include="shader\shader_05_Prt0102.vs" />
-    <None Include="shader\shader_05_Prt03.frag" />
-    <None Include="shader\shader_05_Prt03.fs" />
-    <None Include="shader\shader_05_Prt03.vert" />
-    <None Include="shader\shader_05_Prt03.vs" />
-    <None Include="shader\shader_06.frag" />
-    <None Include="shader\shader_06.fs" />
-    <None Include="shader\shader_06.vert" />
-    <None Include="shader\shader_06.vs" />
-    <None Include="shader\shader_06_Prt04.frag" />
-    <None Include="shader\shader_06_Prt04.fs" />
-    <None Include="shader\shader_06_Prt04.vert" />
-    <None Include="shader\shader_06_Prt04.vs" />
-    <None Include="shader\shader_07.frag" />
-    <None Include="shader\shader_07.fs" />
-    <None Include="shader\shader_07.vert" />
-    <None Include="shader\shader_07.vs" />
-    <None Include="shader\shader_08.frag" />
-    <None Include="shader\shader_08.fs" />
-    <None Include="shader\shader_08.vert" />
-    <None Include="shader\shader_08.vs" />
-    <None Include="shader\shader_08_official.frag" />
-    <None Include="shader\shader_08_official.fs" />
-    <None Include="shader\shader_08_official.vert" />
-    <None Include="shader\shader_08_official.vs" />
-    <None Include="shader\shader_09.frag" />
-    <None Include="shader\shader_09.fs" />
-    <None Include="shader\shader_09.vert" />
-    <None Include="shader\shader_09.vs" />
-    <None Include="shader\shader_09_official.frag" />
-    <None Include="shader\shader_09_official.fs" />
-    <None Include="shader\shader_09_official.vert" />
+    <ClCompile Include="src\Main02_01.cpp" />
+    <ClCompile Include="src\Main03_01.cpp" />
+    <ClCompile Include="src\Main04_01.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-#ifdef LY_EP09
+#ifdef LY_EP09_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
