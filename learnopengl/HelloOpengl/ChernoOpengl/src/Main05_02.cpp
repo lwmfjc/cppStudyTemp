@@ -31,10 +31,12 @@ int main(void)
 #pragma endregion
 
 	// 定义三角形的顶点坐标（CPU 内存）
-	float positions[10] = {
-		-0.5f, -0.5,
-		0.0f, 0.5f,
-		0.5f, -0.5f, 
+	float positions[25] = {
+		-0.5f, -0.5,0.0f,0.3f,
+		0.0f, 0.5f,0.0f,0.3f,
+		0.5f, -0.5f,0.0f,0.3f,
+		1.0f, 0.5f,0.0f,0.3f,
+		0.0f, 0.5f,0.0f,0.3f,
 	};
 
 	unsigned int buffer;
@@ -59,7 +61,11 @@ int main(void)
 	//参数5stride：从*当前顶点的属性的起始点*到*下一个顶点的同属性起始点*的字节数
 	//参数6pointer：在单个顶点数据块内，该属性距离(这个块的)起始位置的字节偏移。可以使用宏简化 
 	//1. 打标签：它把当前 GL_ARRAY_BUFFER 里的数据流，贴上了“0号”的标签。2. 定规则：它告诉 GPU，当你（Shader）想要 location = 0 的数据时，请按照“每 2 个 float 为一组”的规则去缓存里抓取。
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0); 
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (const void*)0);
+
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (const void*)2);
 
 
 
@@ -70,9 +76,14 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// 读取当前绑定的缓冲区数据并绘制三角形：从
-		// 索引0即第1个顶点开始画，读取三个顶点(
-		//并行地读第1个顶点的0号属性_以及_第1个顶点的1号属性) 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		// 索引2即第2个顶点开始画，读取三个顶点(
+		//并行地读第2个顶点的0号属性_以及_第2个顶点的1号属性)
+
+		//如果是分层布局，比如顶点数据：
+		// [V,V, V,V, V,V, V,V, V,V, -->全是位置
+		//  T,T, T,T, T,T, T,T, T,T] -->全是纹理
+		//那么会同时读取第三组[V,V]和下面第三组[T,T]
+		glDrawArrays(GL_TRIANGLES, 2, 3);
 
 		// 交换前后缓冲区以刷新画面
 		glfwSwapBuffers(window);

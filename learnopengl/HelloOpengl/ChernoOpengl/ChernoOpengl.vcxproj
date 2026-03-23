@@ -82,7 +82,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP05;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP06;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -99,7 +99,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP05;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP06;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -141,6 +141,8 @@
     <ClCompile Include="src\Main03_01.cpp" />
     <ClCompile Include="src\Main04_01.cpp" />
     <ClCompile Include="src\Main05_01.cpp" />
+    <ClCompile Include="src\Main05_02.cpp" />
+    <ClCompile Include="src\Main06_01.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
