@@ -29,7 +29,7 @@ int main(void)
 		std::cout << "Error!" << std::endl;
 	}
 #pragma endregion
-
+	
 	// 定义三角形的顶点坐标（CPU 内存）
 	float positions[6] = {
 		-0.5f, -0.5,
@@ -46,6 +46,16 @@ int main(void)
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float),
 		positions, GL_STATIC_DRAW);
 
+	//参数1-index：顶点的哪个属性[有位置、颜色、纹理等]（和在着色器程序里指定的索引一致），设置完后，当使用着色器程序从显卡读取位置时，就能从缓冲区，简单的读取并使用这些属性
+	//参数2-size：每个属性是几个分量的向量，即占用了几个数值
+	//参数3-type：提供的数据类型
+	//参数4normalized：是否归一化，可以让cpu帮你做（那就是true），或者弄好传给它。（比如
+	//把0-255映射成0-1
+	//参数5stride：从*当前顶点的属性的起始点*到*下一个顶点的同属性起始点*的字节数
+	//参数6pointer：在单个顶点数据块内，该属性距离(这个块的)起始位置的字节偏移。可以
+	//使用宏简化      
+	 
+	
 	// 游戏/渲染主循环
 	while (!glfwWindowShouldClose(window))
 	{
