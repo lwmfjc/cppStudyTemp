@@ -1,4 +1,4 @@
-#ifdef LY_EP08_
+#ifdef LY_EP09
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -17,7 +17,7 @@ static ShaderProgramSource ParseShader(const std::string& filepath)
 
 	enum class ShaderType
 	{
-		NONE = -1,VERTEX = 0,FRAGMENT =1
+		NONE = -1, VERTEX = 0, FRAGMENT = 1
 	};
 
 	//input file stream
@@ -26,7 +26,7 @@ static ShaderProgramSource ParseShader(const std::string& filepath)
 	std::string line;
 	std::stringstream ss[2];
 	ShaderType type = ShaderType::NONE;
-	
+
 	while (getline(stream, line))
 	{
 		if (line.find("#shader") != std::string::npos)
@@ -189,14 +189,14 @@ int main(void)
 
 	//1. 打标签：它把当前 GL_ARRAY_BUFFER 里的数据流，贴上了“0号”的标签。2. 定规则：它告诉 GPU，当你（Shader）想要 location = 0 的数据时，请按照“每 2 个 float 为一组”的规则去缓存里抓取。
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
-	 
+
 	//这是一个相对路径，相对于 工作目录
 	//如果不是在visual studio中运行，就会相对于 可执行文件 所在的目录
 	//如果在visual studio中，工作目录被设置为$(ProjectDir) (右键目录-属性-调试-woking directory)
 	ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
 
-	std::cout << source.VertexSource << std::endl;
-	std::cout << source.FragmentSource << std::endl;
+	//std::cout << source.VertexSource << std::endl;
+	//std::cout << source.FragmentSource << std::endl;
 
 	// 将字符串源码编译并链接成一个完整的程序对象
 	unsigned int program = CreateShader(source.VertexSource, source.FragmentSource);
