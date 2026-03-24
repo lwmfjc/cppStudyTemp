@@ -1,4 +1,4 @@
-#ifdef LY_EP09_
+#ifdef LY_EP10
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -168,13 +168,19 @@ int main(void)
 
 	// 定义三角形的顶点坐标（CPU 内存）
 	float positions[] = {
-		-0.5f, -0.5f,
-		0.5f, -0.5f,
-		0.5f, 0.5f,
+		-0.5f, -0.5f,//0
+		0.5f, -0.5f,//1
+		0.5f, 0.5f,//2
 
-		0.5f, 0.5f,
-		-0.5f, 0.5f,
-		-0.5f, -0.5f,
+		//0.5f, 0.5f,
+		-0.5f, 0.5f,//3
+		//-0.5f, -0.5f,
+	};
+
+	//
+	unsigned int indices[] = {
+		0,1,2,
+		2,3,0
 	};
 
 	unsigned int buffer;
@@ -189,10 +195,19 @@ int main(void)
 
 	// 启用索引为 0 的(顶点)属性 
 	glEnableVertexAttribArray(0);
-
-
 	//1. 打标签：它把当前 GL_ARRAY_BUFFER 里的数据流，贴上了“0号”的标签。2. 定规则：它告诉 GPU，当你（Shader）想要 location = 0 的数据时，请按照“每 2 个 float 为一组”的规则去缓存里抓取。
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
+
+	//索引缓冲区：index buffer object
+	unsigned int ibo;
+	// 生成一个缓冲区 ID
+	glGenBuffers(1, &ibo);
+	// 绑定该 ID 到元素数组缓冲区 (Element Array Buffer)插槽，
+	//也称索引缓冲区对象
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	// 将顶点数据从 CPU 内存拷贝到 GPU 显存，设为静态读取模式
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int),
+		indices, GL_STATIC_DRAW);
 
 	//这是一个相对路径，相对于 工作目录
 	//如果不是在visual studio中运行，就会相对于 可执行文件 所在的目录
@@ -219,7 +234,16 @@ int main(void)
 		// 索引0即第1个顶点开始画，读取三个顶点(
 		//并行地读第1个顶点的0号属性_以及_第1个顶点的1号属性) 
 		//GL_TRIANGLES：这是你告诉 GPU 的拓扑模式（Topology）。它告诉 GPU：“请每 3 个点一组，把它们连成一个三角形。”
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//6：“从我指定的起点开始，连续读取 6 个顶点 的数据。GPU 并不认识“矩形”，它只认识你给的拓扑模式。如果你给 GL_TRIANGLES 模式并传了 6 个点，它会自动执行6\3=2，从而在屏幕上画出2个三角形。
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
+		//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+		//跳过前三个顶点
+		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
+
 
 		// 交换前后缓冲区以刷新画面
 		glfwSwapBuffers(window);
