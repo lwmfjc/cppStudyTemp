@@ -6,33 +6,10 @@
 #include <sstream>
 #include <string>
 
-//_debugbreak() 是msvc特有的
-//__FILE__和__LINE__ 是所有编译器都支持的
-//#x：字符串化操作符。它会将你传入的代码直接转成字符串
-//__FILE__ 和 __LINE__：编译器内置宏，自动获取当前代码所在的文件名和行号
-#define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearError();\
-	x;\
-	ASSERT(GLLogCall(#x,__FILE__,__LINE__));
+#include "Render.h"
 
-static void GLClearError()
-{
-	//直到不是GL_NO_ERROR，就退出while循环
-	while (glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall(const char* function,
-	const char* file, int line)
-{
-	while (GLenum error = glGetError())
-	{
-		std::cout << "[OpenGL Error](" << error << "): "
-			<< function << " " << file << ":" << line << std::endl;
-		return false;
-	}
-
-	return true;
-}
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 struct ShaderProgramSource
 {
@@ -219,31 +196,15 @@ int main(void)
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);//绑定vao
 
-	unsigned int buffer;
-	// 生成一个缓冲区 ID
-	glGenBuffers(1, &buffer);
-	// 绑定该 ID 到顶点缓冲区插槽
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	// 将顶点数据从 CPU 内存拷贝到 GPU 显存，设为静态读取模式
-	glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float),
-		positions, GL_STATIC_DRAW);
-
+	//构造函数中已经绑定了
+	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
 	// 启用索引为 0 的(顶点)属性 
 	glEnableVertexAttribArray(0);
 	//1. 打标签：它把当前 GL_ARRAY_BUFFER 里的数据流，贴上了“0号”的标签。2. 定规则：它告诉 GPU，当你（Shader）想要 location = 0 的数据时，请按照“每 2 个 float 为一组”的规则去缓存里抓取。
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
-
-	//索引缓冲区：index buffer object
-	unsigned int ibo;
-	// 生成一个缓冲区 ID
-	glGenBuffers(1, &ibo);
-	// 绑定该 ID 到元素数组缓冲区 (Element Array Buffer)插槽，
-	//也称索引缓冲区对象
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	// 将顶点数据从 CPU 内存拷贝到 GPU 显存，设为静态读取模式
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int),
-		indices, GL_STATIC_DRAW);
+	 
+	IndexBuffer ib(indices, 6);
 
 	//这是一个相对路径，相对于 工作目录
 	//如果不是在visual studio中运行，就会相对于 可执行文件 所在的目录

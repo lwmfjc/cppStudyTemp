@@ -82,7 +82,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP12;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP13;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -99,7 +99,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP12;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP13;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -137,24 +137,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main02_01.cpp" />
-    <ClCompile Include="src\Main03_01.cpp" />
-    <ClCompile Include="src\Main04_01.cpp" />
-    <ClCompile Include="src\Main05_01.cpp" />
-    <ClCompile Include="src\Main05_02.cpp" />
-    <ClCompile Include="src\Main06_01.cpp" />
-    <ClCompile Include="src\Main07_01.cpp" />
-    <ClCompile Include="src\Main08_01.cpp" />
-    <ClCompile Include="src\Main09_01.cpp" />
-    <ClCompile Include="src\Main09_02.cpp" />
-    <ClCompile Include="src\Main10_01.cpp" />
-    <ClCompile Include="src\Main10_02.cpp" />
-    <ClCompile Include="src\Main11_01.cpp" />
-    <ClCompile Include="src\Main12_01.cpp" />
-    <ClCompile Include="src\Main12_02_vao.cpp" />
+    <ClCompile Include="src\basic\Main02_01.cpp" />
+    <ClCompile Include="src\basic\Main03_01.cpp" />
+    <ClCompile Include="src\basic\Main04_01.cpp" />
+    <ClCompile Include="src\basic\Main05_01.cpp" />
+    <ClCompile Include="src\basic\Main05_02.cpp" />
+    <ClCompile Include="src\basic\Main06_01.cpp" />
+    <ClCompile Include="src\basic\Main07_01.cpp" />
+    <ClCompile Include="src\basic\Main08_01.cpp" />
+    <ClCompile Include="src\basic\Main09_01.cpp" />
+    <ClCompile Include="src\basic\Main09_02.cpp" />
+    <ClCompile Include="src\basic\Main10_01.cpp" />
+    <ClCompile Include="src\basic\Main10_02.cpp" />
+    <ClCompile Include="src\basic\Main11_01.cpp" />
+    <ClCompile Include="src\basic\Main12_01.cpp" />
+    <ClCompile Include="src\basic\Main12_02_vao.cpp" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Main13_01.cpp" />
+    <ClCompile Include="src\Render.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Render.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
