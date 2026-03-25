@@ -1,4 +1,4 @@
-#ifdef LY_EP12_
+#ifdef LY_EP12
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -170,9 +170,11 @@ int main(void)
 	//没有手动写着色器则不会渲染；如果不是核心模式，
 	//在固定管线中默认颜色是白色，且默认顶点在NDC标准
 	//设备坐标系中
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//这是兼容配置模式,会让VAO0成为默认对象
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	// 创建窗口对象
 	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
@@ -212,6 +214,10 @@ int main(void)
 		0,1,2,
 		2,3,0
 	};
+
+	unsigned int vao;
+	glGenVertexArrays(1,&vao);
+	glBindVertexArray(vao);//绑定vao
 
 	unsigned int buffer;
 	// 生成一个缓冲区 ID
@@ -255,8 +261,11 @@ int main(void)
 
 
 	//===这里故意把他解绑了（假设他去绑定别的去了）===
-	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glUseProgram(0);
+	glBindVertexArray(0);//解绑vao
+	//element_array_buffer 和vertexAttribArray不能
+	//在解绑vao之前处理，否则就记录进去了
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -274,9 +283,13 @@ int main(void)
 		//绘图前重新绑定
 		glUseProgram(program);
 
+		//必须先绑定program，因为vao不负责着色器程序的切换
+		glBindVertexArray(vao);
+
+
 		//glVertexAttribPointer更具体地指明了属性0、属性1，到绑定到当时的GL_ARRAY_BUFFER上的buffer去找，以及如何找。所以这里并不需要重新绑定GL_ARRAY_BUFFER
-		glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		//glBindBuffer(GL_ARRAY_BUFFER, buffer);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
 		// 读取当前绑定的缓冲区数据并绘制三角形：从
 		// 索引0即第1个顶点开始画，读取三个顶点(
@@ -305,8 +318,8 @@ int main(void)
 		//========设置uniform========
 
 		//重新启动属性
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
+		//glEnableVertexAttribArray(0);
+		//glEnableVertexAttribArray(1);
 
 		//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
 		//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
@@ -325,6 +338,9 @@ int main(void)
 		// 轮询并处理窗口事件（如键盘输入、关闭动作）
 		glfwPollEvents();
 	}
+
+	//最后解绑vao
+	glBindVertexArray(0);
 
 	// 手动通知显卡驱动释放该程序占用的显存
 	glDeleteProgram(program);
