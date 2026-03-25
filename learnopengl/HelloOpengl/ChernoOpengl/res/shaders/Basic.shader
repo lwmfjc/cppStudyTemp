@@ -9,8 +9,12 @@ void main()
 
 #shader fragment
 #version 330 core
-layout(location = 0 ) out vec4 color; //这里应该不需要指定layout
+//layout(location = 0 ) out vec4 color; //这里应该不需要指定layout
+out vec4 color; 
+uniform vec4 u_Color;//同意u_开头表示uniform变量
 void main()
 {
-  color=vec4(0.2,0.3,0.8,1.0);
+  //color=vec4(0.2,0.3,0.8,1.0);
+  color=u_Color;
+
 }

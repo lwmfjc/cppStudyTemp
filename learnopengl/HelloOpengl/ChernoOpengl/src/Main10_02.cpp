@@ -6,21 +6,32 @@
 #include <sstream>
 #include <string>
 
+//_debugbreak() 是msvc特有的
+//__FILE__和__LINE__ 是所有编译器都支持的
+//#x：字符串化操作符。它会将你传入的代码直接转成字符串
+//__FILE__ 和 __LINE__：编译器内置宏，自动获取当前代码所在的文件名和行号
+#define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall(#x,__FILE__,__LINE__));
+
 static void GLClearError()
 {
 	//直到不是GL_NO_ERROR，就退出while循环
 	while (glGetError() != GL_NO_ERROR);
 }
 
-static void GLCheckError()
-{
-	//这里值为0x00000500，
-	//然后到glew.h中查到，得到#define GL_INVALID_ENUM 0x0500，
-	//即无效枚举
+static bool GLLogCall(const char* function,
+	const char* file,int line)
+{ 
 	while (GLenum error = glGetError())
 	{
-		std::cout << "[OpenGL Error](" << error << std::endl;
+		std::cout << "[OpenGL Error](" << error << "): "
+			<< function << " " << file << ":" << line << std::endl;
+		return false;
 	}
+
+	return true;
 }
 
 struct ShaderProgramSource
@@ -257,10 +268,10 @@ int main(void)
 		//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
 		//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-		GLClearError();
+		//GLClearError();
 		//参数错误
-		glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);
-		GLCheckError();
+		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
+		//ASSERT(GLLogCall());
 		//跳过前三个顶点
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
 

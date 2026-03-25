@@ -1,4 +1,4 @@
-#ifdef LY_EP10_
+#ifdef LY_EP12
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -6,21 +6,32 @@
 #include <sstream>
 #include <string>
 
+//_debugbreak() 是msvc特有的
+//__FILE__和__LINE__ 是所有编译器都支持的
+//#x：字符串化操作符。它会将你传入的代码直接转成字符串
+//__FILE__ 和 __LINE__：编译器内置宏，自动获取当前代码所在的文件名和行号
+#define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall(#x,__FILE__,__LINE__));
+
 static void GLClearError()
 {
 	//直到不是GL_NO_ERROR，就退出while循环
 	while (glGetError() != GL_NO_ERROR);
 }
 
-static void GLCheckError()
+static bool GLLogCall(const char* function,
+	const char* file, int line)
 {
-	//这里值为0x00000500，
-	//然后到glew.h中查到，得到#define GL_INVALID_ENUM 0x0500，
-	//即无效枚举
 	while (GLenum error = glGetError())
 	{
-		std::cout << "[OpenGL Error](" << error << std::endl;
+		std::cout << "[OpenGL Error](" << error << "): "
+			<< function << " " << file << ":" << line << std::endl;
+		return false;
 	}
+
+	return true;
 }
 
 struct ShaderProgramSource
@@ -175,6 +186,8 @@ int main(void)
 	// 将当前窗口的上下文设置为 OpenGL 渲染的目标
 	glfwMakeContextCurrent(window);
 
+	glfwSwapInterval(2);
+
 	// 初始化 GLEW 以加载 OpenGL 函数指针，需在有上下文后执行
 	if (glewInit() != GLEW_OK)
 	{
@@ -206,7 +219,7 @@ int main(void)
 	// 绑定该 ID 到顶点缓冲区插槽
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	// 将顶点数据从 CPU 内存拷贝到 GPU 显存，设为静态读取模式
-	glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float),
+	glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float),
 		positions, GL_STATIC_DRAW);
 
 
@@ -236,16 +249,35 @@ int main(void)
 
 	// 将字符串源码编译并链接成一个完整的程序对象
 	unsigned int program = CreateShader(source.VertexSource, source.FragmentSource);
-	// 告诉 OpenGL 状态机：接下来的所有绘制指令（如 glDrawArrays）
-	// 都请使用这个编译好的着色器程序进行渲染
+	// 告诉 OpenGL 状态机：接下来的所有绘制指令（如 glDrawArrays）都请使用这个编译好的着色器程序
+	// 进行渲染
 	glUseProgram(program);
 
+	//==在绑定程序后，获取变量地址，然后设置变量==
+	//问着色器，让着色器告诉CPU变量的位置
+	unsigned int location = glGetUniformLocation(program, "u_Color");
+	//不为1时会报错并且停止程序（当设置了变量但是着色器没
+	//使用过时，OpenGL会在编译时删除那个变量）
+	ASSERT(location != -1);
+
+	//这里故意把他解绑了（假设他去绑定别的去了）
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	float r = 0.0f;
+	float increment = 0.05f;
 
 	// 游戏/渲染主循环
 	while (!glfwWindowShouldClose(window))
 	{
 		// 清理屏幕颜色缓冲区
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		//绘图前重新绑定
+		glUseProgram(program);
+		glBindBuffer(GL_ARRAY_BUFFER, buffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
 		// 读取当前绑定的缓冲区数据并绘制三角形：从
 		// 索引0即第1个顶点开始画，读取三个顶点(
@@ -254,13 +286,23 @@ int main(void)
 		//6：“从我指定的起点开始，连续读取 6 个顶点 的数据。GPU 并不认识“矩形”，它只认识你给的拓扑模式。如果你给 GL_TRIANGLES 模式并传了 6 个点，它会自动执行6\3=2，从而在屏幕上画出2个三角形。
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
+		if (r > 1.0f)
+			increment = -0.05f;
+		else if (r < 0.0f)
+			increment = 0.05f;
+
+		r += increment;
+
+		//在u_Color的位置上设置数值
+		glUniform4f(location, r, 0.3f, 0.0f, 1.0f);
+
 		//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
 		//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-		GLClearError();
+		//GLClearError();
 		//参数错误
-		glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);
-		GLCheckError();
+		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		//ASSERT(GLLogCall());
 		//跳过前三个顶点
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
 
