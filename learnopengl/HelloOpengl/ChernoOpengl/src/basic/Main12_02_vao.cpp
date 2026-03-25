@@ -1,4 +1,4 @@
-#ifdef LY_EP12
+#ifdef LY_EP12_
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
