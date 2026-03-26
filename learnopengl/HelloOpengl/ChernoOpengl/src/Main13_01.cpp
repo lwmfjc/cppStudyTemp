@@ -10,6 +10,7 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 struct ShaderProgramSource
 {
@@ -137,176 +138,171 @@ static unsigned int CreateShader(const std::string& vertexShader,
 
 int main(void)
 {
+	{
+
 #pragma region 一些初始化
-	GLFWwindow* window;
-	// 初始化 GLFW 库，失败则退出
-	if (!glfwInit())
-		return -1;
+		GLFWwindow* window;
+		// 初始化 GLFW 库，失败则退出
+		if (!glfwInit())
+			return -1;
 
-	//强制指定使用 Core Profile（核心模式），如果
-	//没有手动写着色器则不会渲染；如果不是核心模式，
-	//在固定管线中默认颜色是白色，且默认顶点在NDC标准
-	//设备坐标系中
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//这是兼容配置模式,会让VAO0成为默认对象
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		//强制指定使用 Core Profile（核心模式），如果
+		//没有手动写着色器则不会渲染；如果不是核心模式，
+		//在固定管线中默认颜色是白色，且默认顶点在NDC标准
+		//设备坐标系中
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		//这是兼容配置模式,会让VAO0成为默认对象
+		//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
-	// 创建窗口对象
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-	if (!window)
-	{
-		// 创建失败则清理并退出
-		glfwTerminate();
-		return -1;
-	}
+		// 创建窗口对象
+		window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+		if (!window)
+		{
+			// 创建失败则清理并退出
+			glfwTerminate();
+			return -1;
+		}
 
-	// 将当前窗口的上下文设置为 OpenGL 渲染的目标
-	glfwMakeContextCurrent(window);
+		// 将当前窗口的上下文设置为 OpenGL 渲染的目标
+		glfwMakeContextCurrent(window);
 
-	glfwSwapInterval(2);
+		glfwSwapInterval(2);
 
-	// 初始化 GLEW 以加载 OpenGL 函数指针，需在有上下文后执行
-	if (glewInit() != GLEW_OK)
-	{
-		std::cout << "Error!" << std::endl;
-	}
+		// 初始化 GLEW 以加载 OpenGL 函数指针，需在有上下文后执行
+		if (glewInit() != GLEW_OK)
+		{
+			std::cout << "Error!" << std::endl;
+		}
 
 #pragma endregion
 
-	// 定义三角形的顶点坐标（CPU 内存）
-	float positions[] = {
-		-0.5f, -0.5f,//0
-		0.5f, -0.5f,//1
-		0.5f, 0.5f,//2
+		// 定义三角形的顶点坐标（CPU 内存）
+		float positions[] = {
+			-0.5f, -0.5f,//0
+			0.5f, -0.5f,//1
+			0.5f, 0.5f,//2
 
-		//0.5f, 0.5f,
-		-0.5f, 0.5f,//3
-		//-0.5f, -0.5f,
-	};
+			//0.5f, 0.5f,
+			-0.5f, 0.5f,//3
+			//-0.5f, -0.5f,
+		};
 
-	//
-	unsigned int indices[] = {
-		0,1,2,
-		2,3,0
-	};
+		//
+		unsigned int indices[] = {
+			0,1,2,
+			2,3,0
+		};
 
-	unsigned int vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);//绑定vao
+		VertexArray va;
 
-	//构造函数中已经绑定了
-	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+		//申请创建一个GPU上的缓冲区，绑定并复制进去数据构造函
+		//数中已经绑定了，这样glVertexAttribPointer才有效果
+		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
-	// 启用索引为 0 的(顶点)属性 
-	glEnableVertexAttribArray(0);
-	//1. 打标签：它把当前 GL_ARRAY_BUFFER 里的数据流，贴上了“0号”的标签。2. 定规则：它告诉 GPU，当你（Shader）想要 location = 0 的数据时，请按照“每 2 个 float 为一组”的规则去缓存里抓取。
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
-	 
-	IndexBuffer ib(indices, 6);
+		VertexBufferLayout layout;
+		layout.Push<float>(2); 
+		va.AddBuffer(vb, layout);
 
-	//这是一个相对路径，相对于 工作目录
-	//如果不是在visual studio中运行，就会相对于 可执行文件 所在的目录
-	//如果在visual studio中，工作目录被设置为$(ProjectDir) (右键目录-属性-调试-woking directory)
-	ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
+		//申请创建一个GPU上的缓冲区，绑定并复制进去数据
+		IndexBuffer ib(indices, 6);
 
-	//std::cout << source.VertexSource << std::endl;
-	//std::cout << source.FragmentSource << std::endl;
+		//这是一个相对路径，相对于 工作目录
+		//如果不是在visual studio中运行，就会相对于 可执行文件 所在的目录
+		//如果在visual studio中，工作目录被设置为$(ProjectDir) (右键目录-属性-调试-woking directory)
+		ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
 
-	// 将字符串源码编译并链接成一个完整的程序对象
-	unsigned int program = CreateShader(source.VertexSource, source.FragmentSource);
-	// 告诉 OpenGL 状态机：接下来的所有绘制指令（如 glDrawArrays）都请使用这个编译好的着色器程序
-	// 进行渲染
-	glUseProgram(program);
+		//std::cout << source.VertexSource << std::endl;
+		//std::cout << source.FragmentSource << std::endl;
 
-
-	//===这里故意把他解绑了（假设他去绑定别的去了）===
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glUseProgram(0);
-	glBindVertexArray(0);//解绑vao
-	//element_array_buffer 和vertexAttribArray不能
-	//在解绑vao之前处理，否则就记录进去了
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	//========================================
-
-	float r = 0.0f;
-	float increment = 0.05f;
-
-	// 游戏/渲染主循环
-	while (!glfwWindowShouldClose(window))
-	{
-		// 清理屏幕颜色缓冲区
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		//绘图前重新绑定
+		// 将字符串源码编译并链接成一个完整的程序对象
+		unsigned int program = CreateShader(source.VertexSource, source.FragmentSource);
+		// 告诉 OpenGL 状态机：接下来的所有绘制指令（如 glDrawArrays）都请使用这个编译好的着色器程序
+		// 进行渲染
 		glUseProgram(program);
 
-		//必须先绑定program，因为vao不负责着色器程序的切换
-		glBindVertexArray(vao);
 
+		//===这里故意把他解绑了（假设他去绑定别的去了）===
+		vb.Unbind();
 
-		//glVertexAttribPointer更具体地指明了属性0、属性1，到绑定到当时的GL_ARRAY_BUFFER上的buffer去找，以及如何找。所以这里并不需要重新绑定GL_ARRAY_BUFFER
-		//glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		glUseProgram(0);
+		va.Unbind();
 
-		// 读取当前绑定的缓冲区数据并绘制三角形：从
-		// 索引0即第1个顶点开始画，读取三个顶点(
-		//并行地读第1个顶点的0号属性_以及_第1个顶点的1号属性) 
-		//GL_TRIANGLES：这是你告诉 GPU 的拓扑模式（Topology）。它告诉 GPU：“请每 3 个点一组，把它们连成一个三角形。”
-		//6：“从我指定的起点开始，连续读取 6 个顶点 的数据。GPU 并不认识“矩形”，它只认识你给的拓扑模式。如果你给 GL_TRIANGLES 模式并传了 6 个点，它会自动执行6\3=2，从而在屏幕上画出2个三角形。
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		//element_array_buffer 和vertexAttribArray不能
+		//在解绑vao之前处理，否则就记录进去了
+		ib.Unbind();
 
-		//========设置uniform========
-		//==在绑定程序后，获取变量地址，然后设置变量==
-		//问着色器，让着色器告诉CPU变量的位置
-		unsigned int location = glGetUniformLocation(program, "u_Color");
-		//不为1时会报错并且停止程序（当设置了变量但是着色器没
-		//使用过时，OpenGL会在编译时删除那个变量）
-		ASSERT(location != -1);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		//========================================
 
-		if (r > 1.0f)
-			increment = -0.05f;
-		else if (r < 0.0f)
-			increment = 0.05f;
+		float r = 0.0f;
+		float increment = 0.05f;
 
-		r += increment;
+		// 游戏/渲染主循环
+		while (!glfwWindowShouldClose(window))
+		{
+			// 清理屏幕颜色缓冲区
+			glClear(GL_COLOR_BUFFER_BIT);
 
-		//在u_Color的位置上设置数值
-		glUniform4f(location, r, 0.3f, 0.0f, 1.0f);
-		//========设置uniform========
+			//绘图前重新绑定
+			glUseProgram(program);
 
-		//重新启动属性
-		//glEnableVertexAttribArray(0);
-		//glEnableVertexAttribArray(1);
+			//必须先绑定program，因为vao不负责着色器程序的切换
+			va.Bind();
 
-		//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
-		//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-		//GLClearError();
-		//参数错误
-		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+			//========设置uniform========
+			//==在绑定程序后，获取变量地址，然后设置变量==
+			//问着色器，让着色器告诉CPU变量的位置
+			unsigned int location = glGetUniformLocation(program, "u_Color");
+			//不为1时会报错并且停止程序（当设置了变量但是着色器没
+			//使用过时，OpenGL会在编译时删除那个变量）
+			ASSERT(location != -1);
 
-		//ASSERT(GLLogCall());
-		//跳过前三个顶点
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
+			if (r > 1.0f)
+				increment = -0.05f;
+			else if (r < 0.0f)
+				increment = 0.05f;
 
-		// 交换前后缓冲区以刷新画面
-		glfwSwapBuffers(window);
+			r += increment;
 
-		// 轮询并处理窗口事件（如键盘输入、关闭动作）
-		glfwPollEvents();
+			//在u_Color的位置上设置数值
+			glUniform4f(location, r, 0.3f, 0.0f, 1.0f);
+			//========设置uniform========
+
+			//重新启动属性
+			//glEnableVertexAttribArray(0);
+			//glEnableVertexAttribArray(1);
+
+			//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
+			//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
+			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+			//GLClearError();
+			//参数错误
+			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+			//ASSERT(GLLogCall());
+			//跳过前三个顶点
+			//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
+
+			// 交换前后缓冲区以刷新画面
+			glfwSwapBuffers(window);
+
+			// 轮询并处理窗口事件（如键盘输入、关闭动作）
+			glfwPollEvents();
+		}
+
+		//最后解绑vao
+		glBindVertexArray(0);
+
+		// 手动通知显卡驱动释放该程序占用的显存
+		glDeleteProgram(program);
 	}
 
-	//最后解绑vao
-	glBindVertexArray(0);
-
-	// 手动通知显卡驱动释放该程序占用的显存
-	glDeleteProgram(program);
-
 	// 退出前清理资源
+	//glfwTerminate会破坏Context，导致析构函数中的glGetError()
+	//返回一个OpenGL错误
 	glfwTerminate();
 	return 0;
 }
