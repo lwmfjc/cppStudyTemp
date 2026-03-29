@@ -40,4 +40,10 @@ void VertexArray::Unbind() const
 {
 	glBindVertexArray(0);
 
+	//这里是否要禁用呢，但是视频里面没有存count，所以也不知道总共有几个
+	/*for (unsigned int i = 0; i < elements.size(); i++)
+	{
+		glDisableVertexAttribArray(i);
+	}*/
+
 }
