@@ -1,4 +1,4 @@
-#ifdef LY_EP13-15_
+#ifdef LY_EP17
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -9,6 +9,7 @@
 #include "Renderer.h"
 
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
@@ -80,7 +81,7 @@ int main(void)
 		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
 		VertexBufferLayout layout;
-		layout.Push<float>(2); 
+		layout.Push<float>(2);
 		va.AddBuffer(vb, layout);
 
 		//申请创建一个GPU上的缓冲区，绑定并复制进去数据
@@ -107,17 +108,17 @@ int main(void)
 		float r = 0.0f;
 		float increment = 0.05f;
 
+		Renderer renderer;
+
 		// 游戏/渲染主循环
 		while (!glfwWindowShouldClose(window))
 		{
 			// 清理屏幕颜色缓冲区
-			glClear(GL_COLOR_BUFFER_BIT);
+			renderer.Clear();
 
-			//绘图前重新绑定
-			shader.Bind();
 
 			//必须先绑定program，因为vao不负责着色器程序的切换
-			va.Bind();
+			//va.Bind();
 
 			if (r > 1.0f)
 				increment = -0.05f;
@@ -126,24 +127,14 @@ int main(void)
 
 			r += increment;
 
+			//绘图前重新绑定
+			shader.Bind();
 			//在u_Color的位置上设置数值
 			shader.SetUniform4f("u_Color", r, 0.3f, 0.0f, 1.0f);
 			//========设置uniform========
 
-			//重新启动属性
-			//glEnableVertexAttribArray(0);
-			//glEnableVertexAttribArray(1);
+			renderer.Draw(va, ib, shader);
 
-			//最后一个参数：nullptr (或 0)：表示从绑定的 EBO 数据最开头（偏移量为 0）开始读取索引。	非零值：表示从 EBO 的第几个字节开始读取。
-			//glDrawElements 的规范（Specification）中明确规定，第三个参数 type 必须是以下三个之一：	GL_UNSIGNED_BYTE，GL_UNSIGNED_SHORT，GL_UNSIGNED_INT，否则会黑屏
-			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-			//GLClearError();
-			//参数错误
-			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-
-			//ASSERT(GLLogCall());
-			//跳过前三个顶点
-			//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(3 * sizeof(unsigned int)));
 
 			// 交换前后缓冲区以刷新画面
 			glfwSwapBuffers(window);

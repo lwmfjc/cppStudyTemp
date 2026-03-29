@@ -1,4 +1,6 @@
 #include "VertexArray.h"
+//这里要真正调用 layout.GetElements()。这时候编译器必须看到具体的类定义，才能知道 GetElements() 函数长什么样。
+#include "VertexBufferLayout.h"
 
 VertexArray::VertexArray()
 { 
