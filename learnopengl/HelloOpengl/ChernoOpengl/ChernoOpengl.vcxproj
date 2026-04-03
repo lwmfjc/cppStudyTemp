@@ -82,7 +82,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP16;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP17;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -99,7 +99,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LY_EP16;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP17;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ChernoOpengl\Dependencies\GLFW\include;$(SolutionDir)ChernoOpengl\Dependencies\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -155,6 +155,7 @@
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Main13_-Main15.cpp" />
     <ClCompile Include="src\Main16_01.cpp" />
+    <ClCompile Include="src\Main17_01.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />

@@ -60,9 +60,6 @@
     <ClCompile Include="src\basic\Main12_02_vao.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Main13_-Main15.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,7 +75,13 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Main17_01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Main16_01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main13_-Main15.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
