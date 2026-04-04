@@ -88,9 +88,9 @@ int main(void)
 		IndexBuffer ib(indices, 6);
 
 		Shader shader("res/shaders/Basic.shader");
-		//shader.Bind();
+		shader.Bind();
 
-		//shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+		shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 
 		//===这里故意把他解绑了（假设他去绑定别的去了）===
