@@ -37,7 +37,8 @@ int main(void)
 
 		// 创建窗口对象
 		window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-
+		//验证：创建windows之后马上整个白屏了
+		//system("pause");
 
 		if (!window)
 		{
