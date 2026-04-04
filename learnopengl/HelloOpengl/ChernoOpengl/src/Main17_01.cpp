@@ -37,6 +37,8 @@ int main(void)
 
 		// 创建窗口对象
 		window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+
+
 		if (!window)
 		{
 			// 创建失败则清理并退出
@@ -47,7 +49,7 @@ int main(void)
 		// 将当前窗口的上下文设置为 OpenGL 渲染的目标
 		glfwMakeContextCurrent(window);
 
-		glfwSwapInterval(2);
+		glfwSwapInterval(1);
 
 		// 初始化 GLEW 以加载 OpenGL 函数指针，需在有上下文后执行
 		if (glewInit() != GLEW_OK)
@@ -87,7 +89,6 @@ int main(void)
 		//申请创建一个GPU上的缓冲区，绑定并复制进去数据
 		IndexBuffer ib(indices, 6);
 
-		Shader shader("res/shaders/Basic.shader");
 		//shader.Bind();
 
 		//shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
@@ -96,7 +97,7 @@ int main(void)
 		//===这里故意把他解绑了（假设他去绑定别的去了）===
 		vb.Unbind();
 
-		shader.Unbind();
+		//shader.Unbind();
 		va.Unbind();
 
 		//element_array_buffer 和vertexAttribArray不能
@@ -109,6 +110,7 @@ int main(void)
 		float increment = 0.05f;
 
 		Renderer renderer;
+		Shader shader("res/shaders/Basic.shader");
 
 		// 游戏/渲染主循环
 		while (!glfwWindowShouldClose(window))
