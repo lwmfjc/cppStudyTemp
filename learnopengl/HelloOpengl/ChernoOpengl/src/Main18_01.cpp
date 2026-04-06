@@ -1,4 +1,4 @@
-#ifdef LY_EP17_
+#ifdef LY_EP18
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -132,7 +132,7 @@ int main(void)
 
 		//解决白屏问题2：在进入 while 循环前，手动清一次屏并交换缓冲
 		//设置“清除颜色”
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);		
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		//用上面选好的“油漆”填满整个颜色缓冲区（Color Buffer）
 		glClear(GL_COLOR_BUFFER_BIT);
 		//交换缓冲区
