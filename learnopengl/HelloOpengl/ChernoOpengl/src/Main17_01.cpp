@@ -13,6 +13,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 
 int main(void)
@@ -65,12 +66,12 @@ int main(void)
 
 		// 定义三角形的顶点坐标（CPU 内存）
 		float positions[] = {
-			-0.5f, -0.5f,//0
-			0.5f, -0.5f,//1
-			0.5f, 0.5f,//2
+			-0.5f, -0.5f,0.0f,0.0f,//0
+			0.5f, -0.5f,1.0f,0.0f,//1
+			0.5f, 0.5f,1.0f,1.0f,//2
 
 			//0.5f, 0.5f,
-			-0.5f, 0.5f,//3
+			-0.5f, 0.5f,0.0f,1.0f,//3
 			//-0.5f, -0.5f,
 		};
 
@@ -80,13 +81,21 @@ int main(void)
 			2,3,0
 		};
 
+		//默认情况下，OpenGL 是“覆盖”模式。如果一个像素点已经有颜色了（比如背景色），新画上去的像素会直接把旧的顶掉。开启这个开关后，OpenGL 就不再简单地覆盖，而是会把“新颜色”和“旧颜色”按照某种比例混合在一起
+		glEnable(GL_BLEND);
+		//把要画上去的新颜色称为 源 (Source, 简称 src)，把已经在屏幕上的旧颜色称为 目标 (Destination, 简称 dst)
+		//Result = (src x F_src) + (dst x F_dst)
+		//F_src表示新颜色的比例，F_dst表示旧颜色的比例。比如 F_src = 0.3，那么GL_ONE_MINUS_SRC_ALPHA时 F_dst = 0.7， GL_SRC_ALPHA时 F_dst = 0.3
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		VertexArray va;
 
 		//申请创建一个GPU上的缓冲区，绑定并复制进去数据构造函
 		//数中已经绑定了，这样glVertexAttribPointer才有效果
-		VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+		VertexBuffer vb(positions, 4 * 4 * sizeof(float));
 
 		VertexBufferLayout layout;
+		layout.Push<float>(2);
 		layout.Push<float>(2);
 		va.AddBuffer(vb, layout);
 
@@ -97,6 +106,9 @@ int main(void)
 
 		//shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
+		//这里绑定了纹理，shader里就能取到
+		Texture texture("res/textures/ChernoLog.png");
+		texture.Bind(2);//默认绑定0
 
 		//===这里故意把他解绑了（假设他去绑定别的去了）===
 		vb.Unbind();
@@ -115,10 +127,12 @@ int main(void)
 
 		Renderer renderer;
 		Shader shader("res/shaders/Basic.shader");
+		shader.Bind();
+		shader.SetUniform1i("u_Texture", 2);
 
 		//解决白屏问题2：在进入 while 循环前，手动清一次屏并交换缓冲
 		//设置“清除颜色”
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);		
 		//用上面选好的“油漆”填满整个颜色缓冲区（Color Buffer）
 		glClear(GL_COLOR_BUFFER_BIT);
 		//交换缓冲区

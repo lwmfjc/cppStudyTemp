@@ -1,6 +1,6 @@
-#ifdef abcd123
 #include "Texture.h"
 #include "Renderer.h"
+#include <iostream>
 
 #include "vendor/stb_image/stb_image.h"
 
@@ -27,8 +27,8 @@ Texture::Texture(const std::string& path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	//当你的纹理坐标（UV 坐标）超出了  0.0 ~ 1.0  这个“标准范围”时，GPU 应该如何处理那些“多出来”的区域
 	//GL_CLAMP：当纹理坐标超出标准范围时，GPU 会将纹理坐标限制在 0.0 ~ 1.0 的范围内，并使用边界像素的颜色进行填充。这意味着如果纹理坐标超出范围，GPU 会==重复使用边界像素==的颜色来填充超出部分。
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	//把这里读到的数据给opengl
 	//参数1：GL_TEXTURE_2D：目标类型。告诉 OpenGL 你现在要填充的是一张普通的 2D 纹理。
@@ -50,6 +50,10 @@ Texture::Texture(const std::string& path)
 		//stbi_image_free 本质上是一个包装过的 free() 函数。
 		stbi_image_free(m_LocalBuffer);
 	}
+	else
+	{
+		std::cout << "Error: Could not load texture at " << path << std::endl;
+	}
 
 }
 
@@ -63,6 +67,7 @@ void Texture::Bind(unsigned int slot /*= 0*/) const
 {
 	//激活纹理单元
 	//激活纹理单元后，后续的 glBindTexture 调用会将该纹理绑定到当前激活的纹理单元。纹理单元 GL\_TEXTURE0 默认始终处于激活状态
+	//注：.shader 中的 uniform sampler2D 纹理采样器默认绑定在纹理单元 0 上，所以我们在这里默认绑定到 slot 0 上。这里可以指定某个，这样.shader中就可以去对应的slot上取值了
 	glActiveTexture(GL_TEXTURE0 + slot);
 	//绑定到这个缓冲区id 
 	glBindTexture(GL_TEXTURE_2D, m_RendererID);
@@ -73,5 +78,3 @@ void Texture::Unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-#endif

@@ -148,18 +148,28 @@ unsigned int Shader::CompileShader(unsigned int type,
 }
 
 
-void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
-{
-	glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
-}
+ void Shader::SetUniform1i(const std::string& name, int v)
+ {
+	 glUniform1i(GetUniformLocation(name), v);
+ }
 
-unsigned int Shader::GetUniformLocation(const std::string& name)
+ void Shader::SetUniform1f(const std::string& name, float v)
+ {
+	 glUniform1f(GetUniformLocation(name), v);
+ }
+
+ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+ {
+	 glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
+ }
+
+int Shader::GetUniformLocation(const std::string& name)
 {
 	if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
 	{
 		return m_UniformLocationCache[name];
 	}
-	unsigned int location=glGetUniformLocation(m_RendererID, name.c_str());
+	int location=glGetUniformLocation(m_RendererID, name.c_str());
 	if (location == -1)
 		std::cout << "Warning: uniform '" << name << "' doesn't exist!" << std::endl;
 
