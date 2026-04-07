@@ -1,4 +1,4 @@
-#ifdef LY_EP18_
+#ifdef LY_EP19
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
