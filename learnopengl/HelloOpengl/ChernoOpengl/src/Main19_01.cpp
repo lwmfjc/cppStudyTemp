@@ -15,6 +15,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 
 int main(void)
 {
@@ -124,6 +127,9 @@ int main(void)
 
 		float r = 0.0f;
 		float increment = 0.05f;
+
+		glm::mat4 proj = glm::ortho(-2.0, 2.0, -1.5f, 1.5f, -1.0f, 1.0f);
+
 
 		Renderer renderer;
 		Shader shader("res/shaders/Basic.shader");
