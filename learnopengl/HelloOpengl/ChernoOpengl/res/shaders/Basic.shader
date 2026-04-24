@@ -4,9 +4,17 @@ layout(location = 0 ) in vec4 position;
 layout(location = 1 ) in vec2 texCoord;
 
 out vec2 v_TextCoord;
+
+//模型，视图，投影  矩阵
+uniform mat4 u_MVP;
+
 void main()
 {
-  gl_Position=position;//自动转换，X, Y, Z：如果缺省，默认补 0.0。W：如果缺省，默认补 1.0
+  //经过 u_MVP * position 这一行代码计算后，赋值给
+  //gl_Position 的结果必须落在 $[-1.0, 1.0]$ 的区间内，
+  //否则它就会被丢弃
+  gl_Position = u_MVP * position;
+  //gl_Position=position;//自动转换，X, Y, Z：如果缺省，默认补 0.0。W：如果缺省，默认补 1.0
   v_TextCoord=texCoord;//从顶点着色器获取到的又传出来
 }
 
