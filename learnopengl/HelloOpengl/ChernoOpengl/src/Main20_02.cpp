@@ -1,4 +1,4 @@
-#ifdef LY_EP20_
+#ifdef LY_EP20
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -69,12 +69,12 @@ int main(void)
 
 		// 定义三角形的顶点坐标（CPU 内存）
 		float positions[] = {
-			-0.5f, -0.5f,0.0f,0.0f,//0
-			0.5f, -0.5f,1.0f,0.0f,//1
-			0.5f, 0.5f,1.0f,1.0f,//2
+			100.0f, 100.0f,0.0f,0.0f,//0
+			200.0f, 100.0f,1.0f,0.0f,//1
+			200.0f, 200.0f,1.0f,1.0f,//2
 
 			//0.5f, 0.5f,
-			-0.5f, 0.5f,0.0f,1.0f,//3
+			100.0f, 200.0f,0.0f,1.0f,//3
 			//-0.5f, -0.5f,
 		};
 
@@ -128,11 +128,8 @@ int main(void)
 		float r = 0.0f;
 		float increment = 0.05f;
 
-		//宽高比：2.0:1.5即4:3
-		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-		//宽高比：4:3，但是（屏幕场地）比刚才扩大了一倍
-		// ，即东西缩小了一倍
-		//glm::mat4 proj = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, -1.0f, 1.0f);
+		//宽高比：960:540即16:9
+		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f); 
 
 
 		Renderer renderer;

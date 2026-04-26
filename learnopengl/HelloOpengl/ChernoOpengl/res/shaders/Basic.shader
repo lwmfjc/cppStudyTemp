@@ -37,7 +37,8 @@ void main()
   //v_TextCoord: 纹理坐标，告诉 GPU 从图片的哪个位置采样
   vec4 textColor = texture(u_Texture, v_TextCoord);
   //color=u_Color;
- color=textColor;//只要纹理颜色 
+  //color=textColor;//只要纹理颜色 
+  color=vec4(1.0);
   //color=u_Color;//只要纹理颜色 
 
 }
