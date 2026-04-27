@@ -1,4 +1,4 @@
-#ifdef LY_EP20_
+#ifdef LY_EP21
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -129,7 +129,7 @@ int main(void)
 		float increment = 0.05f;
 
 		//¿í¸ß±È£º960:540¼´16:9
-		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f); 
+		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
 
 		glm::vec4 vp(100.0f, 100.0f, 0.0f, 1.0f);
 		glm::vec4 result = proj * vp;
