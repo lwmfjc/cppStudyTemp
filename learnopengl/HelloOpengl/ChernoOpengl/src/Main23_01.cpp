@@ -1,4 +1,4 @@
-#ifdef LY_EP23
+#ifdef LY_EP23_
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -72,12 +72,12 @@ int main(void)
 
 		// 定义三角形的顶点坐标（CPU 内存）
 		float positions[] = {
-			100.0f, 100.0f,0.0f,0.0f,//0
-			200.0f, 100.0f,1.0f,0.0f,//1
-			200.0f, 200.0f,1.0f,1.0f,//2
+			-50.0f, -50.0f,0.0f,0.0f,//0
+			50.0f, -50.0f,1.0f,0.0f,//1
+			50.0f, 50.0f,1.0f,1.0f,//2
 
 			//0.5f, 0.5f,
-			100.0f, 200.0f,0.0f,1.0f,//3
+			-50.0f, 50.0f,0.0f,1.0f,//3
 			//-0.5f, -0.5f,
 		};
 
@@ -135,7 +135,7 @@ int main(void)
 		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
 		//即向右移动相机
 		glm::mat4 view = glm::translate(glm::mat4(1.0f),
-			glm::vec3(-100, 0, 0));
+			glm::vec3(0, 0, 0));
 
 		glm::vec4 vp(100.0f, 100.0f, 0.0f, 1.0f);
 		glm::vec4 result = proj * vp;
@@ -174,7 +174,8 @@ int main(void)
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-		glm::vec3 translation(200, 200, 0);
+		glm::vec3 translationA(200, 200, 0);
+		glm::vec3 translationB(400, 200, 0);
 
 		// 游戏/渲染主循环
 		while (!glfwWindowShouldClose(window))
@@ -195,15 +196,33 @@ int main(void)
 				increment = 0.05f;
 
 			r += increment;
-
-			//=======imgui添加============
 			//绘图前重新绑定
 			shader.Bind();
-			//在u_Color的位置上设置数值
-			shader.SetUniform4f("u_Color", r, 0.3f, 0.0f, 1.0f);
-			//========设置uniform========
 
-			renderer.Draw(va, ib, shader);
+			{
+				//=======imgui添加============
+				//imgui:这里吧mvp相关代码移到while循环中
+				//向右向上移动200
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
+
+				glm::mat4 mvp = proj * view * model;
+				shader.SetUniformMat4f("u_MVP", mvp);
+
+				//=======imgui添加============
+				//在u_Color的位置上设置数值
+				//shader.SetUniform4f("u_Color", r, 0.3f, 0.0f, 1.0f);
+				//========设置uniform========
+
+				renderer.Draw(va, ib, shader);
+			}
+
+			{
+				//批量渲染对象
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
+				glm::mat4 mvp = proj * view * model;
+				shader.SetUniformMat4f("u_MVP", mvp);
+				renderer.Draw(va, ib, shader);
+			}
 
 			//=======imgui添加============
 			//小窗口
@@ -213,7 +232,8 @@ int main(void)
 				ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
 				//这里传入translation.x的地址，imgui会在这个地址上修改值
 				//第一个参数是标签，表示在imgui界面上显示的名字，第二个参数是要修改的值的地址，后面是这个值的范围
-				ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f  
+				ImGui::SliderFloat3("TranslationA", &translationA.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f  
+				ImGui::SliderFloat3("TranslationB", &translationB.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f  
 				ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
 				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
@@ -228,12 +248,6 @@ int main(void)
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			}
 
-			//imgui:这里吧mvp相关代码移到while循环中
-			//向右向上移动200
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-
-			glm::mat4 mvp = proj * view * model;
-			shader.SetUniformMat4f("u_MVP", mvp);
 
 
 			//=======imgui添加============
