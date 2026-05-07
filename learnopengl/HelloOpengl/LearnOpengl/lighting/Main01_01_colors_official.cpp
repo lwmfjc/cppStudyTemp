@@ -1,4 +1,4 @@
-#ifdef LY_EP01
+#ifdef LY_EP01_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -128,28 +128,36 @@ int main()
         -0.5f,  0.5f,  0.5f,
         -0.5f,  0.5f, -0.5f,
     };
-    // first, configure the cube's VAO (and VBO)
+
+    // 第一步：配置物体（立方体）的 VAO 和 VBO
     unsigned int VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &VBO);
 
+    // 将顶点数据填充到缓冲区
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // 绑定物体的 VAO
     glBindVertexArray(cubeVAO);
 
-    // position attribute
+    // 设置位置属性指针（告知 OpenGL 如何解析顶点数据）
+    // 参数：索引0, 每个顶点3个分量, 浮点型, 不归一化, 步长为3个float, 偏移量为0
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
+    // 第二步：配置光源（灯方块）的 VAO
+    // VBO 保持不变：因为灯也是一个 3D 立方体，我们可以复用上面定义的顶点数据
     unsigned int lightCubeVAO;
     glGenVertexArrays(1, &lightCubeVAO);
     glBindVertexArray(lightCubeVAO);
 
-    // we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
+    // 我们只需要绑定之前创建好的 VBO（以便将其与新的 glVertexAttribPointer 关联起来）
+    // 不需要再次填充数据，VBO 中已经包含我们需要的一切
+    // (虽然 VBO 当前可能仍处于绑定状态，但这里再次绑定是为了代码逻辑的严谨和教学目的)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+    // 设置灯的位置属性指针（注意：这里必须重新设置一遍，因为 VAO 会记录这些状态）
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
