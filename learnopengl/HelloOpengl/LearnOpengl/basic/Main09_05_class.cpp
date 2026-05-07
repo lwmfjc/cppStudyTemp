@@ -11,6 +11,11 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp" 
 
+#include "Camera_09.h"
+
+//匹配构造函数Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
+static Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
 static int SCR_WIDTH = 800;
 static int SCR_HEIGHT = 600;
 
@@ -30,34 +35,14 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	/*const*/ float cameraSpeed = 0.05f; // adjust accordingly
-	cameraSpeed = 2.5f * deltaTime;
-	//按一次w就+0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
-	//也就是相机的位置朝负z轴前进
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		std::cout << "====w====" << std::endl;
-		cameraPos += cameraSpeed * cameraFront;
-	}
-	//按一次w就-0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
-	//也就是相机的位置朝正z轴前进
+		camera.ProcessKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		std::cout << "====s====" << std::endl;
-		cameraPos -= cameraSpeed * cameraFront;
-	}
-	//往左就是往负x轴移动
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		std::cout << "====a====" << std::endl;
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
-	//往右就是往正x轴移动
+		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		std::cout << "====d====" << std::endl;
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
+		camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
 
@@ -69,15 +54,19 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
-static bool firstMouse=true;
+
+static bool firstMouse = true;
 static double lastX;
 static double lastY;
 static float yaw;
 static float pitch;
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
 	//std::cout << xpos << "," << ypos << std::endl;
+
+	float xpos = static_cast<float>(xposIn);
+	float ypos = static_cast<float>(yposIn);
 
 	if (firstMouse)
 	{
@@ -91,35 +80,18 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.1f;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
+	camera.ProcessMouseMovement(xoffset, yoffset);
 
-	yaw += xoffset;
-	pitch += yoffset;
-
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
-
-	glm::vec3 direction;
-	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	direction.y = sin(glm::radians(pitch));
-	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(direction);
 }
 
-static float fov= 45.0f;
+static float fov = 45.0f;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	fov -= (float)yoffset;
-	if (fov < 1.0f)
-		fov = 1.0f;
-	if (fov > 45.0f)
-		fov = 45.0f;
+	camera.ProcessMouseScroll(static_cast<float>(yoffset));
+
 }
+ 
 
 int main()
 {
@@ -166,7 +138,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_09.vert", "shader/shader_09.frag");
+	Shader ourShader("basic/shader/shader_09.vert", "basic/shader/shader_09.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -197,7 +169,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -246,7 +218,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -492,14 +464,15 @@ int main()
 
 		//第一个参数(摄像头放哪里)：摄像头的位置
 		//第二个参数(盯着的位置)：摄像头的位置+ (z轴-1.0f)[摄像头前方1.0f的位置]
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		view = camera.GetViewMatrix();
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
 		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
 		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
-		projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
 		for (unsigned int i = 0; i < 10; i++)

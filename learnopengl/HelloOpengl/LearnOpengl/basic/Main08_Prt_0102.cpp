@@ -1,14 +1,16 @@
-#ifdef LY_EP06_
+#ifdef LY_EP08_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
 
-#include <thread>
-#include <chrono>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp" 
 
-float mixValue = 0.2f;
+static int SCR_WIDTH = 800;
+static int SCR_HEIGHT = 600;
 
 void processInput(GLFWwindow* window)
 {
@@ -17,24 +19,6 @@ void processInput(GLFWwindow* window)
 	*/
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-	{
-
-		mixValue += 0.001f;
-		if (mixValue >= 1.0f)
-		{
-			mixValue = 1.0f;
-		}
-	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-	{
-		mixValue -= 0.001f;
-		if (mixValue <= 0.0f)
-		{
-			mixValue = 0.0f;
-		}
-	}
-
 }
 
 
@@ -67,7 +51,7 @@ int main()
 	// 2. 创建窗口对象
 	//创建一个窗口对象。这个窗口对象保存了所有窗口数据，GLFW 的大多数其他函数都需要用到它。
 	//窗口 (Window)：是由操作系统（Windows / macOS）管理的容器。它有标题栏、最小化按钮、边框。
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -90,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_06_Prt04.vert", "shader/shader_06_Prt04.frag");
+	Shader ourShader("basic/shader/shader_08.vert", "basic/shader/shader_08.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -121,7 +105,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -170,7 +154,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -270,6 +254,27 @@ int main()
 	//封存VAO后解绑EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	//创建了一个初始坐标为 (1, 0, 0) 的点
+	//第四个分量 w = 1.0f 非常关键。在图形学中，如果 $w=1$，它代表一个位置（点）；如果 w=0，它代表一个方向（向量），因为w=0时他和平移矩阵相乘结果为本身，所以说他代表方向。
+	//只有 w=1 时，平移矩阵才会对它起作用
+	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+
+
+	//通过单参数构造函数，创建一个对角矩阵
+	//因为对角矩阵和任何矩阵S相乘，得到的还是S
+	//glm::mat4 trans = glm::mat4(1.0f);
+	//绕z轴(0.0,0.0,1.0)旋转90度
+	//伸出你的右手。
+	//将大拇指指向旋转轴的正方向（在你的代码里是 Z 轴正方向，即指向屏幕外、对着你的脸）。
+	//此时，你其余四个手指自然卷曲的方向，就是** 正角度（ + ） * *旋转的方向。
+	//原本在 (1, 0, 0) 的点会跑到 (0, 1, 0)。视线中就是逆时针移动了 90 度。	
+	 //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
+
+	//所有方向上都缩放为0.5
+	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+
+
 
 	//以线框模式绘制三角形
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -277,6 +282,16 @@ int main()
 
 	// 注册 窗口大小改变的回调
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+
+	//将新创建的程序对象作为参数来激活
+	ourShader.use();
+
+	//GPU会去读 GL_TEXTURE1 里的图
+	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
+	//GPU会去读 GL_TEXTURE2 里的图
+	ourShader.setInt("texture2", 2);
+
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
@@ -302,19 +317,6 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 
-		//将新创建的程序对象作为参数来激活
-		ourShader.use();
-
-		//这个setFloat要放在use()的后面，否则第一帧就不会
-		// 是setFloat的值，而是在第一帧use()之后，第二
-		// 帧在setFloat成功
-		ourShader.setFloat("mixValue", mixValue);
-
-
-		//GPU会去读 GL_TEXTURE1 里的图
-		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
-		//GPU会去读 GL_TEXTURE2 里的图
-		ourShader.setInt("texture2", 2);
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -323,9 +325,41 @@ int main()
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
 		glBindVertexArray(VAO);
 
+		//对角线都是1.0
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
 
-		//绘制对象,0表示要绘制的顶点数组的起始索引，6表示我们要绘制的顶点数量
-		//glDrawElements会去查找绑定的那个EBO
+		//如果是+45度，是上面的顶点朝着z轴正方形(转)
+		//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+		//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
+		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		
+		//右移0.5
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+
+
+		//上移0.5
+		model = glm::translate(model, glm::vec3(0.0f, 0.5f, 0.0f));
+
+		//远离镜头3.0
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+
+		//在没有投影矩阵的情况下，OpenGL 只会渲染落在标准化设备坐标 (NDC) 范围内的物体
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
+		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
+
+		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
+		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
+		//projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+
+		ourShader.setMat4("model", model);
+		ourShader.setMat4("view", view);
+		ourShader.setMat4("projection", projection);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
@@ -341,7 +375,6 @@ int main()
 */
 // 4. 喊：画好了！把画完的后台画布翻到前台给用户看！
 		glfwSwapBuffers(window);
-		//std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	}
 	glBindVertexArray(0);

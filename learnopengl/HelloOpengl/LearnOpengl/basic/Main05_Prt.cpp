@@ -66,8 +66,8 @@ int main()
 		return -1;
 	}
 
-	/*Shader ourShader("shader/shader_05_Prt0102.vert", "shader/shader_05.frag");*/
-	Shader ourShader("shader/shader_05_Prt03.vert", "shader/shader_05_Prt03.frag");  
+	/*Shader ourShader("basic/shader/shader_05_Prt0102.vert", "basic/shader/shader_05.frag");*/
+	Shader ourShader("basic/shader/shader_05_Prt03.vert", "basic/shader/shader_05_Prt03.frag");  
 
 
 	//=========ÊäÈëµÄ¶¥µã´æ´¢========

@@ -1,31 +1,9 @@
-#ifdef LY_EP09_
+#ifdef LY_EP06_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
-#include <thread> // 必须包含此头文件
-#include <chrono> // 用于时间单位
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp" 
-
-#include "Camera_09.h"
-
-//匹配构造函数Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
-static Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-
-static int SCR_WIDTH = 800;
-static int SCR_HEIGHT = 600;
-
-static glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-static glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-static glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-// timing
-float deltaTime = 0.0f;	// time between current frame and last frame
-float lastFrame = 0.0f;
 
 void processInput(GLFWwindow* window)
 {
@@ -34,15 +12,6 @@ void processInput(GLFWwindow* window)
 	*/
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
 
@@ -52,46 +21,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	//告诉 OpenGL 渲染窗口的大小
 	glViewport(0, 0, width, height);
 }
-
-
-
-static bool firstMouse = true;
-static double lastX;
-static double lastY;
-static float yaw;
-static float pitch;
-
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
-{
-	//std::cout << xpos << "," << ypos << std::endl;
-
-	float xpos = static_cast<float>(xposIn);
-	float ypos = static_cast<float>(yposIn);
-
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos;
-	lastX = xpos;
-	lastY = ypos;
-
-	camera.ProcessMouseMovement(xoffset, yoffset);
-
-}
-
-static float fov = 45.0f;
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	camera.ProcessMouseScroll(static_cast<float>(yoffset));
-
-}
- 
 
 int main()
 {
@@ -115,7 +44,7 @@ int main()
 	// 2. 创建窗口对象
 	//创建一个窗口对象。这个窗口对象保存了所有窗口数据，GLFW 的大多数其他函数都需要用到它。
 	//窗口 (Window)：是由操作系统（Windows / macOS）管理的容器。它有标题栏、最小化按钮、边框。
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -138,7 +67,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_09.vert", "shader/shader_09.frag");
+	Shader ourShader("basic/shader/shader_06.vert", "basic/shader/shader_06.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -169,7 +98,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -216,9 +145,9 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -249,72 +178,24 @@ int main()
 	//=========应用纹理==========
 
 	//=========定点信息包括坐标、颜色、纹理坐标========
-	//float vertices[] = {
-	//	// positions          // colors           // texture coords
-	//	 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-	//	 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right 
-	//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f ,   // top left 
-
-	//	 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-	//	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-	//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f ,   // top left 
-
-	//}; 
 	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		// positions          // colors           // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
-	glm::vec3 cubePositions[] = {
-	   glm::vec3(0.0f,  0.0f,  0.0f),
-	   glm::vec3(2.0f,  5.0f, -15.0f),
-	   glm::vec3(-1.5f, -2.2f, -2.5f),
-	   glm::vec3(-3.8f, -2.0f, -12.3f),
-	   glm::vec3(2.4f, -0.4f, -3.5f),
-	   glm::vec3(-1.7f,  3.0f, -7.5f),
-	   glm::vec3(1.3f, -2.0f, -2.5f),
-	   glm::vec3(1.5f,  2.0f, -2.5f),
-	   glm::vec3(1.5f,  0.2f, -1.5f),
-	   glm::vec3(-1.3f,  1.0f, -1.5f)
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
 	};
+
+	//创建元素缓冲区对象
+	//存放绘制顺序的索引清单
+	unsigned int EBO;
+	//找目前没被占用的数字，并把它分配给 EBO
+	//存“东西”的
+	glGenBuffers(1, &EBO);
 
 	//创建顶点缓冲区对象，
 	//存放顶点属性（位置、颜色、纹理坐标）的大仓库
@@ -338,20 +219,24 @@ int main()
 	//顶点数组复制到顶点缓冲区对象
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	//绑定EBO 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//将索引复制到缓冲区
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	//配置位置属性
 	//顶点着色器程序编译后，会去0号通道找顶点位置数据画图，结果cpp代码这里没写或者写错了，他就找不到数据
 	//它会将当前属性（比如 0 号位置）与当前正绑定在 GL_ARRAY_BUFFER 上的那个 VBO 关联起来 
 	//配置的是“如何从当前绑定到 GL_ARRAY_BUFFER 的那个缓冲区（Buffer）读取数据”。
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	//配置颜色属性
-	/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);*/
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	//配置纹理属性
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	//这里的2，和上面第一个参数，也就是 vs文件中的location一致，
 	//表示要启用 2 号属性（对应纹理）
 	glEnableVertexAttribArray(2);
@@ -362,27 +247,6 @@ int main()
 	//封存VAO后解绑EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	//创建了一个初始坐标为 (1, 0, 0) 的点
-	//第四个分量 w = 1.0f 非常关键。在图形学中，如果 $w=1$，它代表一个位置（点）；如果 w=0，它代表一个方向（向量），因为w=0时他和平移矩阵相乘结果为本身，所以说他代表方向。
-	//只有 w=1 时，平移矩阵才会对它起作用
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-
-
-	//通过单参数构造函数，创建一个对角矩阵
-	//因为对角矩阵和任何矩阵S相乘，得到的还是S
-	//glm::mat4 trans = glm::mat4(1.0f);
-	//绕z轴(0.0,0.0,1.0)旋转90度
-	//伸出你的右手。
-	//将大拇指指向旋转轴的正方向（在你的代码里是 Z 轴正方向，即指向屏幕外、对着你的脸）。
-	//此时，你其余四个手指自然卷曲的方向，就是** 正角度（ + ） * *旋转的方向。
-	//原本在 (1, 0, 0) 的点会跑到 (0, 1, 0)。视线中就是逆时针移动了 90 度。	
-	 //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
-
-	//所有方向上都缩放为0.5
-	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-
-
 
 	//以线框模式绘制三角形
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -390,28 +254,10 @@ int main()
 
 	// 注册 窗口大小改变的回调
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-
-	//将新创建的程序对象作为参数来激活
-	ourShader.use();
-
-	//GPU会去读 GL_TEXTURE1 里的图
-	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
-	//GPU会去读 GL_TEXTURE2 里的图
-	ourShader.setInt("texture2", 2);
-	glEnable(GL_DEPTH_TEST);
-
-	//设置输入模式-禁用光标
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//设置光标位置回调
-	glfwSetCursorPosCallback(window, mouse_callback);
-	//设置鼠标滚轴动作回调
-	glfwSetScrollCallback(window, scroll_callback);
-
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
-		//std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
 		//check and call events
 		//这个函数负责处理所有的互动
 		//它去操作系统那里询问：“刚才这 0.01 秒里，用户动鼠标了吗？按 ESC 键了吗；如果你之前注册过“按下 ESC 就关窗口”的函数，glfwPollEvents 发现你按了 ESC，就会立刻跳过去执行你的那个函数
@@ -423,8 +269,6 @@ int main()
 		//2.算：根据输入处理逻辑（Process Input / Update Logic）
 		processInput(window);
 
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		// 3. 画：清屏并执行渲染指令（Rendering）
 		// 这里通常会写 glClear() 和 glDraw... (开始在“后台”画画)
 		// rendering commands here
@@ -432,15 +276,15 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 		//立刻把 GL_COLOR_BUFFER_BIT（颜色缓冲区）里所有的像素，全部涂成我刚才在 glClearColor 里指定的颜色
-		//glClear(GL_COLOR_BUFFER_BIT);
-		//还清楚了深度缓冲区
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 
+		//将新创建的程序对象作为参数来激活
+		ourShader.use();
 
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
+		//GPU会去读 GL_TEXTURE1 里的图
+		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);  
+		//GPU会去读 GL_TEXTURE2 里的图
+		ourShader.setInt("texture2", 2); 
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -449,58 +293,10 @@ int main()
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
 		glBindVertexArray(VAO);
 
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
 
-		//试图空间，观察矩阵
-		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		const float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius; //0->10->0->-10->0
-		//camX = 0.0f;
-		float camZ = cos(glfwGetTime()) * radius; //10->0 
-		camZ = 0.0f;
-		//相机的轨迹其实是在 $Z=3$ 这条直线上左右滑动。但在一个看向原点的相机眼里，当它滑到最右边（$X=10$）时，它必须向左后方“斜着”看
-		//view = glm::lookAt(glm::vec3(camX, 0.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
-
-		//第一个参数(摄像头放哪里)：摄像头的位置
-		//第二个参数(盯着的位置)：摄像头的位置+ (z轴-1.0f)[摄像头前方1.0f的位置]
-		//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-		view = camera.GetViewMatrix();
-
-		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
-		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
-
-		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
-		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
-		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		ourShader.setMat4("view", view);
-		ourShader.setMat4("projection", projection);
-		for (unsigned int i = 0; i < 10; i++)
-		{
-
-
-			//对角线都是1.0
-			glm::mat4 model = glm::mat4(1.0f);
-
-			//如果是+45度，是上面的顶点朝着z轴正方形(转)
-			//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-			//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
-			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-
-			model = glm::translate(model, cubePositions[i]);
-
-			/*float angle = 2.0f * (i + 1);
-			model = glm::rotate(model, (float)glfwGetTime() * angle, glm::vec3(1.0f, 0.3f, 0.5f));*/
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-
-			ourShader.setMat4("model", model);
-
-			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-
+		//绘制对象,0表示要绘制的顶点数组的起始索引，6表示我们要绘制的顶点数量
+		//glDrawElements会去查找绑定的那个EBO
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
 		//swap the buffers
@@ -523,6 +319,7 @@ int main()
 	//释放所有显存资源
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteTextures(1, &texture1);
 	glDeleteTextures(1, &texture2);
 

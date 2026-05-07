@@ -66,7 +66,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_05.vert", "shader/shader_05.frag");
+	Shader ourShader("basic/shader/shader_05.vert", "basic/shader/shader_05.frag");
 
 
 	//=========ÊäÈëµÄ¶¥µã´æ´¢========

@@ -1,16 +1,9 @@
-#ifdef LY_EP08_
+#ifdef LY_EP06_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp" 
-
-static int SCR_WIDTH = 800;
-static int SCR_HEIGHT = 600;
 
 void processInput(GLFWwindow* window)
 {
@@ -51,7 +44,7 @@ int main()
 	// 2. 创建窗口对象
 	//创建一个窗口对象。这个窗口对象保存了所有窗口数据，GLFW 的大多数其他函数都需要用到它。
 	//窗口 (Window)：是由操作系统（Windows / macOS）管理的容器。它有标题栏、最小化按钮、边框。
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -74,7 +67,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_08.vert", "shader/shader_08.frag");
+	Shader ourShader("basic/shader/shader_06.vert", "basic/shader/shader_06.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -90,13 +83,17 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);//超出的位置形成拉伸的边缘
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);//超出的位置形成拉伸的边缘
+
 	//渲染过程中切换 mipmap 层级
 	//当纹理向下缩放是，选择GL_LINEAR_MIPMAP_LINEAR：在两个最接近的 mipmap 之间进行线性插值，并通过线性插值对插值级别进行采样
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int width, height, nrChannels;
 
@@ -105,7 +102,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -151,10 +148,10 @@ int main()
 	//当纹理向下缩放是，选择GL_LINEAR_MIPMAP_LINEAR：在两个最接近的 mipmap 之间进行线性插值，并通过线性插值对插值级别进行采样
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -167,7 +164,7 @@ int main()
 		//参数9：实际的图像数据（对应了上面的，是个char字节类型）
 		//把图片从 CPU 内存 拷贝到 显存 里的纹理对象中，指的是texture对应的那块内存？
 		//这里是RGBA，填错就不显示了
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
 		//以上只加载了纹理图像的基础层，如果要使用mipmap，就不断递加第二个参数，或者接下来调用生成纹理后调用glGenerateMipmap
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -186,11 +183,11 @@ int main()
 
 	//=========定点信息包括坐标、颜色、纹理坐标========
 	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		// positions          // colors           // texture coords (note that we changed them to 'zoom in' on our texture image)
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.55f, 0.55f, // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   0.55f, 0.45f, // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.45f, 0.45f, // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.45f, 0.55f  // top left 
 	};
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
@@ -254,27 +251,6 @@ int main()
 	//封存VAO后解绑EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	//创建了一个初始坐标为 (1, 0, 0) 的点
-	//第四个分量 w = 1.0f 非常关键。在图形学中，如果 $w=1$，它代表一个位置（点）；如果 w=0，它代表一个方向（向量），因为w=0时他和平移矩阵相乘结果为本身，所以说他代表方向。
-	//只有 w=1 时，平移矩阵才会对它起作用
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-
-
-	//通过单参数构造函数，创建一个对角矩阵
-	//因为对角矩阵和任何矩阵S相乘，得到的还是S
-	//glm::mat4 trans = glm::mat4(1.0f);
-	//绕z轴(0.0,0.0,1.0)旋转90度
-	//伸出你的右手。
-	//将大拇指指向旋转轴的正方向（在你的代码里是 Z 轴正方向，即指向屏幕外、对着你的脸）。
-	//此时，你其余四个手指自然卷曲的方向，就是** 正角度（ + ） * *旋转的方向。
-	//原本在 (1, 0, 0) 的点会跑到 (0, 1, 0)。视线中就是逆时针移动了 90 度。	
-	 //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
-
-	//所有方向上都缩放为0.5
-	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-
-
 
 	//以线框模式绘制三角形
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -282,16 +258,6 @@ int main()
 
 	// 注册 窗口大小改变的回调
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-
-	//将新创建的程序对象作为参数来激活
-	ourShader.use();
-
-	//GPU会去读 GL_TEXTURE1 里的图
-	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
-	//GPU会去读 GL_TEXTURE2 里的图
-	ourShader.setInt("texture2", 2);
-
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
@@ -316,7 +282,13 @@ int main()
 		//立刻把 GL_COLOR_BUFFER_BIT（颜色缓冲区）里所有的像素，全部涂成我刚才在 glClearColor 里指定的颜色
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		//将新创建的程序对象作为参数来激活
+		ourShader.use();
 
+		//GPU会去读 GL_TEXTURE1 里的图
+		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
+		//GPU会去读 GL_TEXTURE2 里的图
+		ourShader.setInt("texture2", 2);
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -325,30 +297,9 @@ int main()
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
 		glBindVertexArray(VAO);
 
-		//对角线都是1.0
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
 
-		//如果是+45度，是上面的顶点朝着z轴正方形(转)
-		//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-		//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
-		model = glm::rotate(model,  (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
-		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
-
-		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
-		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-
-		ourShader.setMat4("model", model);
-		ourShader.setMat4("view", view);
-		ourShader.setMat4("projection", projection);
+		//绘制对象,0表示要绘制的顶点数组的起始索引，6表示我们要绘制的顶点数量
+		//glDrawElements会去查找绑定的那个EBO
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 

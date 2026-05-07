@@ -21,117 +21,120 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c">
+    <ClCompile Include="basic\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_01_triangle.cpp">
+    <ClCompile Include="basic\Main04_01_triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_02_rectangle.cpp">
+    <ClCompile Include="basic\Main04_02_rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_Prt01.cpp">
+    <ClCompile Include="basic\Main04_Prt01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_Prt02.cpp">
+    <ClCompile Include="basic\Main04_Prt02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main04_Prt03.cpp">
+    <ClCompile Include="basic\Main04_Prt03.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_01_out.cpp">
+    <ClCompile Include="basic\Main05_01_out.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_02_uniform.cpp">
+    <ClCompile Include="basic\Main05_02_uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_03_flat.cpp">
+    <ClCompile Include="basic\Main05_03_flat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_04_pakage_class.cpp">
+    <ClCompile Include="basic\Main05_04_pakage_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader_05.cpp">
+    <ClCompile Include="basic\Shader_05.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main05_Prt.cpp">
+    <ClCompile Include="basic\Main05_Prt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main06_01_textures.cpp">
+    <ClCompile Include="basic\Main06_01_textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image_06.cpp">
+    <ClCompile Include="basic\stb_image_06.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main06_Prt02.cpp">
+    <ClCompile Include="basic\Main06_Prt02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main06_Prt03.cpp">
+    <ClCompile Include="basic\Main06_Prt03.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main06_Prt04.cpp">
+    <ClCompile Include="basic\Main06_Prt04.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main07_01_transformations.cpp">
+    <ClCompile Include="basic\Main07_01_transformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_01_single.cpp">
+    <ClCompile Include="basic\Main08_01_single.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main03_01.cpp">
+    <ClCompile Include="basic\Main03_01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main03_02.cpp">
+    <ClCompile Include="basic\Main03_02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_official.cpp">
+    <ClCompile Include="basic\Main08_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_02_ten_move.cpp">
+    <ClCompile Include="basic\Main08_02_ten_move.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_Prt_0102.cpp">
+    <ClCompile Include="basic\Main08_Prt_0102.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_Prt_03.cpp">
+    <ClCompile Include="basic\Main08_Prt_03.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_base_test.cpp">
+    <ClCompile Include="basic\Main09_base_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_official.cpp">
+    <ClCompile Include="basic\Main09_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main08_03_single.cpp">
+    <ClCompile Include="basic\Main08_03_single.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_01_look_at.cpp">
+    <ClCompile Include="basic\Main09_01_look_at.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_02_look_move_to_ten.cpp">
+    <ClCompile Include="basic\Main09_02_look_move_to_ten.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_03_look_around.cpp">
+    <ClCompile Include="basic\Main09_03_look_around.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_04._mouse_input.cpp">
+    <ClCompile Include="basic\Main09_04._mouse_input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main09_05_class.cpp">
+    <ClCompile Include="basic\Main09_05_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyTest.cpp">
+    <ClCompile Include="basic\MyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lighting\Main01_01_colors_official.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader_05.h">
+    <ClInclude Include="basic\Shader_05.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="basic\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera_09.h">
+    <ClInclude Include="basic\Camera_09.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,25 +167,6 @@
     <None Include="shader\shader_09.vs" />
     <None Include="shader\shader_09.fs" />
     <None Include="shader\shader_09_official.fs" />
-    <None Include="shader\shader_05.frag" />
-    <None Include="shader\shader_05.vert" />
-    <None Include="shader\shader_05_Prt03.frag" />
-    <None Include="shader\shader_05_Prt03.vert" />
-    <None Include="shader\shader_05_Prt0102.vert" />
-    <None Include="shader\shader_06.frag" />
-    <None Include="shader\shader_06.vert" />
-    <None Include="shader\shader_06_Prt04.frag" />
-    <None Include="shader\shader_06_Prt04.vert" />
-    <None Include="shader\shader_07.frag" />
-    <None Include="shader\shader_07.vert" />
-    <None Include="shader\shader_08.frag" />
-    <None Include="shader\shader_08.vert" />
-    <None Include="shader\shader_08_official.frag" />
-    <None Include="shader\shader_08_official.vert" />
-    <None Include="shader\shader_09.frag" />
-    <None Include="shader\shader_09.vert" />
-    <None Include="shader\shader_09_official.frag" />
-    <None Include="shader\shader_09_official.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="shader\shader_09_official.vs">

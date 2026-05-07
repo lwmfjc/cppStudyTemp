@@ -5,6 +5,11 @@
 #include "stb_image.h"
 #include <iostream> 
 
+#include <thread>
+#include <chrono>
+
+float mixValue = 0.2f;
+
 void processInput(GLFWwindow* window)
 {
 	/*
@@ -12,6 +17,24 @@ void processInput(GLFWwindow* window)
 	*/
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+
+		mixValue += 0.001f;
+		if (mixValue >= 1.0f)
+		{
+			mixValue = 1.0f;
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		mixValue -= 0.001f;
+		if (mixValue <= 0.0f)
+		{
+			mixValue = 0.0f;
+		}
+	}
+
 }
 
 
@@ -67,7 +90,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_06.vert", "shader/shader_06.frag");
+	Shader ourShader("basic/shader/shader_06_Prt04.vert", "basic/shader/shader_06_Prt04.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -83,17 +106,13 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);//超出的位置形成拉伸的边缘
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);//超出的位置形成拉伸的边缘
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//水平方向平铺
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//垂直方向平铺
 	//渲染过程中切换 mipmap 层级
 	//当纹理向下缩放是，选择GL_LINEAR_MIPMAP_LINEAR：在两个最接近的 mipmap 之间进行线性插值，并通过线性插值对插值级别进行采样
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
 
@@ -102,7 +121,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -148,10 +167,10 @@ int main()
 	//当纹理向下缩放是，选择GL_LINEAR_MIPMAP_LINEAR：在两个最接近的 mipmap 之间进行线性插值，并通过线性插值对插值级别进行采样
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -164,7 +183,7 @@ int main()
 		//参数9：实际的图像数据（对应了上面的，是个char字节类型）
 		//把图片从 CPU 内存 拷贝到 显存 里的纹理对象中，指的是texture对应的那块内存？
 		//这里是RGBA，填错就不显示了
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data2);
 		//以上只加载了纹理图像的基础层，如果要使用mipmap，就不断递加第二个参数，或者接下来调用生成纹理后调用glGenerateMipmap
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -183,11 +202,11 @@ int main()
 
 	//=========定点信息包括坐标、颜色、纹理坐标========
 	float vertices[] = {
-		// positions          // colors           // texture coords (note that we changed them to 'zoom in' on our texture image)
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.55f, 0.55f, // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   0.55f, 0.45f, // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.45f, 0.45f, // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.45f, 0.55f  // top left 
+		// positions          // colors           // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
@@ -282,8 +301,15 @@ int main()
 		//立刻把 GL_COLOR_BUFFER_BIT（颜色缓冲区）里所有的像素，全部涂成我刚才在 glClearColor 里指定的颜色
 		glClear(GL_COLOR_BUFFER_BIT);
 
+
 		//将新创建的程序对象作为参数来激活
 		ourShader.use();
+
+		//这个setFloat要放在use()的后面，否则第一帧就不会
+		// 是setFloat的值，而是在第一帧use()之后，第二
+		// 帧在setFloat成功
+		ourShader.setFloat("mixValue", mixValue);
+
 
 		//GPU会去读 GL_TEXTURE1 里的图
 		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
@@ -315,6 +341,7 @@ int main()
 */
 // 4. 喊：画好了！把画完的后台画布翻到前台给用户看！
 		glfwSwapBuffers(window);
+		//std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	}
 	glBindVertexArray(0);

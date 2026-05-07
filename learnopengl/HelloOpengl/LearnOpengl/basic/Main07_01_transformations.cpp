@@ -1,9 +1,13 @@
-#ifdef LY_EP06_
+#ifdef LY_EP07_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp" 
 
 void processInput(GLFWwindow* window)
 {
@@ -67,7 +71,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_06.vert", "shader/shader_06.frag");
+	Shader ourShader("basic/shader/shader_07.vert", "basic/shader/shader_07.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -98,7 +102,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -145,9 +149,9 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//当纹理向上缩放选择线性过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	 
+
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -247,6 +251,51 @@ int main()
 	//封存VAO后解绑EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	//创建了一个初始坐标为 (1, 0, 0) 的点
+	//第四个分量 w = 1.0f 非常关键。在图形学中，如果 $w=1$，它代表一个位置（点）；如果 w=0，它代表一个方向（向量），因为w=0时他和平移矩阵相乘结果为本身，所以说他代表方向。
+	//只有 w=1 时，平移矩阵才会对它起作用
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	std::cout << vec.x << vec.y << vec.z << vec.w << std::endl;
+
+	// 1. 创建一个单位矩阵 (Identity Matrix)
+	// 它像数字 1 一样，是所有变换的起点。
+	// 主对角线全为 1.0，其余为 0。
+	glm::mat4 trans1 = glm::mat4(1.0f);
+
+	// 2. 缩放变换 (Scale)
+	// 传入第一个参数 trans 是为了在“单位矩阵”的基础上进行加工。
+	// scale 函数会根据 vec3(0.3f) 构造一个缩放矩阵 S：
+	// S 的主对角线前三个数是 0.3，第四个数（w）是 1.0。
+	// 计算过程：trans = trans * S;
+	//trans1 = glm::scale(trans, glm::vec3(0.3f));
+
+	// 3. 平移变换 (Translate)
+	// 此时第一个参数 trans1 已经包含了上面(注释掉了)的“缩放”信息。
+	// translate 函数会构造一个平移矩阵 T：
+	// T 的最右侧一列会填入 (1.0, 1.0, 0.0)，表示位移量。
+	// 计算过程：trans = trans * T; (现在 trans 同时拥有了缩放和平移)
+	trans1 = glm::translate(trans1, glm::vec3(1.0f, 1.0f, 0.0f));
+
+	vec = trans1 * vec;
+	std::cout << vec.x << vec.y << vec.z << vec.w << std::endl;
+
+	std::cout << "======旋转=======" << std::endl;
+
+	//通过单参数构造函数，创建一个对角矩阵
+	//因为对角矩阵和任何矩阵S相乘，得到的还是S
+	//glm::mat4 trans = glm::mat4(1.0f);
+	//绕z轴(0.0,0.0,1.0)旋转90度
+	//伸出你的右手。
+	//将大拇指指向旋转轴的正方向（在你的代码里是 Z 轴正方向，即指向屏幕外、对着你的脸）。
+	//此时，你其余四个手指自然卷曲的方向，就是** 正角度（ + ） * *旋转的方向。
+	//原本在 (1, 0, 0) 的点会跑到 (0, 1, 0)。视线中就是逆时针移动了 90 度。	
+     //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
+	 
+	//所有方向上都缩放为0.5
+	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+
+	
 
 	//以线框模式绘制三角形
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -254,6 +303,16 @@ int main()
 
 	// 注册 窗口大小改变的回调
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+
+	//将新创建的程序对象作为参数来激活
+	ourShader.use();
+
+	//GPU会去读 GL_TEXTURE1 里的图
+	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
+	//GPU会去读 GL_TEXTURE2 里的图
+	ourShader.setInt("texture2", 2);
+
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
@@ -278,13 +337,7 @@ int main()
 		//立刻把 GL_COLOR_BUFFER_BIT（颜色缓冲区）里所有的像素，全部涂成我刚才在 glClearColor 里指定的颜色
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//将新创建的程序对象作为参数来激活
-		ourShader.use();
 
-		//GPU会去读 GL_TEXTURE1 里的图
-		glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);  
-		//GPU会去读 GL_TEXTURE2 里的图
-		ourShader.setInt("texture2", 2); 
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -294,8 +347,35 @@ int main()
 		glBindVertexArray(VAO);
 
 
+		glm::mat4 trans = glm::mat4(1.0f);
+		unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+
+
+		//往右下角移动
+		//旋转角度（随时间）
+		//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		////平移：x平移0.5f，y平移-0.5f
+		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+
 		//绘制对象,0表示要绘制的顶点数组的起始索引，6表示我们要绘制的顶点数量
 		//glDrawElements会去查找绑定的那个EBO
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
+
+		//往左上角移动
+		trans = glm::mat4(1.0f);
+
+		//glfwGetTime()返回自 GLFW 初始化（调用 glfwInit()）以来所经过的秒数
+		//sin()输入值$(-\infty, +\infty)$，输出值始终在$[-1.0, 1.0]$之间
+		float timeAngle = sin(glfwGetTime()) * 0.5f + 0.5f; //（范围变成 $[0, 1]$）;
+		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+		trans = glm::scale(trans, glm::vec3(timeAngle, timeAngle, timeAngle));
+
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 

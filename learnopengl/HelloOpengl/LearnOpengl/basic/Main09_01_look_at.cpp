@@ -4,8 +4,6 @@
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
-#include <thread> // 必须包含此头文件
-#include <chrono> // 用于时间单位
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -14,50 +12,13 @@
 static int SCR_WIDTH = 800;
 static int SCR_HEIGHT = 600;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-// timing
-float deltaTime = 0.0f;	// time between current frame and last frame
-float lastFrame = 0.0f;
-
 void processInput(GLFWwindow* window)
 {
 	/*
 	检查用户是否按下了 Esc 键（如果没有按下，glfwGetKey 返回 GLFW\_RELEASE ）。如果用户按下了 Esc 键，我们使用 glfwSetwindowShouldClose 将 GLFW 的 WindowShouldClose 属性设置为 `true` 来关闭 GLFW
 	*/
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_.KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
-	/*const*/ float cameraSpeed = 0.05f; // adjust accordingly
-	cameraSpeed = 2.5f * deltaTime;
-	//按一次w就+0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
-	//也就是相机的位置朝负z轴前进
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		std::cout << "====w====" << std::endl;
-		cameraPos += cameraSpeed * cameraFront;
-	}
-	//按一次w就-0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
-	//也就是相机的位置朝正z轴前进
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		std::cout << "====s====" << std::endl;
-		cameraPos -= cameraSpeed * cameraFront;
-	}
-	//往左就是往负x轴移动
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		std::cout << "====a====" << std::endl;
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
-	//往右就是往正x轴移动
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		std::cout << "====d====" << std::endl;
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
 }
 
 
@@ -113,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_09.vert", "shader/shader_09.frag");
+	Shader ourShader("basic/shader/shader_09.vert", "basic/shader/shader_09.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -144,7 +105,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -193,7 +154,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -277,18 +238,6 @@ int main()
 	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-	glm::vec3 cubePositions[] = {
-	   glm::vec3(0.0f,  0.0f,  0.0f),
-	   glm::vec3(2.0f,  5.0f, -15.0f),
-	   glm::vec3(-1.5f, -2.2f, -2.5f),
-	   glm::vec3(-3.8f, -2.0f, -12.3f),
-	   glm::vec3(2.4f, -0.4f, -3.5f),
-	   glm::vec3(-1.7f,  3.0f, -7.5f),
-	   glm::vec3(1.3f, -2.0f, -2.5f),
-	   glm::vec3(1.5f,  2.0f, -2.5f),
-	   glm::vec3(1.5f,  0.2f, -1.5f),
-	   glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
 	//创建顶点缓冲区对象，
@@ -376,13 +325,12 @@ int main()
 	ourShader.setInt("texture2", 2);
 	glEnable(GL_DEPTH_TEST);
 
-	 
-
+	bool hasLog = false;
 
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
-		//std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
 		//check and call events
 		//这个函数负责处理所有的互动
 		//它去操作系统那里询问：“刚才这 0.01 秒里，用户动鼠标了吗？按 ESC 键了吗；如果你之前注册过“按下 ESC 就关窗口”的函数，glfwPollEvents 发现你按了 ESC，就会立刻跳过去执行你的那个函数
@@ -408,10 +356,6 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -423,53 +367,88 @@ int main()
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
-		//试图空间，观察矩阵
-		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		const float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius; //0->10->0->-10->0
-		//camX = 0.0f;
-		float camZ = cos(glfwGetTime()) * radius; //10->0 
-		camZ = 0.0f;
-		//相机的轨迹其实是在 $Z=3$ 这条直线上左右滑动。但在一个看向原点的相机眼里，当它滑到最右边（$X=10$）时，它必须向左后方“斜着”看
-		//view = glm::lookAt(glm::vec3(camX, 0.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
+		//让相机先向上，再靠近(向前，即-z轴方向)
+		//view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
 
-		//第一个参数(摄像头放哪里)：摄像头的位置
-		//第二个参数(盯着的位置)：摄像头的位置+ (z轴-1.0f)[摄像头前方1.0f的位置]
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
+		//view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
+
+
+
+		//===========视野空间处理=========
+		//视图空间空间，观察矩阵
+		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+
+		//normalize：归一化，让向量的长度变成1，但是方向不变。把它变成长度为 1 的单位向量后，它就能作为一个标准的轴（Axis）--z轴
+		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+
+		//上向量 
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+		//叉积，得到一个垂直于这两个向量的向量
+		//叉积（Cross Product）的方向遵循右手定则，伸出右手，平整手掌。四指指向第一个向量：也就是 up）。向第二个向量弯曲四指：也就是 cameraDirection。大拇指的指向：就是叉积的结果 cameraRight
+		glm::vec3 cameraRight = glm::normalize(
+			glm::cross(up, cameraDirection));
+
+		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+
+
+
+		if (!hasLog) {
+			std::cout << "Camera Position:  " << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << std::endl;
+			std::cout << "Camera Direction: " << cameraDirection.x << ", " << cameraDirection.y << ", " << cameraDirection.z << std::endl;
+			std::cout << "Camera Right:     " << cameraRight.x << ", " << cameraRight.y << ", " << cameraRight.z << std::endl;
+			std::cout << "Camera Up (Final):" << cameraUp.x << ", " << cameraUp.y << ", " << cameraUp.z << std::endl;
+			hasLog = true;
+
+		}
+
+		//glm::mat4 view;
+		/*view = glm::lookAt(glm::vec3(-0.5f, 0.3f, 3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));*/
+		view = glm::lookAt(glm::vec3(0.0f, 0.0f,  3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f));
+		/*view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));*/
+
+
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		ourShader.setMat4("view", view);
+		//===========视野空间处理=========
+
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
 		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
 		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
+		//只看得到z值在-0.1f->-100.f之间的物体
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
-		for (unsigned int i = 0; i < 10; i++)
-		{
 
 
-			//对角线都是1.0
-			glm::mat4 model = glm::mat4(1.0f);
+		//对角线都是1.0
+		glm::mat4 model = glm::mat4(1.0f);
 
-			//如果是+45度，是上面的顶点朝着z轴正方形(转)
-			//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//如果是+45度，是上面的顶点朝着z轴正方形(转)
+		//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-			//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
-			//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
+		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 
-			model = glm::translate(model, cubePositions[i]);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 
-			/*float angle = 2.0f * (i + 1);
-			model = glm::rotate(model, (float)glfwGetTime() * angle, glm::vec3(1.0f, 0.3f, 0.5f));*/
-			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+		/*float angle = 2.0f * (i + 1);
+		//model = glm::rotate(model, (float)glfwGetTime() * angle, //glm::vec3(1.0f, 0.3f, 0.5f));*/
+		float angle = 45.0f;// *i;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 
-			ourShader.setMat4("model", model);
+		ourShader.setMat4("model", model);
 
-			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 
 

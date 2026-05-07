@@ -1,9 +1,11 @@
-#ifdef LY_EP08_
+#ifdef LY_EP09_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
 #include "stb_image.h"
 #include <iostream> 
+#include <thread> // 必须包含此头文件
+#include <chrono> // 用于时间单位
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -12,6 +14,14 @@
 static int SCR_WIDTH = 800;
 static int SCR_HEIGHT = 600;
 
+static glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+static glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+static glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
 void processInput(GLFWwindow* window)
 {
 	/*
@@ -19,6 +29,35 @@ void processInput(GLFWwindow* window)
 	*/
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	/*const*/ float cameraSpeed = 0.05f; // adjust accordingly
+	cameraSpeed = 2.5f * deltaTime;
+	//按一次w就+0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
+	//也就是相机的位置朝负z轴前进
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		std::cout << "====w====" << std::endl;
+		cameraPos += cameraSpeed * cameraFront;
+	}
+	//按一次w就-0.05个cameraFront【 glm::vec3(0.0f, 0.0f, -1.0f) 】,
+	//也就是相机的位置朝正z轴前进
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		std::cout << "====s====" << std::endl;
+		cameraPos -= cameraSpeed * cameraFront;
+	}
+	//往左就是往负x轴移动
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		std::cout << "====a====" << std::endl;
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	//往右就是往正x轴移动
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		std::cout << "====d====" << std::endl;
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
 }
 
 
@@ -27,6 +66,59 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	//告诉 OpenGL 渲染窗口的大小
 	glViewport(0, 0, width, height);
+}
+
+
+static bool firstMouse=true;
+static double lastX;
+static double lastY;
+static float yaw;
+static float pitch;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	//std::cout << xpos << "," << ypos << std::endl;
+
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+
+	float sensitivity = 0.1f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(direction);
+}
+
+static float fov= 45.0f;
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	fov -= (float)yoffset;
+	if (fov < 1.0f)
+		fov = 1.0f;
+	if (fov > 45.0f)
+		fov = 45.0f;
 }
 
 int main()
@@ -74,7 +166,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_08.vert", "shader/shader_08.frag");
+	Shader ourShader("basic/shader/shader_09.vert", "basic/shader/shader_09.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -105,7 +197,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -154,7 +246,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -337,11 +429,17 @@ int main()
 	ourShader.setInt("texture2", 2);
 	glEnable(GL_DEPTH_TEST);
 
+	//设置输入模式-禁用光标
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//设置光标位置回调
+	glfwSetCursorPosCallback(window, mouse_callback);
+	//设置鼠标滚轴动作回调
+	glfwSetScrollCallback(window, scroll_callback);
 
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
 	{//顺序原则：先取样（Poll），再处理（Input），后绘制（Render），末提交（Swap）
-
+		//std::this_thread::sleep_for(std::chrono::milliseconds(300));
 		//check and call events
 		//这个函数负责处理所有的互动
 		//它去操作系统那里询问：“刚才这 0.01 秒里，用户动鼠标了吗？按 ESC 键了吗；如果你之前注册过“按下 ESC 就关窗口”的函数，glfwPollEvents 发现你按了 ESC，就会立刻跳过去执行你的那个函数
@@ -367,6 +465,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 
 		//因为我前面解绑了，所以这里要再重新绑定
 		//glBindTexture(GL_TEXTURE_2D, texture1);
@@ -379,14 +481,25 @@ int main()
 		glm::mat4 projection = glm::mat4(1.0f);
 
 		//试图空间，观察矩阵
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		const float radius = 10.0f;
+		float camX = sin(glfwGetTime()) * radius; //0->10->0->-10->0
+		//camX = 0.0f;
+		float camZ = cos(glfwGetTime()) * radius; //10->0 
+		camZ = 0.0f;
+		//相机的轨迹其实是在 $Z=3$ 这条直线上左右滑动。但在一个看向原点的相机眼里，当它滑到最右边（$X=10$）时，它必须向左后方“斜着”看
+		//view = glm::lookAt(glm::vec3(camX, 0.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); //所以其实这里就是往右上绕
+
+		//第一个参数(摄像头放哪里)：摄像头的位置
+		//第二个参数(盯着的位置)：摄像头的位置+ (z轴-1.0f)[摄像头前方1.0f的位置]
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
 		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
 		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
 		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
 		for (unsigned int i = 0; i < 10; i++)
@@ -407,7 +520,7 @@ int main()
 			/*float angle = 2.0f * (i + 1);
 			model = glm::rotate(model, (float)glfwGetTime() * angle, glm::vec3(1.0f, 0.3f, 0.5f));*/
 			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f)); 
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
 			ourShader.setMat4("model", model);
 

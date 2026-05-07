@@ -1,4 +1,4 @@
-#ifdef LY_EP07_
+#ifdef LY_EP09_
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 #include "Shader_05.h"
@@ -8,6 +8,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp" 
+
+static int SCR_WIDTH = 800;
+static int SCR_HEIGHT = 600;
 
 void processInput(GLFWwindow* window)
 {
@@ -48,7 +51,7 @@ int main()
 	// 2. 创建窗口对象
 	//创建一个窗口对象。这个窗口对象保存了所有窗口数据，GLFW 的大多数其他函数都需要用到它。
 	//窗口 (Window)：是由操作系统（Windows / macOS）管理的容器。它有标题栏、最小化按钮、边框。
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -71,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_07.vert", "shader/shader_07.frag");
+	Shader ourShader("basic/shader/shader_09.vert", "basic/shader/shader_09.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -102,7 +105,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -151,7 +154,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -182,24 +185,60 @@ int main()
 	//=========应用纹理==========
 
 	//=========定点信息包括坐标、颜色、纹理坐标========
-	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	};
-	unsigned int indices[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
+	//float vertices[] = {
+	//	// positions          // colors           // texture coords
+	//	 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+	//	 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right 
+	//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f ,   // top left 
 
-	//创建元素缓冲区对象
-	//存放绘制顺序的索引清单
-	unsigned int EBO;
-	//找目前没被占用的数字，并把它分配给 EBO
-	//存“东西”的
-	glGenBuffers(1, &EBO);
+	//	 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+	//	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+	//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f ,   // top left 
+
+	//}; 
+	float vertices[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
 
 	//创建顶点缓冲区对象，
 	//存放顶点属性（位置、颜色、纹理坐标）的大仓库
@@ -223,24 +262,20 @@ int main()
 	//顶点数组复制到顶点缓冲区对象
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	//绑定EBO 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//将索引复制到缓冲区
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	//配置位置属性
 	//顶点着色器程序编译后，会去0号通道找顶点位置数据画图，结果cpp代码这里没写或者写错了，他就找不到数据
 	//它会将当前属性（比如 0 号位置）与当前正绑定在 GL_ARRAY_BUFFER 上的那个 VBO 关联起来 
 	//配置的是“如何从当前绑定到 GL_ARRAY_BUFFER 的那个缓冲区（Buffer）读取数据”。
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	//配置颜色属性
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);*/
 
 	//配置纹理属性
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	//这里的2，和上面第一个参数，也就是 vs文件中的location一致，
 	//表示要启用 2 号属性（对应纹理）
 	glEnableVertexAttribArray(2);
@@ -255,31 +290,7 @@ int main()
 	//第四个分量 w = 1.0f 非常关键。在图形学中，如果 $w=1$，它代表一个位置（点）；如果 w=0，它代表一个方向（向量），因为w=0时他和平移矩阵相乘结果为本身，所以说他代表方向。
 	//只有 w=1 时，平移矩阵才会对它起作用
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	std::cout << vec.x << vec.y << vec.z << vec.w << std::endl;
 
-	// 1. 创建一个单位矩阵 (Identity Matrix)
-	// 它像数字 1 一样，是所有变换的起点。
-	// 主对角线全为 1.0，其余为 0。
-	glm::mat4 trans1 = glm::mat4(1.0f);
-
-	// 2. 缩放变换 (Scale)
-	// 传入第一个参数 trans 是为了在“单位矩阵”的基础上进行加工。
-	// scale 函数会根据 vec3(0.3f) 构造一个缩放矩阵 S：
-	// S 的主对角线前三个数是 0.3，第四个数（w）是 1.0。
-	// 计算过程：trans = trans * S;
-	//trans1 = glm::scale(trans, glm::vec3(0.3f));
-
-	// 3. 平移变换 (Translate)
-	// 此时第一个参数 trans1 已经包含了上面(注释掉了)的“缩放”信息。
-	// translate 函数会构造一个平移矩阵 T：
-	// T 的最右侧一列会填入 (1.0, 1.0, 0.0)，表示位移量。
-	// 计算过程：trans = trans * T; (现在 trans 同时拥有了缩放和平移)
-	trans1 = glm::translate(trans1, glm::vec3(1.0f, 1.0f, 0.0f));
-
-	vec = trans1 * vec;
-	std::cout << vec.x << vec.y << vec.z << vec.w << std::endl;
-
-	std::cout << "======旋转=======" << std::endl;
 
 	//通过单参数构造函数，创建一个对角矩阵
 	//因为对角矩阵和任何矩阵S相乘，得到的还是S
@@ -289,13 +300,13 @@ int main()
 	//将大拇指指向旋转轴的正方向（在你的代码里是 Z 轴正方向，即指向屏幕外、对着你的脸）。
 	//此时，你其余四个手指自然卷曲的方向，就是** 正角度（ + ） * *旋转的方向。
 	//原本在 (1, 0, 0) 的点会跑到 (0, 1, 0)。视线中就是逆时针移动了 90 度。	
-     //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
-	 
+	 //trans = glm::rotate(trans, glm::radians(90.f), glm::vec3(0.0, 0.0, 1.0));
+
 	//所有方向上都缩放为0.5
 	//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
 
-	
+
 
 	//以线框模式绘制三角形
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -312,6 +323,8 @@ int main()
 	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 1);
 	//GPU会去读 GL_TEXTURE2 里的图
 	ourShader.setInt("texture2", 2);
+	glEnable(GL_DEPTH_TEST);
+
 
 	//1. 问：该下班（关窗口）了吗？
 	while (!glfwWindowShouldClose(window))
@@ -328,6 +341,8 @@ int main()
 		//2.算：根据输入处理逻辑（Process Input / Update Logic）
 		processInput(window);
 
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		// 3. 画：清屏并执行渲染指令（Rendering）
 		// 这里通常会写 glClear() 和 glDraw... (开始在“后台”画画)
 		// rendering commands here
@@ -335,7 +350,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 		//立刻把 GL_COLOR_BUFFER_BIT（颜色缓冲区）里所有的像素，全部涂成我刚才在 glClearColor 里指定的颜色
-		glClear(GL_COLOR_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		//还清楚了深度缓冲区
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
@@ -346,37 +363,53 @@ int main()
 		// 把它里面的所有状态（VBO 是谁、怎么读、开关在哪）一瞬间全部复原到桌面上！”
 		glBindVertexArray(VAO);
 
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
 
-		glm::mat4 trans = glm::mat4(1.0f);
-		unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-
-
-		//往右下角移动
-		//旋转角度（随时间）
-		//trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		////平移：x平移0.5f，y平移-0.5f
-		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+		//让相机先向上，再靠近(向前，即-z轴方向)
+		//view = glm::translate(view, glm::vec3(0.0f, -0.5f, 2.0f));
 
 
-		//绘制对象,0表示要绘制的顶点数组的起始索引，6表示我们要绘制的顶点数量
-		//glDrawElements会去查找绑定的那个EBO
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		view = glm::translate(view, glm::vec3(0.8f, 0.0f, 1.0f));
+
+		//试图空间，观察矩阵
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
 
 
+		ourShader.setMat4("view", view);
 
-		//往左上角移动
-		trans = glm::mat4(1.0f);
+		//如果不用投影，不会处理w，直接就超出了[1.0,1.0]的范围
+		//projection= glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
-		//glfwGetTime()返回自 GLFW 初始化（调用 glfwInit()）以来所经过的秒数
-		//sin()输入值$(-\infty, +\infty)$，输出值始终在$[-1.0, 1.0]$之间
-		float timeAngle = sin(glfwGetTime()) * 0.5f + 0.5f; //（范围变成 $[0, 1]$）;
-		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(timeAngle, timeAngle, timeAngle));
+		//角度是负数会导致y轴方向的坐标全部变为负数，即镜像
+		/*projection = glm::perspective(glm::radians(-55.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);*/
+		//只看得到z值在-0.1f->-100.f之间的物体
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		ourShader.setMat4("projection", projection);
 
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		//对角线都是1.0
+		glm::mat4 model = glm::mat4(1.0f);
+
+		//如果是+45度，是上面的顶点朝着z轴正方形(转)
+		//model = glm::rotate(model, glm::radians( -45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+		//翻转到90度之后，观察到的 Y坐标正负相反，其实是因为你的正方形翻面了
+		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+
+		/*float angle = 2.0f * (i + 1);
+		//model = glm::rotate(model, (float)glfwGetTime() * angle, //glm::vec3(1.0f, 0.3f, 0.5f));*/
+		float angle = 20.0f;// *i;
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+		ourShader.setMat4("model", model);
+
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
 
 
 		//swap the buffers
@@ -399,7 +432,6 @@ int main()
 	//释放所有显存资源
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
 	glDeleteTextures(1, &texture1);
 	glDeleteTextures(1, &texture2);
 

@@ -74,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Shader ourShader("shader/shader_08.vert", "shader/shader_08.frag");
+	Shader ourShader("basic/shader/shader_08.vert", "basic/shader/shader_08.frag");
 
 	//=========生成纹理==========
 	unsigned int texture1;
@@ -105,7 +105,7 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("basic/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		//使用前面加载的图片生成纹理
@@ -154,7 +154,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//加载图片， 把图片读进 CPU 内存
-	unsigned char* data2 = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data2 = stbi_load("basic/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data2)
 	{
 		//使用前面加载的图片生成纹理
@@ -404,11 +404,11 @@ int main()
 
 			model = glm::translate(model, cubePositions[i]);
 
-			if (i % 3 == 0) {
-				float angle = 2.0f * (i + 1);
-				model = glm::rotate(model, (float)glfwGetTime() * angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			/*float angle = 2.0f * (i + 1);
+			model = glm::rotate(model, (float)glfwGetTime() * angle, glm::vec3(1.0f, 0.3f, 0.5f));*/
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f)); 
 
-			}
 			ourShader.setMat4("model", model);
 
 			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
