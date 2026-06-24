@@ -129,6 +129,9 @@
     <ClCompile Include="lighting\Main01_02_colors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="review\01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic\Shader_05.h">

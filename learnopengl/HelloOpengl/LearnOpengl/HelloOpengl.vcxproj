@@ -176,6 +176,7 @@
     <ClCompile Include="basic\Main09_official.cpp" />
     <ClCompile Include="lighting\Main01_01_colors_official.cpp" />
     <ClCompile Include="lighting\Main01_02_colors.cpp" />
+    <ClCompile Include="review\01.cpp" />
     <Text Include="shader\shader_09_official.vs">
       <FileType>Document</FileType>
     </Text>
