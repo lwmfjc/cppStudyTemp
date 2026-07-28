@@ -10,7 +10,7 @@
 //类定义
 struct Player
 {
-	//默认是私有的
+	//默认是公有的
 	//int x, y;
 //这里的public包括了speed这个成员
 
