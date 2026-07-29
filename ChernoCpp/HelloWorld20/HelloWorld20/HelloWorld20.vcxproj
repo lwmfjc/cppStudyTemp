@@ -18,6 +18,26 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Log_23_24.cpp" />
+    <ClCompile Include="Main31_1.cpp" />
+    <ClCompile Include="Main31_2.cpp" />
+    <ClCompile Include="Main31_3.cpp" />
+    <ClCompile Include="Main32_1.cpp" />
+    <ClCompile Include="Main32_2.cpp" />
+    <ClCompile Include="Main32_3.cpp" />
+    <ClCompile Include="Main32_4.cpp" />
+    <ClCompile Include="Main_20.cpp" />
+    <ClCompile Include="Main_21.cpp" />
+    <ClCompile Include="Main_23.cpp" />
+    <ClCompile Include="Main_24.cpp" />
+    <ClCompile Include="Main_26.cpp" />
+    <ClCompile Include="Main_27_28.cpp" />
+    <ClCompile Include="Main_29.cpp" />
+    <ClCompile Include="Main_30.cpp" />
+    <ClCompile Include="Static_21.cpp" />
+    <ClCompile Include="Static_23_24.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -108,7 +128,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP23;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <LanguageStandard>Default</LanguageStandard>
@@ -125,7 +145,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LY_EP23;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <LanguageStandard>Default</LanguageStandard>

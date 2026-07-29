@@ -16,15 +16,15 @@ int b = 1;
 int c = 2;
 
 
-//int main()
-//{
-//	Example value = B;
-//
-//	//if (value == 1) {
-//	if (value == B) {
-//		std::cout << "get" << std::endl;
-//	}
-//	std::cin.get();
-//}
+int main()
+{
+	Example value = B;
+
+	//if (value == 1) {
+	if (value == B) {
+		std::cout << "get" << std::endl;
+	}
+	std::cin.get();
+}
 
 #endif
