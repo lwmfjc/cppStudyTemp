@@ -3,7 +3,7 @@
 #include <iostream>
 
 class Entity
-{
+{ 
 public:
 	//C++中不处理的话默认不初始化任何成员变量
 	float X, Y;
@@ -20,7 +20,7 @@ public:
 	{
 		X = 0.00f;
 		Y = 0.00f;
-		std::cout << "Created Entity!" << std::endl;
+		std::cout << "Created Entity!"  << std::endl;
 
 	}
 
@@ -43,7 +43,10 @@ public:
 
 void Function()
 {
+	//声明了一个函数：	函数名：e1，	返回类型：Entity，参数：无
+	Entity e1();
 	Entity e;//栈上分配
+	Entity e2{};//栈上分配
 	e.Print();
 }
 
@@ -52,7 +55,9 @@ int main()
 	Function();
    /*
 Created Entity!
+Created Entity!
 0,0
+Destroyed Entity!
 Destroyed Entity!
 
    */
